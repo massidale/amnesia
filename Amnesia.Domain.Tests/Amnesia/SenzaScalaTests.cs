@@ -17,9 +17,26 @@ public class SenzaScalaTests
     {
         var world = TestDeclarations.World();
 
-        var declared = Service().Declare(world, "rosa", "circolo_esisteva");
+        var declared = Service().Declare(world, "rosa", "usciva_allegro");
 
         Assert.That(declared.IsOk, Is.True, "Rosa non ha una scala e non ha niente da tenersi");
+        Assert.That(new Register(world).SupportsFor("usciva_allegro"), Does.Contain("rosa"));
+    }
+
+    [Test]
+    public void MaLaPrecondizioneValeAnchePerLei()
+    {
+        // Non avere una scala non e' una deroga alle precondizioni: il gruppo lo
+        // ammette chiunque, ma davanti alla fotografia. Senza, quella riga non e'
+        // ancora sua.
+        var world = TestDeclarations.World();
+
+        Assert.That(Service().Declare(world, "rosa", "circolo_esisteva").IsOk, Is.False,
+            "a freddo la fotografia non gliel'ha messa davanti nessuno");
+
+        world.MarkShown("rosa", "fotografia");
+
+        Assert.That(Service().Declare(world, "rosa", "circolo_esisteva").IsOk, Is.True);
         Assert.That(new Register(world).SupportsFor("circolo_esisteva"), Does.Contain("rosa"));
     }
 

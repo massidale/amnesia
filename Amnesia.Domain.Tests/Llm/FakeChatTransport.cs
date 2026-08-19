@@ -37,3 +37,32 @@ public sealed class FakeChatTransport : IChatTransport
         return Task.FromResult(answer);
     }
 }
+
+/// Le tre risposte che servono di continuo, scritte una volta sola: un
+/// personaggio che parla, uno che chiama uno strumento, e un fornitore che non
+/// risponde — che e' una condizione normale, non un guasto del programma.
+public static class FakeAnswers
+{
+    public static FakeChatTransport Replying(string text) =>
+        new FakeChatTransport().Answers(Result<LlmReply>.Ok(new LlmReply { Text = text }));
+
+    public static FakeChatTransport Failing(string code, string message) =>
+        new FakeChatTransport().Answers(Result<LlmReply>.Fail(code, message));
+
+    public static FakeChatTransport Calling(string tool, string arguments, string text = "")
+    {
+        using var document = System.Text.Json.JsonDocument.Parse(arguments);
+        var call = new ToolCall
+        {
+            Id = "call_1",
+            Name = tool,
+            Arguments = document.RootElement.Clone(),
+            RawArguments = arguments,
+        };
+        return new FakeChatTransport().Answers(Result<LlmReply>.Ok(new LlmReply
+        {
+            Text = text,
+            ToolCalls = new[] { call },
+        }));
+    }
+}

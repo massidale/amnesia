@@ -29,7 +29,7 @@ public sealed class DeclarationService
         {
             return Result.Fail("declaration_not_granted", "non e' cosa che questo personaggio possa dire adesso");
         }
-        new Register(world).Record(speakerId, declarationId);
+        new Register(world).Record(speakerId, declarationId, _declarations.Find(declarationId)?.CountsAlone ?? false);
         return Result.Ok(WorldEvent.Create(
             "declared", speakerId, world.Minute, ("declaration_id", declarationId)));
     }

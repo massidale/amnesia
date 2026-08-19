@@ -17,9 +17,13 @@ public class DichiaroTests
     {
         var dichiaro = ToolCatalog.Schemas().Single(tool => tool.Function.Name == "dichiaro");
 
-        Assert.That(dichiaro.Function.Parameters.Properties!["id"].EnumValues,
-            Is.EqualTo(new[] { "circolo_esisteva", "scampagnate", "non_erano_gite" }),
+        // Quali id ci siano dentro lo verifica CatalogoEDatiTests contro i dati:
+        // qui si difende la forma, cioe' che l'id sia una scelta da una lista
+        // chiusa e non una stringa che il modello riempie come vuole.
+        Assert.That(dichiaro.Function.Parameters.Properties!["id"].EnumValues, Is.Not.Null.And.Not.Empty,
             "l'id e' un vocabolario chiuso, non testo libero");
+        Assert.That(dichiaro.Function.Parameters.Properties!["id"].EnumValues,
+            Is.SupersetOf(new[] { "circolo_esisteva", "scampagnate", "non_erano_gite" }));
         Assert.That(dichiaro.Function.Parameters.Required, Is.EqualTo(new[] { "id" }));
     }
 

@@ -6,6 +6,13 @@ namespace Amnesia;
 /// ordine di arrivo, e quante volte ciascuna l'ha ripetuta.
 public sealed class RegisterEntry
 {
+    /// Una cosa detta contro il proprio interesse non ha bisogno di conferme.
+    /// Sta sulla riga e non nella tabella perche' e' una proprieta' di come quella
+    /// frase e' entrata nel mondo: il registro deve poter rispondere da solo,
+    /// anche riletto da un salvataggio, senza avere accanto i dati del contenuto.
+    [System.Text.Json.Serialization.JsonPropertyName("counts_alone")]
+    public bool CountsAlone { get; set; }
+
     /// Chi l'ha detta, senza duplicati. Due sostegni vuol dire due persone.
     public List<string> Supports { get; set; } = new();
 
@@ -35,9 +42,13 @@ public sealed class Register
 
     public Register(WorldState state) => _state = state;
 
-    public void Record(string speakerId, string declarationId)
+    public void Record(string speakerId, string declarationId, bool countsAlone = false)
     {
         var entry = Entry(declarationId);
+        if (countsAlone)
+        {
+            entry.CountsAlone = true;
+        }
         // Una bocca che si ripete resta una bocca, o chiunque si autoconferma
         // dicendo la stessa cosa due volte.
         if (!entry.Supports.Contains(speakerId))
@@ -56,8 +67,18 @@ public sealed class Register
     /// Due sostegni indipendenti stabiliscono. E' la regola delle due vie
     /// non-mendaci applicata a runtime: il motore conta le bocche, e non c'e'
     /// niente da interpretare.
-    public bool IsEstablished(string declarationId) =>
-        SupportsFor(declarationId).Count >= SupportsRequired;
+    public bool IsEstablished(string declarationId)
+    {
+        var row = _state.Declarations.TryGetValue(declarationId, out var entry) ? entry : null;
+        if (row is null)
+        {
+            return false;
+        }
+        // Una confessione contro se stessi vale da sola: nessuno la conferma,
+        // perche' l'unico altro che potrebbe non ha nessun motivo di farlo.
+        var needed = row.CountsAlone ? 1 : SupportsRequired;
+        return row.Supports.Count >= needed;
+    }
 
     public int TimesSaid(string speakerId, string declarationId) =>
         _state.Declarations.TryGetValue(declarationId, out var entry)

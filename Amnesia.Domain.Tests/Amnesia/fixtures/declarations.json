@@ -3,20 +3,371 @@
     "circolo_esisteva": {
       "text": "C'era un gruppo che si trovava, si facevano chiamare il Circolo della Soglia.",
       "truth": "true",
-      "sources": ["rosa", "matteo"],
-      "requires_shown": []
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ]
     },
     "scampagnate": {
       "text": "Era una compagnia di amici. Si andava su alla cava a fare le scampagnate, roba di quando eravamo giovani.",
       "truth": "false",
-      "sources": ["matteo"],
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "avevano_una_frase": {
+      "text": "Avevano una specie di detto fra loro. Qualcosa di una porta.",
+      "truth": "true",
+      "sources": [
+        "nino",
+        "rosa",
+        "don_carlo"
+      ],
       "requires_shown": []
     },
     "non_erano_gite": {
       "text": "Non erano gite. Ci si trovava per altro.",
       "truth": "true",
-      "sources": ["matteo"],
-      "requires_shown": ["frase"]
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": [
+        "frase"
+      ]
+    },
+    "padre_nel_circolo": {
+      "text": "Tuo padre era dei nostri. Otto anni, forse nove.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": [
+        "frase"
+      ]
+    },
+    "magazzino_dove": {
+      "text": "La roba della cava l'hanno portata giù al deposito. Il magazzino in fondo, il diciassette.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "laura"
+      ],
+      "requires_shown": [
+        "frase"
+      ]
+    },
+    "affitto": {
+      "text": "Tuo padre l'affitto di un posto l'ha pagato per vent'anni. Non gli ho mai chiesto di cosa.",
+      "truth": "true",
+      "sources": [
+        "rosa"
+      ],
+      "requires_shown": []
+    },
+    "versione_paese": {
+      "text": "È stata una disgrazia. Erano andati su a vedere la cava, la montagna è venuta giù, e per quella creatura è stato un attimo.",
+      "truth": "half",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "elena_figlia_vittorio": {
+      "text": "Era la figlia di Vittorio Valli, quello che comandava.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "corpo_mai_trovato": {
+      "text": "Non l'hanno mai tirata fuori. Hanno murato la galleria e ci hanno messo la lapide.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "il_rito": {
+      "text": "Per far tornare qualcuno di là, qualcuno di qua deve passare la soglia e tornare indietro.",
+      "truth": "true",
+      "sources": [
+        "quaderno_vittorio",
+        "anna",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "sacrificio_per_vittorio": {
+      "text": "Doveva servire per Vittorio. Era morto in primavera, e lui era quello che poteva tornare.",
+      "truth": "true",
+      "sources": [
+        "anna"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "elena_prescelta": {
+      "text": "Era lei che doveva passare. Serviva il sangue.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "laura_non_cera": {
+      "text": "Io lassù non c'ero. Sono rimasta a casa.",
+      "truth": "true",
+      "sources": [
+        "laura"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "laura_assoggettata": {
+      "text": "Ero assoggettata a mio marito. Non giudicarmi.",
+      "truth": "half",
+      "sources": [
+        "laura"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "anna_solo_matteo": {
+      "text": "Quando sono scesa in paese, alla cava era rimasto solo Matteo.",
+      "truth": "true",
+      "sources": [
+        "anna"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "padre_nella_cava": {
+      "text": "Tuo padre quella notte c'era.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "registro"
+      ],
+      "requires_shown": []
+    },
+    "io_ero_con_lui": {
+      "text": "E c'eri anche tu. Ti aveva portato su, non aveva nessuno a cui lasciarti.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "registro"
+      ],
+      "requires_shown": []
+    },
+    "matteo_ero_gia_sceso": {
+      "text": "Quella sera io ero già sceso quando è venuta giù. Ho saputo tutto la mattina dopo, come tutti.",
+      "truth": "false",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "matteo_la_porto_via": {
+      "text": "L'ho sentita sotto le pietre. L'ho tirata fuori io.",
+      "truth": "true",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": [],
+      "counts_alone": true
+    },
+    "elena_viva": {
+      "text": "È viva. È grande. Ha una vita, in un'altra città.",
+      "truth": "true",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": [],
+      "counts_alone": true
+    },
+    "matteo_non_dice_dove": {
+      "text": "Lasciala stare. Ha una vita che non c'entra niente con noi.",
+      "truth": "true",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "matteo_cosa_ti_ricordi": {
+      "text": "Senti… ma tu, di preciso, cosa ti ricordi?",
+      "truth": "true",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "matteo_mai_parlati": {
+      "text": "Io e te non ci eravamo mai parlati.",
+      "truth": "false",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "matteo_confessa": {
+      "text": "Quando ti sei girato ho visto tutto finire. Ho preso una pietra dal banco. Non ho deciso niente.",
+      "truth": "true",
+      "sources": [
+        "matteo"
+      ],
+      "requires_shown": [],
+      "counts_alone": true
+    },
+    "usciva_allegro": {
+      "text": "Quella sera è uscito dopo cena. Era allegro, la prima volta in mesi. Diceva che andava da uno che sapeva.",
+      "truth": "true",
+      "sources": [
+        "rosa"
+      ],
+      "requires_shown": []
+    },
+    "segatura": {
+      "text": "Nei risvolti dei pantaloni c'è la segatura. La giacca è consumata sulla schiena.",
+      "truth": "true",
+      "sources": [
+        "scatola_vestiti"
+      ],
+      "requires_shown": []
+    },
+    "referto": {
+      "text": "Trauma occipitale. Escoriazioni su dorso e talloni.",
+      "truth": "true",
+      "sources": [
+        "cartella_clinica"
+      ],
+      "requires_shown": []
+    },
+    "dove_lo_trovai": {
+      "text": "Nel castagneto sopra la curva. Lì non ci si arriva camminando, e non ci si cade da soli.",
+      "truth": "true",
+      "sources": [
+        "nino"
+      ],
+      "requires_shown": []
+    },
+    "giovedi_sabato": {
+      "text": "Sei venuto da me di giovedì. Il sabato ti hanno trovato.",
+      "truth": "true",
+      "sources": [
+        "don_carlo"
+      ],
+      "requires_shown": []
+    },
+    "nessuno_denuncio": {
+      "text": "Si è detto che eri caduto. Poi si è smesso di dirlo. Nessuno ha mai denunciato niente.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "requires_shown": []
+    },
+    "padre_cercava": {
+      "text": "Cercava qualcuno che credeva vivo. I nomi sono raschiati.",
+      "truth": "true",
+      "sources": [
+        "diario"
+      ],
+      "requires_shown": []
+    },
+    "padre_veniva_da_me": {
+      "text": "Tuo padre veniva qui. Spesso, negli ultimi anni. Di quello che mi ha detto non posso dirti niente.",
+      "truth": "true",
+      "sources": [
+        "don_carlo"
+      ],
+      "requires_shown": []
+    },
+    "busta_esiste": {
+      "text": "C'è una cosa che tuo padre ha lasciato per te. Mi ha detto quando dartela: se un giorno fossi venuto a chiedere di quella bambina.",
+      "truth": "true",
+      "sources": [
+        "don_carlo"
+      ],
+      "requires_shown": []
+    },
+    "don_carlo_manda": {
+      "text": "Non posso dirti niente. Va' a parlare con Matteo.",
+      "truth": "true",
+      "sources": [
+        "don_carlo"
+      ],
+      "requires_shown": [
+        "braccialetto"
+      ]
+    },
+    "don_carlo_consegna": {
+      "text": "Tuo padre me l'ha lasciata perché te la dessi, e mi ha detto a quale condizione. Adesso la condizione c'è.",
+      "truth": "true",
+      "sources": [
+        "don_carlo"
+      ],
+      "requires_shown": [
+        "foglio_indirizzo"
+      ]
+    },
+    "wanda_una_persona_sola": {
+      "text": "Di questa faccenda io parlo con una persona sola, e non è lei.",
+      "truth": "true",
+      "sources": [
+        "wanda"
+      ],
+      "requires_shown": []
+    },
+    "elena_adottata": {
+      "text": "Lo so di essere stata adottata. Me l'ha detto lei che avevo undici anni, e che la mia famiglia era morta. Non ho mai saputo altro.",
+      "truth": "true",
+      "sources": [
+        "elena"
+      ],
+      "requires_shown": []
     }
   }
 }

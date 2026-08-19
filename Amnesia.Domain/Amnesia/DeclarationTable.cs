@@ -27,6 +27,17 @@ public sealed class Declaration
     [JsonPropertyName("sources")]
     public List<string> Sources { get; set; } = new();
 
+    /// Una confessione contro il proprio interesse vale da sola: nessuno la
+
+    /// conferma, perche' l'unico altro che potrebbe non ne ha nessun motivo. E'
+
+    /// l'unica eccezione ai due sostegni indipendenti, ed e' dichiarata.
+
+    [JsonPropertyName("counts_alone")]
+
+    public bool CountsAlone { get; set; }
+
+
     [JsonPropertyName("requires_shown")]
     public List<string> RequiresShown { get; set; } = new();
 }

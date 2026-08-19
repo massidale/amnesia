@@ -30,6 +30,11 @@ public sealed class WorldState
     /// quali righe entrano nel prompt di un personaggio.
     public Dictionary<string, List<string>> ShownTo { get; set; } = new();
 
+    /// I confronti gia' messi davanti a ciascun personaggio, come coppie
+    /// normalizzate. Sta accanto a ShownTo e non dentro, perche' accostare due
+    /// righe non e' mostrare un oggetto: e' l'altro verbo del gioco.
+    public Dictionary<string, List<string>> ConfrontiShownTo { get; set; } = new();
+
     /// Le catene autoriali a colpo singolo: acceso una volta, resta acceso.
     public Dictionary<string, bool> Flags { get; set; } = new();
 
@@ -79,6 +84,28 @@ public sealed class WorldState
 
     public IReadOnlyList<string> ShownToNpc(string npcId) =>
         ShownTo.TryGetValue(npcId, out var shown) ? shown : Array.Empty<string>();
+
+    /// La coppia si normalizza ordinandola: accostare A e B e' la stessa mossa
+    /// che accostare B e A, e un giocatore non deve indovinare il verso.
+    private static string PairKey(string first, string second) =>
+        string.CompareOrdinal(first, second) <= 0 ? $"{first}|{second}" : $"{second}|{first}";
+
+    public void MarkConfrontoShown(string npcId, string first, string second)
+    {
+        if (!ConfrontiShownTo.TryGetValue(npcId, out var pairs))
+        {
+            pairs = new List<string>();
+            ConfrontiShownTo[npcId] = pairs;
+        }
+        var key = PairKey(first, second);
+        if (!pairs.Contains(key))
+        {
+            pairs.Add(key);
+        }
+    }
+
+    public bool ConfrontoShownTo(string npcId, string first, string second) =>
+        ConfrontiShownTo.TryGetValue(npcId, out var pairs) && pairs.Contains(PairKey(first, second));
 
     public void MarkShown(string npcId, string itemId)
     {

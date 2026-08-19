@@ -18,8 +18,43 @@ public sealed class PositionStep
     [JsonPropertyName("grants")]
     public List<string> Grants { get; set; } = new();
 
+    /// Tutti mostrati, in AND. Un oggetto che manca tiene giu' il gradino.
     [JsonPropertyName("requires_shown")]
     public List<string> RequiresShown { get; set; } = new();
+
+    /// Almeno uno mostrato, in OR. E' la forma delle serrature a piu' chiavi:
+    /// la scatola dei vestiti OPPURE la cartella clinica portano tutte e due allo
+    /// stesso posto, e un gioco d'indagine con una sola strada e' un corridoio.
+    [JsonPropertyName("requires_any_shown")]
+    public List<string> RequiresAnyShown { get; set; } = new();
+
+    /// Proposizioni che devono risultare STABILITE nel registro — due sostegni
+    /// indipendenti, non una che qualcuno ha detto una volta.
+    ///
+    /// Serve perche' certi gradini non si aprono con un oggetto ma con una cosa
+    /// che il gioco ha accertato: la busta del padre esce quando Elena risulta
+    /// viva, non quando qualcuno ha mostrato al prete un foglio con un indirizzo.
+    [JsonPropertyName("requires_declared")]
+    public List<string> RequiresDeclared { get; set; } = new();
+
+    /// Due righe che devono essere state accostate DAVANTI A QUESTO PERSONAGGIO.
+    /// L'ordine non conta: e' una coppia, non una sequenza.
+    [JsonPropertyName("requires_confronto")]
+    public List<List<string>> RequiresConfronto { get; set; } = new();
+
+    /// Almeno uno dei confronti elencati, in OR. E' la forma delle serrature a
+    /// piu' chiavi applicata alle parole: la segatura nei risvolti oppure il
+    /// referto dell'ospedale dicono la stessa cosa, e un giocatore che ha trovato
+    /// l'una non deve essere costretto a trovare anche l'altra.
+    [JsonPropertyName("requires_any_confronto")]
+    public List<List<string>> RequiresAnyConfronto { get; set; } = new();
+
+    /// SICUREZZA DEI DATI: System.Text.Json ignora in silenzio le chiavi che non
+    /// conosce, quindi un autore che scrive "requires_declarated" per errore non
+    /// vede niente — nessun errore, e un cancello che semplicemente non c'e'.
+    /// Qui le raccogliamo, e il caricatore rifiuta il file.
+    [JsonExtensionData]
+    public Dictionary<string, object>? Unknown { get; set; }
 }
 
 /// Le scale di posizione, una per personaggio guardingo.
@@ -68,6 +103,14 @@ public sealed class PositionTable
         var ladders = new Dictionary<string, IReadOnlyList<PositionStep>>();
         foreach (var entry in dto.Positions)
         {
+            foreach (var step in entry.Value)
+            {
+                if (step.Unknown is { Count: > 0 })
+                {
+                    return Result<PositionTable>.Fail("unknown_position_field",
+                        $"{entry.Key}/{step.Id}: campo sconosciuto \"{step.Unknown.Keys.First()}\" — un refuso qui e' un cancello che non esiste");
+                }
+            }
             ladders[entry.Key] = entry.Value;
         }
         return Result<PositionTable>.Ok(new PositionTable(ladders));
@@ -112,16 +155,45 @@ public sealed class PositionTable
             return Array.Empty<PositionStep>();
         }
         var shown = world.ShownToNpc(npcId);
+        var register = new Register(world);
         var reached = new List<PositionStep>();
         foreach (var step in ladder)
         {
-            if (step.RequiresShown.Any(itemId => !shown.Contains(itemId)))
+            if (!Satisfied(step, world, npcId, shown, register))
             {
                 break;
             }
             reached.Add(step);
         }
         return reached;
+    }
+
+    private static bool Satisfied(
+        PositionStep step, WorldState world, string npcId, IReadOnlyList<string> shown, Register register)
+    {
+        if (step.RequiresShown.Any(itemId => !shown.Contains(itemId)))
+        {
+            return false;
+        }
+        if (step.RequiresAnyShown.Count > 0 && !step.RequiresAnyShown.Any(shown.Contains))
+        {
+            return false;
+        }
+        if (step.RequiresDeclared.Any(id => !register.IsEstablished(id)))
+        {
+            return false;
+        }
+        // Un confronto vale per il personaggio a cui e' stato messo davanti, non
+        // per il mondo: convincere Anna non convince Matteo, e farlo cedere e'
+        // proprio il lavoro che il giocatore deve fare in bottega.
+        if (!step.RequiresConfronto.All(pair =>
+                pair.Count == 2 && world.ConfrontoShownTo(npcId, pair[0], pair[1])))
+        {
+            return false;
+        }
+        return step.RequiresAnyConfronto.Count == 0
+            || step.RequiresAnyConfronto.Any(pair =>
+                pair.Count == 2 && world.ConfrontoShownTo(npcId, pair[0], pair[1]));
     }
 
     private sealed class TableDto

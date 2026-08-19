@@ -9,7 +9,7 @@ namespace Amnesia.Tests.Declarations;
 /// Le tabelle dei test sono una copia della fetta scritta in `content/amnesia/`:
 /// i test girano sulla cartella di output, non sulla radice del repository, e un
 /// test che carica il contenuto del gioco dipenderebbe da dove e' stato lanciato.
-internal static class TestDeclarations
+public static class TestDeclarations
 {
     public static string FixturePath(string fileName) =>
         Path.Combine(TestContext.CurrentContext.TestDirectory, "Amnesia", "fixtures", fileName);

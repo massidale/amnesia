@@ -82,5 +82,11 @@
     "name": "le due righe di Matteo",
     "visible": "Mezzo foglio strappato da un blocco da lavoro, la carta ruvida e segnata dal banco. Due righe a matita, in una calligrafia grossa da uomo che scrive poco, e sotto una firma.",
     "description": "Due righe e un nome in fondo. Non c'è scritto niente che io non sappia già."
+  },
+  {
+    "id": "lapide",
+    "name": "la lapide",
+    "visible": "Una lastra di pietra murata all'imbocco della cava, la scritta scavata e ripassata di nero. «A ricordo di Pietro Ferro, Giuseppe Boasso, Michele Aimar, e della piccola Elena Valli, che questa montagna ha preso il 14 ottobre 1966.» Sotto, piu' piccolo: «Il paese di San Rocco».",
+    "description": "Quattro nomi. Tre uomini e una bambina di tre anni. Uno dei tre lo conosco: Ferro e' il cognome della vedova in fondo alla strada."
   }
 ]

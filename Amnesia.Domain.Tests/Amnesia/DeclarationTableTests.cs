@@ -22,8 +22,14 @@ public class DeclarationTableTests
     [Test]
     public void UnaDichiarazioneSaDaQualiBocchePuoUscire()
     {
-        Assert.That(TestDeclarations.Table().SourcesOf("circolo_esisteva"),
-            Is.EqualTo(new[] { "rosa", "matteo" }), "circolo_esisteva ha due fonti");
+        var table = TestDeclarations.Table();
+
+        Assert.That(table.SourcesOf("circolo_esisteva"), Does.Contain("rosa").And.Contain("matteo"),
+            "il gruppo lo puo' ammettere chiunque, davanti alla fotografia");
+        Assert.That(table.SourcesOf("affitto"), Is.EqualTo(new[] { "rosa" }),
+            "e c'e' chi ha una bocca sola: l'affitto lo sa solo la moglie che l'ha visto pagare");
+        Assert.That(table.SourcesOf("scampagnate"), Does.Not.Contain("rosa"),
+            "la copertura la dicono i membri, non chi non c'era");
     }
 
     [Test]

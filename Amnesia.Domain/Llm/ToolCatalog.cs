@@ -53,7 +53,20 @@ public static class ToolCatalog
                 ["id"] = new()
                 {
                     Type = "string",
-                    EnumValues = new[] { "circolo_esisteva", "scampagnate", "non_erano_gite" },
+                    EnumValues = new[]
+                    {
+                        "circolo_esisteva", "scampagnate", "avevano_una_frase", "non_erano_gite",
+                        "padre_nel_circolo", "magazzino_dove", "affitto", "versione_paese",
+                        "elena_figlia_vittorio", "corpo_mai_trovato", "il_rito",
+                        "sacrificio_per_vittorio", "elena_prescelta", "laura_non_cera",
+                        "laura_assoggettata", "anna_solo_matteo", "padre_nella_cava",
+                        "io_ero_con_lui", "matteo_ero_gia_sceso", "matteo_la_porto_via",
+                        "elena_viva", "matteo_non_dice_dove", "matteo_cosa_ti_ricordi",
+                        "matteo_mai_parlati", "matteo_confessa", "usciva_allegro", "segatura",
+                        "referto", "dove_lo_trovai", "giovedi_sabato", "nessuno_denuncio",
+                        "padre_cercava", "padre_veniva_da_me", "busta_esiste", "don_carlo_manda",
+                        "don_carlo_consegna", "wanda_una_persona_sola", "elena_adottata",
+                    },
                 },
             },
             Required = new[] { "id" },

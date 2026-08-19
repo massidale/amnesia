@@ -14,8 +14,10 @@ public class PositionTableTests
 
         var granted = table.Granted("matteo", cold);
         Assert.That(granted, Does.Contain("scampagnate"), "a M0 ha la scampagnata");
-        Assert.That(granted, Does.Contain("circolo_esisteva"), "e ammette che il gruppo esisteva");
-        Assert.That(granted, Does.Not.Contain("non_erano_gite"), "ma NON ha la riga che smentisce la scampagnata");
+        Assert.That(granted, Does.Contain("versione_paese"), "e la frase del paese, che e' di tutti dal primo minuto");
+        Assert.That(granted, Does.Not.Contain("circolo_esisteva"),
+            "ma il nome del gruppo non lo pronuncia: la scampagnata non ha un nome");
+        Assert.That(granted, Does.Not.Contain("non_erano_gite"), "e NON ha la riga che smentisce la scampagnata");
     }
 
     [Test]
