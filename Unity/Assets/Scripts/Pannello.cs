@@ -14,10 +14,9 @@ namespace AmnesiaUnity
     /// salvata e' solo una cosa in piu' che si rompe in silenzio.
     public sealed class Pannello : MonoBehaviour
     {
-        /// Quanti scambi restano a schermo. Il pannello e' basso apposta: se ci
-        /// stesse tutta la conversazione il giocatore rileggerebbe invece di
-        /// guardare in faccia chi ha davanti.
-        private const int TurniMostrati = 8;
+        /// Quanto indietro si puo' riavvolgere. Tutta la conversazione: la
+        /// prova, in questo gioco, e' spesso una frase detta tre scambi fa.
+        private const int TurniMostrati = 200;
 
         private const float DurataAvviso = 5f;
 
@@ -31,6 +30,7 @@ namespace AmnesiaUnity
         private InputField _campo;
         private GameObject _radice;
         private RectTransform _fila;
+        private ScrollRect _rullo;
         private string _con = "";
         private bool _inAttesa;
         private float _avvisoFino;
@@ -65,9 +65,8 @@ namespace AmnesiaUnity
             _chi = Stile.Scritta(_radice.transform, Stile.Macchina, 20, Stile.Ottone,
                 new Vector2(0.035f, 0.855f), new Vector2(0.7f, 0.965f));
 
-            var feritoia = Stile.Feritoia(_radice.transform, "detto",
-                new Vector2(0.035f, 0.30f), new Vector2(0.965f, 0.84f));
-            _detto = Stile.Colonna(feritoia, Stile.Libro, 23, Stile.Carta);
+            _detto = Stile.Rullo(_radice.transform, Stile.Libro, 23, Stile.Carta,
+                new Vector2(0.035f, 0.30f), new Vector2(0.965f, 0.84f), out _rullo);
 
             var barra = new GameObject("oggetti", typeof(RectTransform));
             barra.transform.SetParent(_radice.transform, false);
@@ -127,7 +126,7 @@ namespace AmnesiaUnity
             // Riaprire una conversazione la ritrova dov'era: e' il registro del
             // personaggio, non una finestra che si svuota chiudendola.
             Trascrivi();
-            _stato.text = "invio per parlare   ·   /oggetti   /taccuino   ·   esc per andartene";
+            _stato.text = "invio per parlare   ·   rotella per rileggere   ·   /oggetti   /taccuino   ·   esc per andartene";
             _campo.text = "";
             _campo.ActivateInputField();
         }
@@ -156,6 +155,19 @@ namespace AmnesiaUnity
 
         private void Update()
         {
+            // La rotella scorre solo dove sta il puntatore; questi funzionano
+            // anche con le mani sulla tastiera, che e' dove stanno mentre parli.
+            if (Aperto && _rullo != null)
+            {
+                if (Input.GetKey(KeyCode.PageUp))
+                {
+                    _rullo.verticalNormalizedPosition += Time.deltaTime * 0.8f;
+                }
+                else if (Input.GetKey(KeyCode.PageDown))
+                {
+                    _rullo.verticalNormalizedPosition -= Time.deltaTime * 0.8f;
+                }
+            }
             if (Aperto && Input.GetKeyDown(KeyCode.Escape) && !_inAttesa)
             {
                 Aperto = false;
@@ -267,6 +279,7 @@ namespace AmnesiaUnity
             {
                 _detto.text = "/oggetti    cosa hai in tasca\n/taccuino   cosa ti hanno detto";
             }
+            InFondo();
             _stato.color = Stile.Grafite;
             _stato.text = "scrivi per tornare alla conversazione";
         }
@@ -294,6 +307,19 @@ namespace AmnesiaUnity
                 }
             }
             _detto.text = scritto.ToString().Trim('\n');
+            InFondo();
+        }
+
+        /// Dopo ogni battuta si torna in fondo, dov'e' l'ultima cosa detta. Da
+        /// li' si riavvolge con la rotella; la posizione la tiene il rullo, non
+        /// noi, cosi' chi sta rileggendo non viene riportato in basso a forza.
+        private void InFondo()
+        {
+            Canvas.ForceUpdateCanvases();
+            if (_rullo != null)
+            {
+                _rullo.verticalNormalizedPosition = 0f;
+            }
         }
 
         /// Cosa il motore ha registrato. A schermo perche' questa e' una scena

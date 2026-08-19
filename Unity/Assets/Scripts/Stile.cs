@@ -126,6 +126,38 @@ namespace AmnesiaUnity
             return testo;
         }
 
+        /// Un testo che si puo' scorrere. Serve alla conversazione: le battute
+        /// vecchie non spariscono, si riavvolgono — e in un gioco in cui la
+        /// prova e' una frase detta tre scambi fa, poterla rileggere mentre si
+        /// parla non e' comodita', e' la meccanica.
+        public static Text Rullo(Transform genitore, Font carattere, int corpo, Color colore,
+            Vector2 min, Vector2 max, out ScrollRect rullo)
+        {
+            var contenitore = new GameObject("rullo", typeof(RectTransform));
+            contenitore.transform.SetParent(genitore, false);
+            Ancora((RectTransform)contenitore.transform, min, max);
+            rullo = contenitore.AddComponent<ScrollRect>();
+
+            var vista = Feritoia(contenitore.transform, "vista", Vector2.zero, Vector2.one);
+            var testo = Scritta(vista, carattere, corpo, colore, Vector2.zero, Vector2.one);
+            var rect = testo.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            testo.verticalOverflow = VerticalWrapMode.Overflow;
+            var misura = testo.gameObject.AddComponent<ContentSizeFitter>();
+            misura.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            rullo.viewport = vista;
+            rullo.content = rect;
+            rullo.horizontal = false;
+            rullo.vertical = true;
+            rullo.movementType = ScrollRect.MovementType.Clamped;
+            rullo.scrollSensitivity = 28f;
+            return testo;
+        }
+
         public static RectTransform Ancora(RectTransform rect, Vector2 min, Vector2 max)
         {
             rect.anchorMin = min;
