@@ -37,6 +37,50 @@ public class TabelleTests
     private static string PathOf(params string[] parts) =>
         Path.Combine(new[] { ContentDir() }.Concat(parts).ToArray());
 
+    /// Un saluto appeso a un gradino che non esiste non rompe niente: quel
+    /// personaggio semplicemente non ti saluta piu', e nessuno se ne accorge
+    /// finche' non gioca proprio quel pezzo.
+    [Test]
+    public void OgniSalutoParlaDiUnGradinoCheEsiste()
+    {
+        var caricati = GreetingTable.Load(PathOf("amnesia", "saluti.json"));
+        Assert.That(caricati.IsOk, Is.True, caricati.Message);
+        var saluti = caricati.Value!;
+        var scale = Positions();
+
+        using var documento = JsonDocument.Parse(File.ReadAllText(PathOf("amnesia", "saluti.json")));
+        foreach (var personaggio in documento.RootElement.GetProperty("greetings").EnumerateObject())
+        {
+            foreach (var riga in personaggio.Value.EnumerateObject())
+            {
+                Assert.That(riga.Value.GetString(), Is.Not.Empty, $"{personaggio.Name}/{riga.Name} e' vuoto");
+                if (riga.Name.Length == 0)
+                {
+                    Assert.That(scale.HasLadder(personaggio.Name), Is.False,
+                        $"{personaggio.Name} ha una scala: i suoi saluti vanno per gradino");
+                    continue;
+                }
+                Assert.That(scale.HasLadder(personaggio.Name), Is.True, $"{personaggio.Name} non ha una scala");
+                Assert.That(GradiniDi(personaggio.Name), Contains.Item(riga.Name),
+                    $"{personaggio.Name} non ha il gradino {riga.Name}");
+            }
+        }
+
+        // Chi ha una scala deve avere il saluto del gradino da cui si parte, o
+        // la prima conversazione del gioco comincia in silenzio.
+        foreach (var chi in saluti.Ids.Where(chi => scale.HasLadder(chi)))
+        {
+            Assert.That(saluti.Line(chi, GradiniDi(chi).First()), Is.Not.Empty, $"{chi} non saluta al primo gradino");
+        }
+    }
+
+    private static IReadOnlyList<string> GradiniDi(string npcId)
+    {
+        using var documento = JsonDocument.Parse(File.ReadAllText(PathOf("amnesia", "positions.json")));
+        return documento.RootElement.GetProperty("positions").GetProperty(npcId)
+            .EnumerateArray().Select(gradino => gradino.GetProperty("id").GetString()!).ToList();
+    }
+
     private static DeclarationTable Declarations()
     {
         var loaded = DeclarationTable.Load(PathOf("amnesia", "declarations.json"));

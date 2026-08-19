@@ -1,0 +1,33 @@
+{
+  "greetings": {
+    "rosa": {
+      "": "Sei sceso. Hai mangiato qualcosa, tu?"
+    },
+    "nino": {
+      "": "Oh. Il ragazzo dei Lipari. Cammini bene, adesso."
+    },
+    "matteo": {
+      "M0": "Giorgio! Guarda chi si vede in piedi. Vieni, vieni — occhio alla polvere. Dimmi tutto.",
+      "M1": "Ancora tu. …Va bene. Chiudi la porta che entra freddo.",
+      "M2": "Ti aspettavo, sai. Uno arriva a chiedere e poi torna sempre.",
+      "M3": "Giorgio. …Siediti, che in piedi non ti reggi ancora bene.",
+      "M4": "Cosa c'è ancora.",
+      "M5": "Siediti."
+    },
+    "anna": {
+      "A0": "Sì? …Ah. Il figlio di Rosa. Cosa vuoi, che ho il pane in forno.",
+      "A1": "Sei tornato. Lo sapevo che tornavi.",
+      "A2": "Entra, va'. Che qui fuori si gela e quello che devi chiedere è lungo."
+    },
+    "laura": {
+      "L0": "Buongiorno. …Tu sei il figlio di Rosa, vero? Sei cresciuto che non ti riconoscevo.",
+      "L1": "Ancora tu. Va bene, dimmi.",
+      "L2": "Chiudi la porta. Non voglio che si senta dalla strada."
+    },
+    "don_carlo": {
+      "C0": "Giorgio Lipari. Prima o poi lo sapevo che venivi. Siediti pure.",
+      "C1": "Sei di nuovo qui. Lo sai che io ti posso dire poco.",
+      "C2": "Ti stavo aspettando. Da sei anni, per la precisione."
+    }
+  }
+}
