@@ -29,6 +29,7 @@ namespace AmnesiaUnity
         public string Problema { get; private set; } = "";
 
         private readonly Dictionary<string, Transform> _corpi = new Dictionary<string, Transform>();
+        private readonly Dictionary<string, string> _nomi = new Dictionary<string, string>();
 
         private static string Contenuto(params string[] parti) =>
             Path.Combine(Application.streamingAssetsPath, Path.Combine(parti));
@@ -84,6 +85,7 @@ namespace AmnesiaUnity
                 if (id != "rules")
                 {
                     schede[id] = File.ReadAllText(file);
+                    _nomi[id] = TitoloDi(schede[id], id);
                 }
             }
             var regole = File.ReadAllText(Contenuto("prompts", "rules.md"));
@@ -150,6 +152,24 @@ namespace AmnesiaUnity
             }
         }
 
+        /// Il nome per esteso non sta in una tabella a parte: e' il titolo della
+        /// scheda, cioe' la stessa riga che il modello si ritrova nel prompt. Due
+        /// posti in cui scrivere lo stesso nome sono due posti in cui divergera'.
+        public string NomeDi(string id) => _nomi.TryGetValue(id, out var nome) ? nome : id;
+
+        private static string TitoloDi(string scheda, string ripiego)
+        {
+            foreach (var riga in scheda.Split('\n'))
+            {
+                var pulita = riga.Trim();
+                if (pulita.StartsWith("# "))
+                {
+                    return pulita.Substring(2).Trim();
+                }
+            }
+            return ripiego;
+        }
+
         public Vector3 InScena(Cell cell) => new Vector3(cell.X * CellSize, 0f, -cell.Y * CellSize);
 
         /// Un cubo per ogni cella solida. Brutto e sufficiente: serve a capire se
@@ -205,8 +225,7 @@ namespace AmnesiaUnity
             }
         }
 
-        /// Chi e' abbastanza vicino da poterci parlare. Nessuna indicazione a
-        /// schermo: ci si avvicina e si preme un tasto, come si fa in un paese.
+        /// Chi e' abbastanza vicino da poterci parlare.
         public string PiuVicino(Vector3 da, float portata)
         {
             var migliore = "";

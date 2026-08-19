@@ -20,6 +20,8 @@ namespace AmnesiaUnity
 
         private Bootstrap _gioco;
         private Text _detto;
+        private Text _chi;
+        private Text _invito;
         private Text _stato;
         private InputField _campo;
         private GameObject _radice;
@@ -62,7 +64,9 @@ namespace AmnesiaUnity
             rect.anchorMax = new Vector2(0.94f, 0.40f);
             rect.offsetMin = rect.offsetMax = Vector2.zero;
 
-            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.96f));
+            _chi = Etichetta(_radice.transform, font, 23, new Vector2(0.03f, 0.86f), new Vector2(0.97f, 0.99f));
+            _chi.color = new Color(0.88f, 0.82f, 0.66f);
+            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.84f));
             _detto.color = new Color(0.93f, 0.91f, 0.86f);
             _detto.alignment = TextAnchor.LowerLeft;
             _stato = Etichetta(_radice.transform, font, 15, new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.16f));
@@ -94,6 +98,12 @@ namespace AmnesiaUnity
                 }
             });
 
+            // Fuori dal pannello, perche' si legge mentre si cammina.
+            _invito = Etichetta(canvas.transform, font, 18, new Vector2(0.20f, 0.44f), new Vector2(0.80f, 0.50f));
+            _invito.alignment = TextAnchor.MiddleCenter;
+            _invito.color = new Color(0.93f, 0.91f, 0.86f, 0.80f);
+            _invito.text = "";
+
             _radice.SetActive(false);
         }
 
@@ -122,9 +132,19 @@ namespace AmnesiaUnity
             // Riaprire una conversazione la ritrova dov'era: e' il registro del
             // personaggio, non una finestra che si svuota chiudendola.
             Trascrivi();
-            _stato.text = $"{npcId} — invio per parlare, Esc per andartene";
+            _chi.text = _gioco.NomeDi(npcId);
+            _invito.text = "";
+            _stato.text = "invio per parlare, Esc per andartene";
             _campo.text = "";
             _campo.ActivateInputField();
+        }
+
+        /// Chi hai davanti, prima di aprire bocca. In un paese di milleduecento
+        /// anime le facce si conoscono tutte: andare in giro a chiedere «lei chi
+        /// e'?» a uno per uno e' una cosa che Giorgio non farebbe mai.
+        public void Suggerisci(string npcId)
+        {
+            _invito.text = Aperto || string.IsNullOrEmpty(npcId) ? "" : $"E — parla con {_gioco.NomeDi(npcId)}";
         }
 
         private void Update()

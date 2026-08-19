@@ -74,14 +74,14 @@ namespace AmnesiaUnity
             Guarda();
             Cammina();
 
-            if (Input.GetKeyDown(KeyCode.E))
+            // Il nome compare avvicinandosi, non dopo aver chiesto: chi vive in
+            // un paese sa gia' chi ha davanti.
+            var chi = _gioco.PiuVicino(transform.position, PortataDiParola);
+            _pannello.Suggerisci(chi);
+            if (Input.GetKeyDown(KeyCode.E) && !string.IsNullOrEmpty(chi))
             {
-                var chi = _gioco.PiuVicino(transform.position, PortataDiParola);
-                if (!string.IsNullOrEmpty(chi))
-                {
-                    _bersaglio = GameObject.Find(chi).transform;
-                    _pannello.Apri(chi);
-                }
+                _bersaglio = GameObject.Find(chi).transform;
+                _pannello.Apri(chi);
             }
         }
 
