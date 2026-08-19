@@ -41,8 +41,24 @@ namespace AmnesiaUnity
         /// tenuto da parte leggerebbe la partita di due battute fa.
         public Taccuino Taccuino => new Taccuino(Session.World, _dichiarazioni, Items);
 
-        private static string Contenuto(params string[] parti) =>
-            Path.Combine(Application.streamingAssetsPath, Path.Combine(parti));
+        /// Dove sta il contenuto. Nell'editor si legge direttamente la cartella
+        /// `content/` del repository, cosi' una modifica alla mappa o a una
+        /// scheda si vede premendo Play — senza ricopiare niente. Nella build
+        /// quella cartella non esiste e si usa la copia in StreamingAssets.
+        private static string Contenuto(params string[] parti)
+        {
+            var relativo = Path.Combine(parti);
+            if (Application.isEditor)
+            {
+                var repository = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "content"));
+                var candidato = Path.Combine(repository, relativo);
+                if (File.Exists(candidato) || Directory.Exists(candidato))
+                {
+                    return candidato;
+                }
+            }
+            return Path.Combine(Application.streamingAssetsPath, relativo);
+        }
 
         private void Awake()
         {
