@@ -94,8 +94,12 @@ namespace AmnesiaUnity
             {
                 var go = new GameObject($"terreno {pair.Key}");
                 go.transform.SetParent(radice);
-                go.AddComponent<MeshFilter>().sharedMesh = pair.Value.Mesh();
+                var mesh = pair.Value.Mesh();
+                go.AddComponent<MeshFilter>().sharedMesh = mesh;
                 go.AddComponent<MeshRenderer>().sharedMaterial = Materiale(suoli[pair.Key].colore);
+                // Il terreno si vede *e* si calpesta. Senza questo il giocatore
+                // parte, la gravita' lo prende, e precipita attraverso il paese.
+                go.AddComponent<MeshCollider>().sharedMesh = mesh;
             }
         }
 
