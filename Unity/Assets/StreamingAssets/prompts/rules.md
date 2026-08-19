@@ -56,6 +56,13 @@ banco insieme alle elementari. In paese se ne parla da due settimane.
 Chi non è in questa lista non ha un nome: si dice «uno di Valdieri», «la figlia
 del fornaio», e basta.
 
+**Il deposito ferroviario**, in fondo al paese oltre la stazione, è chiuso da
+quando hanno tolto il servizio merci. Una fila di saracinesche uguali, la
+vernice andata, e non ci va più nessuno. Che ci tenessero della roba lo sanno
+tutti; **quale magazzino sia di chi, e cosa ci sia dentro, non lo sa nessuno** —
+tranne chi ce l'ha portata. Se ti chiedono del deposito, questo è quello che
+sai, e dirlo non ti costa niente.
+
 ## Chi sei
 
 Tu reciti **un solo personaggio**, quello descritto nella scheda che segue queste

@@ -1,3 +1,4 @@
+using System.Linq;
 using Amnesia.Core;
 
 namespace Amnesia;
@@ -43,20 +44,32 @@ public sealed class DeclarationService
     /// sue precondizioni siano soddisfatte. Senza questa distinzione un personaggio
     /// senza scala resterebbe muto attraverso lo strumento, che e' l'esatto
     /// contrario di cio' che e'.
-    private bool CanSay(WorldState world, string speakerId, string declarationId)
+    private bool CanSay(WorldState world, string speakerId, string declarationId) =>
+        Sayable(_declarations, _positions, speakerId, world).Contains(declarationId);
+
+    /// Cosa questo personaggio, adesso, e' in grado di dire.
+    ///
+    /// E' la stessa lista che il motore accetta quando lui dichiara e che il
+    /// prompt gli mette davanti: un personaggio deve *avere* le righe che gli
+    /// e' permesso dire, o le improvvisa — e uno che improvvisa su una cosa
+    /// finisce per improvvisare anche su tutto il resto.
+    public static IReadOnlyList<string> Sayable(
+        DeclarationTable declarations, PositionTable positions, string npcId, WorldState world)
     {
-        if (_positions.HasLadder(speakerId))
+        if (positions.HasLadder(npcId))
         {
-            return _positions.Granted(speakerId, world).Contains(declarationId);
+            return positions.Granted(npcId, world);
         }
 
-        var declaration = _declarations.Find(declarationId);
-        if (declaration is null || !declaration.Sources.Contains(speakerId))
-        {
-            return false;
-        }
-
-        var shown = world.ShownToNpc(speakerId);
-        return declaration.RequiresShown.All(shown.Contains);
+        var shown = world.ShownToNpc(npcId);
+        return declarations.Ids
+            .Where(id =>
+            {
+                var declaration = declarations.Find(id);
+                return declaration is not null
+                    && declaration.Sources.Contains(npcId)
+                    && declaration.RequiresShown.All(shown.Contains);
+            })
+            .ToList();
     }
 }

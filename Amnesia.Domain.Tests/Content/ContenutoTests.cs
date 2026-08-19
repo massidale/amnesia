@@ -68,8 +68,8 @@ public class ContenutoTests
     public void ITreFileDiContenutoSiCaricano()
     {
         var map = Map();
-        Assert.That(map.Width, Is.EqualTo(64));
-        Assert.That(map.Height, Is.EqualTo(56));
+        Assert.That(map.Width, Is.EqualTo(84));
+        Assert.That(map.Height, Is.EqualTo(65));
         Assert.That(Routines().Entries, Is.Not.Empty);
         Assert.That(Items().Items, Is.Not.Empty);
     }
@@ -270,9 +270,13 @@ public class ContenutoTests
     }
 
     /// I minuti sono la valuta del gioco, e la mappa e' dove si stampano: a
-    /// sedici celle al minuto, il paese si attraversa in tre minuti e alla cava
-    /// si sale. Se un giorno il paese si rimpicciolisce, questo si accorge che
-    /// andare a Pian della Soglia non costa piu' niente.
+    /// sedici celle al minuto, il paese si attraversa in quattro minuti scarsi e
+    /// alla cava si sale. Se un giorno il paese si rimpicciolisce, questo si
+    /// accorge che andare a Pian della Soglia non costa piu' niente.
+    ///
+    /// Il tetto e' salito da quattro minuti a cinque quando il paese si e'
+    /// allargato a mano e casa Lipari e' finita in fondo a levante: da li' a
+    /// casa Valli sono sessantotto celle.
     [Test]
     public void AttraversareIlPaeseCostaTreMinutiESalireAllaCavaMoltiDiPiu()
     {
@@ -286,7 +290,7 @@ public class ContenutoTests
         var minutiPaese = (double)paese / MovementSystem.WalkCellsPerMinute;
         var minutiCava = (double)cava / MovementSystem.WalkCellsPerMinute;
 
-        Assert.That(minutiPaese, Is.InRange(2.0, 4.0), $"attraversare il paese costa circa tre minuti (e' {minutiPaese:0.0})");
+        Assert.That(minutiPaese, Is.InRange(2.0, 5.0), $"attraversare il paese costa quattro minuti scarsi (e' {minutiPaese:0.0})");
         Assert.That(minutiCava, Is.GreaterThan(minutiPaese * 1.5), $"la cava e' un'altra cosa (e' {minutiCava:0.0} contro {minutiPaese:0.0})");
     }
 }

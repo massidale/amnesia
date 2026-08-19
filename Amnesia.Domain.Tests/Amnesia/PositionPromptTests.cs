@@ -58,12 +58,22 @@ public class PositionPromptTests
         Assert.That(told, Does.Not.Contain("non dire"), "nessuna istruzione a nascondere, mai");
     }
 
+    /// Chi non ha una scala ha davanti tutto cio' di cui e' fonte, subito.
+    ///
+    /// Prima il blocco non c'era affatto, e sembrava coerente — uno che non
+    /// nasconde niente non ha una posizione da tenere. Ma il risultato era che
+    /// Rosa e i paesani non avevano il testo delle righe che il motore gli
+    /// permette di dire, e le improvvisavano: e un personaggio che improvvisa
+    /// su una riga improvvisa anche sul resto, fino a inventarsi dove sta il
+    /// magazzino.
     [Test]
-    public void ChiNonHaUnaScalaNonHaIlBlocco()
+    public void ChiNonHaUnaScalaHaSubitoTuttoCioDiCuiEFonte()
     {
-        // Un personaggio senza scala non perde niente: il blocco semplicemente non
-        // c'e'.
-        Assert.That(Prompt("rosa", TestDeclarations.World()), Does.Not.Contain("<posizione>"));
+        var prompt = Prompt("rosa", TestDeclarations.World());
+
+        Assert.That(prompt, Does.Contain("<posizione>"));
+        Assert.That(prompt, Does.Contain("l'affitto di un posto"), "una riga di cui Rosa e' fonte");
+        Assert.That(prompt, Does.Not.Contain("nel castagneto"), "e nessuna di cui non lo e'");
     }
 
     [Test]
@@ -81,5 +91,43 @@ public class PositionPromptTests
             new TurnContext { Spoken = "buongiorno", ClockText = "9:00" });
 
         Assert.That(messages[messages.Count - 1].Parts.Single().Text, Does.Not.Contain("<posizione>"));
+    }
+
+    /// Il paesano deve *avere* le righe di cui e' fonte. Senza, le improvvisa —
+    /// e il coro, che e' la prova migliore del gioco, si scioglie: la stessa
+    /// frase impossibile da tre bocche diverse funziona solo se le tre bocche
+    /// dicono le stesse parole.
+    [Test]
+    public void UnPaesanoHaLaVersioneDelPaeseDavanti()
+    {
+        var prompt = Prompt("teresa", new WorldState());
+
+        Assert.That(prompt, Does.Contain("è stato un attimo"));
+    }
+
+    /// E soprattutto: quello di cui non e' fonte non ce l'ha. La vecchia del
+    /// giardino non sa dove sia il magazzino, e nel suo prompt quella riga non
+    /// esiste — se la dice se l'e' inventata, e le regole glielo vietano.
+    [Test]
+    public void UnPaesanoNonSaDoveSiaIlMagazzino()
+    {
+        var prompt = Prompt("teresa", new WorldState());
+
+        Assert.That(prompt, Does.Not.Contain("magazzino"));
+        Assert.That(prompt, Does.Not.Contain("diciassette"));
+    }
+
+    /// Anna lo sa, ma non prima: la riga entra nel suo prompt il turno in cui
+    /// le si dice la frase, non un momento prima.
+    [Test]
+    public void AnnaHaIlMagazzinoSoloDopoLaFrase()
+    {
+        var world = new WorldState();
+
+        Assert.That(Prompt("anna", world), Does.Not.Contain("diciassette"));
+
+        world.MarkShown("anna", "frase");
+
+        Assert.That(Prompt("anna", world), Does.Contain("diciassette"));
     }
 }

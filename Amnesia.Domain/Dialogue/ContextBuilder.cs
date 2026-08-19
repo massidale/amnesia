@@ -136,7 +136,11 @@ public sealed class ContextBuilder
             return "";
         }
         var lines = new List<string>();
-        foreach (var declarationId in _positions.Granted(npcId, world))
+        // Chi non ha una scala non e' uno a cui manca qualcosa: e' uno che non
+        // nasconde niente, e le righe di cui e' fonte deve averle davanti. Un
+        // paesano che non ha il testo della versione del paese la racconta a
+        // modo suo — e il coro, che e' la prova migliore del gioco, non esiste.
+        foreach (var declarationId in DeclarationService.Sayable(_declarations, _positions, npcId, world))
         {
             var text = _declarations.TextOf(declarationId);
             if (text.Length > 0)
