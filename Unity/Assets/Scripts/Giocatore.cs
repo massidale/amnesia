@@ -16,6 +16,12 @@ namespace AmnesiaUnity
         private const float GradiAlSecondo = 110f;
         private const float PendenzaMassima = 75f;
 
+        /// Dove stanno gli occhi quando il paese e' tuo. L'inquadratura della
+        /// conversazione sposta la telecamera nel mondo, quindi questo e' il
+        /// posto a cui deve tornare: senza, ogni chiacchierata te la lasciava
+        /// dove l'aveva messa l'ultima faccia.
+        private static readonly Vector3 SedeDellOcchio = new Vector3(0f, 0.6f, 0f);
+
         private Bootstrap _gioco;
         private Camera _occhio;
         private Pannello _pannello;
@@ -39,7 +45,7 @@ namespace AmnesiaUnity
 
             _occhio = new GameObject("occhio").AddComponent<Camera>();
             _occhio.transform.SetParent(transform, false);
-            _occhio.transform.localPosition = new Vector3(0f, 0.6f, 0f);
+            _occhio.transform.localPosition = SedeDellOcchio;
             _occhio.fieldOfView = 62f;
 
             Libera(false);
@@ -68,7 +74,6 @@ namespace AmnesiaUnity
             if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Libera(false);
-                _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
             }
 
             Guarda();
@@ -99,6 +104,10 @@ namespace AmnesiaUnity
                 -PendenzaMassima, PendenzaMassima);
 
             transform.rotation = Quaternion.Euler(0f, _imbardata, 0f);
+            // Posizione e rotazione insieme, ogni fotogramma: e' quello che
+            // disfa l'inquadratura della conversazione appena si torna a
+            // camminare, qualunque cosa le avesse fatto.
+            _occhio.transform.localPosition = SedeDellOcchio;
             _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
         }
 
