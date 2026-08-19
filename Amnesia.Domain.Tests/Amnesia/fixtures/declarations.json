@@ -21,7 +21,9 @@
       "sources": [
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "marisa"
       ],
       "requires_shown": []
     },
@@ -31,7 +33,10 @@
       "sources": [
         "nino",
         "rosa",
-        "don_carlo"
+        "don_carlo",
+        "teresa",
+        "piero",
+        "marisa"
       ],
       "requires_shown": []
     },
@@ -87,7 +92,10 @@
         "don_carlo",
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa"
       ],
       "requires_shown": []
     },
@@ -100,7 +108,10 @@
         "don_carlo",
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa"
       ],
       "requires_shown": []
     },
@@ -113,7 +124,10 @@
         "don_carlo",
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa"
       ],
       "requires_shown": []
     },
@@ -305,7 +319,10 @@
         "don_carlo",
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa"
       ],
       "requires_shown": []
     },

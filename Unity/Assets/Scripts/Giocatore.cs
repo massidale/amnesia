@@ -16,6 +16,8 @@ namespace AmnesiaUnity
         private const float Sensibilita = 2.2f;
         private const float GradiAlSecondo = 110f;
         private const float PendenzaMassima = 75f;
+        private const float AltezzaDelVolto = 1.55f;
+        private static readonly Vector3 SpallaDestra = new Vector3(0.45f, 1.75f, -2.6f);
 
         /// Dove stanno gli occhi quando il paese e' tuo. L'inquadratura della
         /// conversazione sposta la telecamera nel mondo, quindi questo e' il
@@ -30,6 +32,8 @@ namespace AmnesiaUnity
         private Transform _bersaglio;
         private CharacterController _corpo;
         private float _caduta;
+        private Transform _figura;
+        private bool _diSpalle;
         private float _imbardata;
         private float _beccheggio;
 
@@ -73,7 +77,38 @@ namespace AmnesiaUnity
             _occhio.backgroundColor = Scenografia.ColoreDelCielo;
             _occhio.farClipPlane = 120f;
 
+            // Il corpo di Giorgio esiste sempre e si vede solo di spalle: in
+            // prima persona guardarsi addosso vuol dire vedersi il collo da
+            // dentro.
+            _figura = Bootstrap.Figura("giorgio", "c").transform;
+            _figura.name = "giorgio";
+            _figura.SetParent(transform, false);
+            _figura.localPosition = Vector3.zero;
+            // Il corpo si vede, non urta: chi urta e' il CharacterController, e
+            // due collisori sulla stessa persona si spingono a vicenda.
+            foreach (var urto in _figura.GetComponentsInChildren<Collider>())
+            {
+                Destroy(urto);
+            }
+            Mostra(false);
+
             Libera(false);
+        }
+
+        /// La terza persona non e' un vezzo: in un gioco in cui si sta fermi a
+        /// guardare in faccia qualcuno, vedere anche se stessi cambia cosa si
+        /// sta guardando. Si passa da una all'altra con V.
+        private void Mostra(bool diSpalle)
+        {
+            _diSpalle = diSpalle;
+            if (_figura != null)
+            {
+                foreach (var pezzo in _figura.GetComponentsInChildren<Renderer>())
+                {
+                    pezzo.enabled = diSpalle;
+                }
+            }
+            _occhio.transform.localPosition = diSpalle ? SpallaDestra : SedeDellOcchio;
         }
 
         /// Il puntatore sparisce mentre si cammina e torna quando si parla,
@@ -130,6 +165,10 @@ namespace AmnesiaUnity
                 Libera(false);
             }
 
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                Mostra(!_diSpalle);
+            }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 _menu.Apri();
@@ -155,13 +194,72 @@ namespace AmnesiaUnity
             Cammina();
 
             // Il nome compare avvicinandosi, non dopo aver chiesto: chi vive in
-            // un paese sa gia' chi ha davanti.
+            // un paese sa gia' chi ha davanti. Una porta chiusa si annuncia
+            // allo stesso modo, ed e' l'unica cosa che in questo gioco non si
+            // apre parlando.
+            var porta = _gioco.PortaVicina(transform.position, PortataDiParola);
             var chi = _gioco.PiuVicino(transform.position, PortataDiParola);
-            _pannello.Suggerisci(chi);
-            if (Input.GetKeyDown(KeyCode.E) && !string.IsNullOrEmpty(chi))
+            if (!string.IsNullOrEmpty(porta))
             {
-                _bersaglio = GameObject.Find(chi).transform;
-                _pannello.Apri(chi);
+                _pannello.Suggerimento($"E   {_gioco.DescrizioneDellaPorta(porta)}");
+            }
+            else
+            {
+                _pannello.Suggerimento(string.IsNullOrEmpty(chi) ? "" : $"E   parla con {_gioco.NomeDi(chi)}");
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (!string.IsNullOrEmpty(porta))
+                {
+                    Prova(porta);
+                }
+                else if (!string.IsNullOrEmpty(chi))
+                {
+                    _bersaglio = GameObject.Find(chi).transform;
+                    _pannello.Apri(chi);
+                }
+            }
+        }
+
+        /// Aprire una porta. Il rifiuto non e' un errore da nascondere: e'
+        /// l'unico modo che ha il gioco di dirti cosa ti manca senza dirti dove
+        /// andare a prenderlo.
+        private void Prova(string porta)
+        {
+            var esito = _gioco.Porte.Apri(_gioco.Session.World, porta);
+            if (!esito.IsOk)
+            {
+                _pannello.Avviso(Rifiuto(esito.Code), true);
+                return;
+            }
+            _gioco.SpalancaLaPorta(porta);
+            var racconto = esito.Value.Racconto;
+            if (esito.Value.Presi.Count > 0)
+            {
+                var nomi = new System.Collections.Generic.List<string>();
+                foreach (var id in esito.Value.Presi)
+                {
+                    var oggetto = _gioco.Items.Find(id);
+                    nomi.Add(oggetto == null || string.IsNullOrEmpty(oggetto.Name) ? id : oggetto.Name);
+                }
+                racconto += "\n\nPrendi: " + string.Join(", ", nomi);
+            }
+            _pannello.Avviso(racconto);
+        }
+
+        private static string Rifiuto(string codice)
+        {
+            switch (codice)
+            {
+                case "needs_item":
+                    return "Chiusa. La chiave che serve non ce l'hai.";
+                case "needs_knowledge":
+                    return "Saracinesche uguali, le targhette tolte.\nQuale sia la B-17 non lo sai.";
+                case "already_open":
+                    return "E' gia' aperta.";
+                default:
+                    return "Qui non c'e' niente da aprire.";
             }
         }
 
@@ -182,7 +280,7 @@ namespace AmnesiaUnity
             // Posizione e rotazione insieme, ogni fotogramma: e' quello che
             // disfa l'inquadratura della conversazione appena si torna a
             // camminare, qualunque cosa le avesse fatto.
-            _occhio.transform.localPosition = SedeDellOcchio;
+            _occhio.transform.localPosition = _diSpalle ? SpallaDestra : SedeDellOcchio;
             _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
         }
 
@@ -219,9 +317,12 @@ namespace AmnesiaUnity
             {
                 return;
             }
-            var verso = _bersaglio.position + Vector3.up * 0.35f;
-            var da = verso - (verso - transform.position).normalized * 1.6f;
-            _occhio.transform.position = Vector3.Lerp(_occhio.transform.position, da + Vector3.up * 0.2f, Time.deltaTime * 4f);
+            // All'altezza degli occhi dell'altro: le figure sono alte un metro
+            // e settantacinque e hanno l'origine ai piedi, quindi mirare a
+            // trentacinque centimetri voleva dire inquadrargli le ginocchia.
+            var verso = _bersaglio.position + Vector3.up * AltezzaDelVolto;
+            var da = verso - (verso - transform.position).normalized * 1.5f;
+            _occhio.transform.position = Vector3.Lerp(_occhio.transform.position, da, Time.deltaTime * 4f);
             _occhio.transform.rotation = Quaternion.Slerp(
                 _occhio.transform.rotation, Quaternion.LookRotation(verso - _occhio.transform.position), Time.deltaTime * 5f);
         }

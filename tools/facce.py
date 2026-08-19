@@ -25,12 +25,16 @@ SFONDO = 40                       # sotto questa luminosita' l'atlante e' vuoto
 # persone, e in un paese di montagna non ci sono due carnagioni uguali.
 CAST = {
     # id          mesh  busto      gambe      capelli    pelle
+    "giorgio":   ("c", "#4a4640", "#33302c", "#2e2823", 1.02),
     "rosa":      ("e", "#8a7f74", "#4a4442", "#6b5f55", 1.00),
     "anna":      ("e", "#33302e", "#2a2725", "#9d968d", 0.90),
     "laura":     ("e", "#3f4a52", "#33383c", "#3a3029", 1.06),
     "matteo":    ("q", "#6d5540", "#4a4238", None,      0.97),
     "don_carlo": ("j", "#232120", "#232120", None,      1.00),
     "nino":      ("a", "#4e5741", "#3d4034", None,      0.94),
+    "teresa":    ("e", "#4a4a52", "#35353a", "#a49d94", 0.88),
+    "piero":     ("k", "#55575c", "#3a3b3e", None,      0.99),
+    "marisa":    ("e", "#7d5f52", "#443a35", "#54443a", 1.03),
 }
 
 

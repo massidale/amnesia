@@ -1,91 +1,91 @@
 [
   {
     "id": "fotografia",
-    "name": "la fotografia",
+    "name": "fotografia",
     "visible": "Una fotografia in bianco e nero, il bordo dentellato, la carta ingiallita. Undici persone in fila davanti all'imbocco di una cava, in posa, vestite bene. Sul retro, a matita: «Circolo della Soglia — 1961».",
     "description": "Undici facce che guardano l'obiettivo. Due le conosco: mio padre, e il falegname che abita a duecento metri da casa mia. Le altre nove sono facce e basta."
   },
   {
     "id": "frase",
-    "name": "la frase",
+    "name": "frase",
     "visible": "Cinque parole, dette a voce o lette dalla prima pagina di un taccuino: «Chi passa per primo tiene la porta».",
     "description": "Cinque parole che non vogliono dire niente. Le ripetevo da bambino, e mia madre dice che avevo ricominciato a dirle prima del coma."
   },
   {
     "id": "foglio_indirizzo",
-    "name": "il foglio",
+    "name": "foglio",
     "visible": "Un foglio di quaderno piegato in quattro, la piega ormai lisa. Una riga sola, a penna, scritta in fretta: «Via Sant'Orsola 14 — Chivasso».",
     "description": "L'ho scritto io: è la mia calligrafia. A Chivasso non ci sono mai stato in vita mia, e questo foglio ce l'avevo addosso quando mi hanno trovato."
   },
   {
     "id": "chiave_b17",
-    "name": "la chiave",
+    "name": "chiave",
     "visible": "Una chiave di ferro, grossa, da serratura vecchia. All'anello è legata con lo spago una targhetta d'ottone stampigliata: B-17.",
     "description": "Una chiave e una sigla. Non so cosa apra, e non ho idea di dove sia la porta."
   },
   {
     "id": "taccuino",
-    "name": "il taccuino",
+    "name": "taccuino",
     "visible": "Un taccuino a righe con la copertina di tela, gonfio d'uso. Le pagine sono piene di righe scritte a mano, ognuna con accanto una data.",
     "description": "Il mio taccuino. Ci scrivo quello che mi viene detto, con la data, perché di quello che ricordo non mi fido più."
   },
   {
     "id": "diario",
-    "name": "il diario di mio padre",
+    "name": "diario di mio padre",
     "visible": "Un quaderno con la copertina di tela nera, portato addosso per anni. Molte righe sono state raschiate via con la lametta: restano i nomi dei posti — Roccavione, Chivasso, istituti, parrocchie — e le date, dal 1974 al 1981. In fondo a una pagina, non raschiata, una riga sola: «se è ancora viva».",
     "description": "Sette anni di viaggi e di lettere, e ogni nome che ha scritto l'ha poi grattato via dalla carta."
   },
   {
     "id": "scatola_vestiti",
-    "name": "la scatola dei vestiti",
+    "name": "scatola dei vestiti",
     "visible": "Una scatola di cartone con i vestiti di un uomo, lavati e piegati. Nei risvolti dei pantaloni è rimasta della segatura. La giacca è consumata sulla schiena, dalle scapole in giù.",
     "description": "Quello che avevo addosso quella sera. Mia madre l'ha lavato e piegato due anni fa e non l'ha più toccato."
   },
   {
     "id": "cartella_clinica",
-    "name": "la cartella clinica",
+    "name": "cartella clinica",
     "visible": "Due fogli ciclostilati dell'ospedale di Cuneo, intestati al ricovero d'urgenza. «Trauma occipitale.» «Escoriazioni al dorso e ai talloni.»",
     "description": "Quello che i medici hanno scritto la mattina in cui mi hanno portato giù dal bosco."
   },
   {
     "id": "quaderno_vittorio",
-    "name": "il quaderno di Vittorio",
+    "name": "quaderno di Vittorio",
     "visible": "Un quaderno scritto fitto da una mano sola, senza date, senza nomi e senza firme. Spiega per esteso cosa si deve fare perché qualcuno passi dall'altra parte e torni indietro: che chi passa dev'essere del sangue di chi si chiama, che deve scendere senza niente addosso, e che chi tiene la corda non la lascia per nessun motivo.",
     "description": "Non è il verbale di una cosa successa: sono istruzioni. Qualcuno le ha scritte perché qualcun altro le eseguisse."
   },
   {
     "id": "registro",
-    "name": "il registro",
+    "name": "registro",
     "visible": "Un registro rilegato in tela, una riga per serata, dal 1958 all'ottobre del 1966. Sulle righe ci sono solo nomi di battesimo e iniziali. L'ultima riga è più lunga delle altre: fra i presenti c'è «A. L.», e di fianco, aggiunto dopo con un'altra penna, «+ il bambino». «L. V.» non c'è.",
     "description": "Otto anni di serate, contate e firmate come si fa con le cose serie."
   },
   {
     "id": "cassetta_latta",
-    "name": "la cassetta di latta",
+    "name": "cassetta di latta",
     "visible": "Una cassetta di latta da biscotti, legata con lo spago. Dentro: un paio di scarpine da bambina, un fermaglio per capelli di celluloide e un braccialetto d'argento sottile.",
     "description": "Roba da bambina piccola, tolta e messa via, e conservata per vent'anni da qualcuno che non l'ha buttata."
   },
   {
     "id": "braccialetto",
-    "name": "il braccialetto",
+    "name": "braccialetto",
     "visible": "Un braccialetto da battesimo, d'argento sottile, della misura di un polso di bambina. All'interno, inciso in corsivo: E. V.",
     "description": "Due iniziali su un braccialetto non vogliono dire niente, finché qualcuno non ti ha raccontato di chi erano."
   },
   {
     "id": "busta_andrea",
-    "name": "la busta di mio padre",
+    "name": "busta di mio padre",
     "visible": "Una busta da lettere chiusa, ingiallita ai bordi, senza francobollo e senza indirizzo. Sul davanti, a penna: «Per mio figlio. Da dargli se un giorno viene a chiedere di quella bambina».",
     "description": "L'ha lasciata a qualcun altro perché me la desse, e ha scritto sopra a quale condizione. Sapeva già che sarei venuto a chiedere."
   },
   {
     "id": "due_righe_matteo",
-    "name": "le due righe di Matteo",
+    "name": "due righe di Matteo",
     "visible": "Mezzo foglio strappato da un blocco da lavoro, la carta ruvida e segnata dal banco. Due righe a matita, in una calligrafia grossa da uomo che scrive poco, e sotto una firma.",
     "description": "Due righe e un nome in fondo. Non c'è scritto niente che io non sappia già."
   },
   {
     "id": "lapide",
-    "name": "la lapide",
+    "name": "lapide",
     "visible": "Una lastra di pietra murata all'imbocco della cava, la scritta scavata e ripassata di nero. «A ricordo di Pietro Ferro, Giuseppe Boasso, Michele Aimar, e della piccola Elena Valli, che questa montagna ha preso il 14 ottobre 1966.» Sotto, piu' piccolo: «Il paese di San Rocco».",
     "description": "Quattro nomi. Tre uomini e una bambina di tre anni. Uno dei tre lo conosco: Ferro e' il cognome della vedova in fondo alla strada."
   }

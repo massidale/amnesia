@@ -38,6 +38,34 @@ namespace AmnesiaUnity
             Terreno(mappa, cella, radice);
             Volumi(mappa, cella, radice);
             Vegetazione(mappa, cella, radice);
+            Bordi(mappa, cella, radice);
+        }
+
+        /// Quattro pareti invisibili intorno al paese. Il terreno finisce dove
+        /// finisce la mappa, e senza queste il giocatore che cammina verso il
+        /// bordo esce dal mondo e cade: non e' una ringhiera, e' il pavimento
+        /// che smette.
+        private static void Bordi(VillageMap mappa, float cella, Transform radice)
+        {
+            var bordo = new GameObject("bordi").transform;
+            bordo.SetParent(radice);
+            var larghezza = mappa.Width * cella;
+            var altezza = mappa.Height * cella;
+            var centro = new Vector3(larghezza * 0.5f - cella * 0.5f, 6f, -altezza * 0.5f + cella * 0.5f);
+            var spessore = cella;
+
+            Parete(bordo, new Vector3(centro.x, centro.y, cella * 0.5f), new Vector3(larghezza, 12f, spessore));
+            Parete(bordo, new Vector3(centro.x, centro.y, -altezza + cella * 0.5f), new Vector3(larghezza, 12f, spessore));
+            Parete(bordo, new Vector3(-cella * 0.5f, centro.y, centro.z), new Vector3(spessore, 12f, altezza));
+            Parete(bordo, new Vector3(larghezza - cella * 0.5f, centro.y, centro.z), new Vector3(spessore, 12f, altezza));
+        }
+
+        private static void Parete(Transform genitore, Vector3 dove, Vector3 misura)
+        {
+            var parete = new GameObject("parete");
+            parete.transform.SetParent(genitore);
+            parete.transform.position = dove;
+            parete.AddComponent<BoxCollider>().size = misura;
         }
 
         private static void Cielo1987()

@@ -100,7 +100,7 @@
   "nino": [
     {
       "from_minute": 0,
-      "place": "segheria"
+      "place": "castagneto"
     },
     {
       "from_minute": 360,
@@ -108,7 +108,7 @@
     },
     {
       "from_minute": 720,
-      "place": "segheria"
+      "place": "castagneto"
     },
     {
       "from_minute": 1110,
@@ -116,7 +116,7 @@
     },
     {
       "from_minute": 1260,
-      "place": "segheria"
+      "place": "castagneto"
     }
   ]
 }

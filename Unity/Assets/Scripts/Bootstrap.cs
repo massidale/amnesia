@@ -27,11 +27,14 @@ namespace AmnesiaUnity
         public ItemCatalog Items { get; private set; }
         public ConversationSession Session { get; private set; }
         public Greeter Accoglienza { get; private set; }
+        public PlaceService Porte { get; private set; }
         public string Problema { get; private set; } = "";
 
         private readonly Dictionary<string, Transform> _corpi = new Dictionary<string, Transform>();
         private readonly Dictionary<string, string> _nomi = new Dictionary<string, string>();
         private DeclarationTable _dichiarazioni;
+        private PlaceTable _luoghi;
+        private readonly Dictionary<string, Transform> _porte = new Dictionary<string, Transform>();
 
         /// Il taccuino si costruisce sul mondo di adesso e non si conserva: la
         /// sessione sostituisce il mondo a ogni turno riuscito, e un taccuino
@@ -50,6 +53,7 @@ namespace AmnesiaUnity
             }
             CostruisciIlPaese();
             CostruisciLeFigure();
+            CostruisciLePorte();
         }
 
         private bool Carica()
@@ -107,6 +111,15 @@ namespace AmnesiaUnity
                 return false;
             }
 
+            var luoghi = PlaceTable.Load(Contenuto("amnesia", "luoghi.json"));
+            if (!luoghi.IsOk)
+            {
+                Problema = luoghi.Message;
+                return false;
+            }
+            Porte = new PlaceService(luoghi.Value);
+            _luoghi = luoghi.Value;
+
             var saluti = GreetingTable.Load(Contenuto("amnesia", "saluti.json"));
             if (!saluti.IsOk)
             {
@@ -157,7 +170,8 @@ namespace AmnesiaUnity
             {
                 ("player", "casa_lipari"), ("rosa", "casa_lipari"), ("matteo", "bottega"),
                 ("anna", "casa_ferro"), ("laura", "casa_valli"), ("don_carlo", "canonica"),
-                ("nino", "segheria"),
+                ("nino", "castagneto"), ("teresa", "giardino"), ("piero", "bar"),
+                ("marisa", "piazza"),
             })
             {
                 // Il posto scritto nella mappa vince sul centro geometrico del
@@ -200,6 +214,59 @@ namespace AmnesiaUnity
             Scenografia.Costruisci(Map, CellSize, new GameObject("paese").transform);
         }
 
+        /// Il ferro sulla porta. Sta in scena solo finche' e' chiuso: quando si
+        /// apre sparisce, e da quel momento quella stanza e' parte del paese
+        /// come tutte le altre.
+        private void CostruisciLePorte()
+        {
+            var porte = new GameObject("porte").transform;
+            foreach (var id in _luoghi.Ids)
+            {
+                var luogo = _luoghi.Find(id);
+                if (luogo == null || Porte.IsOpen(World, id))
+                {
+                    continue;
+                }
+                var battente = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                battente.name = id;
+                battente.transform.SetParent(porte);
+                battente.transform.position = InScena(luogo.Door.Cell()) + Vector3.up * (CellSize * 1.1f);
+                battente.transform.localScale = new Vector3(CellSize, CellSize * 2.2f, CellSize * 0.25f);
+                battente.GetComponent<Renderer>().sharedMaterial = Scenografia.Materiale(new Color(0.24f, 0.21f, 0.18f));
+                _porte[id] = battente.transform;
+            }
+        }
+
+        /// La porta chiusa piu' vicina, se ci sei davanti.
+        public string PortaVicina(Vector3 da, float portata)
+        {
+            foreach (var pair in _porte)
+            {
+                if (pair.Value == null)
+                {
+                    continue;
+                }
+                var quanto = Vector2.Distance(
+                    new Vector2(da.x, da.z), new Vector2(pair.Value.position.x, pair.Value.position.z));
+                if (quanto < portata)
+                {
+                    return pair.Key;
+                }
+            }
+            return "";
+        }
+
+        public void SpalancaLaPorta(string id)
+        {
+            if (_porte.TryGetValue(id, out var battente) && battente != null)
+            {
+                Destroy(battente.gameObject);
+                _porte.Remove(id);
+            }
+        }
+
+        public string DescrizioneDellaPorta(string id) => Porte.Descrizione(id);
+
         /// Quale corpo indossa ciascuno. Le mesh sono di Kenney (CC0); le
         /// facce le dipinge `tools/facce.py`, che tiene la stessa lista: se qui
         /// cambia una lettera, va cambiata anche la'.
@@ -207,6 +274,7 @@ namespace AmnesiaUnity
         {
             ["rosa"] = "e", ["anna"] = "e", ["laura"] = "e",
             ["matteo"] = "q", ["don_carlo"] = "j", ["nino"] = "a",
+            ["teresa"] = "e", ["piero"] = "k", ["marisa"] = "e",
         };
 
         private void CostruisciLeFigure()
@@ -231,7 +299,7 @@ namespace AmnesiaUnity
         /// il modello non c'e' — import non riuscito, cartella spostata — resta
         /// una capsula: il gioco deve poter partire lo stesso, perche' la scena
         /// serve a provare le conversazioni, non i poligoni.
-        private static GameObject Figura(string id, string mesh)
+        public static GameObject Figura(string id, string mesh)
         {
             var modello = Resources.Load<GameObject>("kenney/persone/character-" + mesh);
             if (modello == null)

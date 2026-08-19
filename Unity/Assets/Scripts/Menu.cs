@@ -4,17 +4,17 @@ using UnityEngine.UI;
 
 namespace AmnesiaUnity
 {
-    /// Il menu di pausa, con tre pagine: cosa hai in tasca, la pianta del paese,
-    /// il taccuino.
+    /// La pausa, con tre pagine: cosa hai in tasca, la pianta del paese, il
+    /// taccuino.
     ///
     /// Stanno insieme perche' sono la stessa cosa vista da tre lati — un
     /// oggetto senza una riga che lo spieghi non vuol dire niente, una riga
     /// senza l'oggetto in mano non si puo' mettere in faccia a nessuno, e
     /// nessuna delle due serve se non sai dove sta la bottega.
     ///
-    /// Il tempo qui non scorre e non c'e' niente da fermare: in Amnesia l'orologio
-    /// avanza a ogni battuta, quindi la pausa e' esattamente cio' che sembra —
-    /// il gioco che sta fermo ad aspettarti.
+    /// Il tempo qui non scorre e non c'e' niente da fermare: in Amnesia
+    /// l'orologio avanza a ogni battuta, quindi la pausa e' esattamente cio'
+    /// che sembra — il gioco fermo ad aspettarti.
     public sealed class Menu : MonoBehaviour
     {
         private const int Zoom = 14;
@@ -26,12 +26,12 @@ namespace AmnesiaUnity
         private Bootstrap _gioco;
         private Transform _giocatore;
         private GameObject _radice;
-        private Text _titolo;
         private Text _foglio;
         private GameObject _pianta;
         private RectTransform _carta;
         private RectTransform _iosono;
         private readonly Dictionary<Pagina, Text> _linguette = new Dictionary<Pagina, Text>();
+        private readonly Dictionary<Pagina, RectTransform> _sottolineature = new Dictionary<Pagina, RectTransform>();
         private Pagina _pagina = Pagina.Tasche;
 
         private void Start()
@@ -89,7 +89,7 @@ namespace AmnesiaUnity
 
         private void Mostra()
         {
-            _foglio.gameObject.SetActive(_pagina != Pagina.Paese);
+            _foglio.transform.parent.gameObject.SetActive(_pagina != Pagina.Paese);
             _pianta.SetActive(_pagina == Pagina.Paese);
             if (_pagina == Pagina.Tasche)
             {
@@ -101,9 +101,9 @@ namespace AmnesiaUnity
             }
             foreach (var linguetta in _linguette)
             {
-                linguetta.Value.color = linguetta.Key == _pagina
-                    ? new Color(0.95f, 0.90f, 0.76f)
-                    : new Color(0.52f, 0.50f, 0.47f);
+                var scelta = linguetta.Key == _pagina;
+                linguetta.Value.color = scelta ? Stile.Carta : Stile.Grafite;
+                _sottolineature[linguetta.Key].gameObject.SetActive(scelta);
             }
         }
 
@@ -119,82 +119,81 @@ namespace AmnesiaUnity
 
         private void Costruisci()
         {
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            var canvas = new GameObject("menu").AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            // Sopra la conversazione: l'ordine fra due canvas pari e' quello di
-            // creazione, cioe' una cosa che cambia da sola spostando una riga.
-            canvas.sortingOrder = 10;
-            var scaler = canvas.gameObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280f, 720f);
-            canvas.gameObject.AddComponent<GraphicRaycaster>();
+            var canvas = Stile.Tela("menu", 10);
+            _radice = Stile.Riquadro(canvas.transform, "pagina", Stile.Velo, Vector2.zero, Vector2.one).gameObject;
 
-            _radice = new GameObject("pagina");
-            _radice.transform.SetParent(canvas.transform, false);
-            _radice.AddComponent<Image>().color = new Color(0.04f, 0.04f, 0.05f, 0.95f);
-            Riempi(_radice.GetComponent<RectTransform>(), Vector2.zero, Vector2.one);
+            var occhiello = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+                new Vector2(0.07f, 0.925f), new Vector2(0.5f, 0.965f));
+            occhiello.text = "PAUSA";
 
-            _titolo = Scritta(_radice.transform, font, 24, new Vector2(0.06f, 0.90f), new Vector2(0.5f, 0.97f));
-            _titolo.color = new Color(0.88f, 0.82f, 0.66f);
-            _titolo.text = "Pausa";
-
-            var barra = new GameObject("linguette");
+            var barra = new GameObject("linguette", typeof(RectTransform));
             barra.transform.SetParent(_radice.transform, false);
             var disposizione = barra.AddComponent<HorizontalLayoutGroup>();
-            disposizione.spacing = 26f;
+            disposizione.spacing = 34f;
             disposizione.childForceExpandWidth = false;
             disposizione.childAlignment = TextAnchor.MiddleLeft;
-            Riempi(barra.GetComponent<RectTransform>(), new Vector2(0.06f, 0.83f), new Vector2(0.94f, 0.89f));
+            Stile.Ancora((RectTransform)barra.transform, new Vector2(0.07f, 0.855f), new Vector2(0.93f, 0.915f));
 
-            Linguetta(barra.transform, font, Pagina.Tasche, "In tasca  (I)");
-            Linguetta(barra.transform, font, Pagina.Paese, "Il paese  (M)");
-            Linguetta(barra.transform, font, Pagina.Taccuino, "Il taccuino  (T)");
+            Linguetta(barra.transform, Pagina.Tasche, "In tasca", "I");
+            Linguetta(barra.transform, Pagina.Paese, "Il paese", "M");
+            Linguetta(barra.transform, Pagina.Taccuino, "Il taccuino", "T");
 
-            _foglio = Scritta(_radice.transform, font, 18, new Vector2(0.06f, 0.08f), new Vector2(0.94f, 0.81f));
+            Stile.Filo(_radice.transform, new Vector2(0.07f, 0.845f), new Vector2(0.93f, 0.848f), Stile.Incavo);
 
-            CostruisciLaPianta(font);
+            var feritoia = Stile.Feritoia(_radice.transform, "foglio",
+                new Vector2(0.07f, 0.09f), new Vector2(0.93f, 0.825f));
+            _foglio = Stile.Scritta(feritoia, Stile.Macchina, 16, Stile.Carta, Vector2.zero, Vector2.one);
 
-            var coda = Scritta(_radice.transform, font, 15, new Vector2(0.06f, 0.02f), new Vector2(0.94f, 0.07f));
-            coda.color = new Color(0.52f, 0.50f, 0.47f);
-            coda.text = "Esc riprende  ·  Tab o le frecce cambiano pagina";
+            CostruisciLaPianta();
+
+            var coda = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+                new Vector2(0.07f, 0.035f), new Vector2(0.93f, 0.075f));
+            coda.text = "esc riprende   ·   tab e frecce cambiano pagina";
 
             _radice.SetActive(false);
         }
 
-        private void CostruisciLaPianta(Font font)
+        private void CostruisciLaPianta()
         {
             _pianta = new GameObject("paese", typeof(RectTransform));
             _pianta.transform.SetParent(_radice.transform, false);
-            Riempi((RectTransform)_pianta.transform, new Vector2(0f, 0.08f), new Vector2(1f, 0.81f));
+            Stile.Ancora((RectTransform)_pianta.transform, new Vector2(0f, 0.09f), new Vector2(1f, 0.825f));
 
-            var disegno = new GameObject("carta");
-            disegno.transform.SetParent(_pianta.transform, false);
+            var larghezza = _gioco.Map.Width * Zoom;
+            var altezza = _gioco.Map.Height * Zoom;
+
+            // La cornice: un bordo intorno alla carta, che la stacca dal nero e
+            // dice dove finisce il paese.
+            var cornice = Stile.Riquadro(_pianta.transform, "cornice", Stile.Grafite,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            cornice.sizeDelta = new Vector2(larghezza + 4f, altezza + 4f);
+
+            var disegno = new GameObject("carta", typeof(RectTransform));
+            disegno.transform.SetParent(cornice, false);
             disegno.AddComponent<RawImage>().texture = Pianta.Disegna(_gioco.Map);
-            _carta = disegno.GetComponent<RectTransform>();
-            _carta.anchorMin = _carta.anchorMax = new Vector2(0.5f, 0.5f);
-            _carta.sizeDelta = new Vector2(_gioco.Map.Width * Zoom, _gioco.Map.Height * Zoom);
+            _carta = Stile.Ancora((RectTransform)disegno.transform, Vector2.zero, Vector2.one);
+            _carta.offsetMin = new Vector2(2f, 2f);
+            _carta.offsetMax = new Vector2(-2f, -2f);
 
             foreach (var luogo in _gioco.Map.Places)
             {
                 var rettangolo = luogo.Value;
-                var etichetta = Scritta(_carta, font, 13, Vector2.zero, Vector2.zero);
+                var etichetta = Stile.Scritta(_carta, Stile.Macchina, 12, Stile.Carta,
+                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
                 etichetta.alignment = TextAnchor.MiddleCenter;
                 etichetta.horizontalOverflow = HorizontalWrapMode.Overflow;
+                etichetta.verticalOverflow = VerticalWrapMode.Overflow;
                 etichetta.text = Pianta.NomeDi(luogo.Key);
                 var rect = etichetta.GetComponent<RectTransform>();
-                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.sizeDelta = new Vector2(170f, 18f);
+                rect.sizeDelta = new Vector2(170f, 16f);
                 rect.anchoredPosition = SulFoglio(
                     rettangolo.X + rettangolo.W / 2f, rettangolo.Y + rettangolo.H / 2f);
             }
 
-            var segno = new GameObject("io").AddComponent<Image>();
-            segno.transform.SetParent(_carta, false);
-            segno.color = new Color(0.96f, 0.86f, 0.52f);
-            _iosono = segno.GetComponent<RectTransform>();
-            _iosono.anchorMin = _iosono.anchorMax = new Vector2(0.5f, 0.5f);
-            _iosono.sizeDelta = new Vector2(9f, 9f);
+            var segno = Stile.Riquadro(_carta, "io", Stile.Ottone,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            segno.sizeDelta = new Vector2(9f, 9f);
+            _iosono = segno;
 
             _pianta.SetActive(false);
         }
@@ -203,43 +202,25 @@ namespace AmnesiaUnity
             (x - _gioco.Map.Width / 2f) * Zoom,
             (_gioco.Map.Height / 2f - y) * Zoom);
 
-        private void Linguetta(Transform genitore, Font font, Pagina pagina, string testo)
+        private void Linguetta(Transform genitore, Pagina pagina, string testo, string tasto)
         {
-            var go = new GameObject(testo);
+            var go = new GameObject(testo, typeof(RectTransform));
             go.transform.SetParent(genitore, false);
-            var scritta = go.AddComponent<Text>();
-            scritta.font = font;
-            scritta.fontSize = 19;
+            var scritta = Stile.Scritta(go.transform, Stile.Macchina, 19, Stile.Grafite, Vector2.zero, Vector2.one);
             scritta.alignment = TextAnchor.MiddleLeft;
             scritta.horizontalOverflow = HorizontalWrapMode.Overflow;
-            scritta.text = testo;
-            go.AddComponent<LayoutElement>().preferredWidth = scritta.preferredWidth + 6f;
+            scritta.text = $"{testo}  ({tasto})";
+
+            // Il filo d'ottone sotto la linguetta aperta: la stessa firma del
+            // pannello, e lo stesso significato — sei qui dentro.
+            var filo = Stile.Filo(go.transform, new Vector2(0f, 0f), new Vector2(1f, 0.06f), Stile.Ottone);
+            _sottolineature[pagina] = filo;
+
+            go.AddComponent<LayoutElement>().preferredWidth = scritta.preferredWidth + 4f;
             var bottone = go.AddComponent<Button>();
             bottone.targetGraphic = scritta;
             bottone.onClick.AddListener(() => { _pagina = pagina; Mostra(); });
             _linguette[pagina] = scritta;
-        }
-
-        private static Text Scritta(Transform genitore, Font font, int corpo, Vector2 min, Vector2 max)
-        {
-            var go = new GameObject("scritta");
-            go.transform.SetParent(genitore, false);
-            var testo = go.AddComponent<Text>();
-            testo.font = font;
-            testo.fontSize = corpo;
-            testo.color = new Color(0.91f, 0.89f, 0.84f);
-            testo.alignment = TextAnchor.UpperLeft;
-            testo.horizontalOverflow = HorizontalWrapMode.Wrap;
-            testo.verticalOverflow = VerticalWrapMode.Truncate;
-            Riempi(go.GetComponent<RectTransform>(), min, max);
-            return testo;
-        }
-
-        private static void Riempi(RectTransform rect, Vector2 min, Vector2 max)
-        {
-            rect.anchorMin = min;
-            rect.anchorMax = max;
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
         }
     }
 }

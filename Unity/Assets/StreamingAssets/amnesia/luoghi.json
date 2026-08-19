@@ -1,0 +1,22 @@
+{
+  "places": {
+    "magazzino_b17": {
+      "door": {
+        "x": 6,
+        "y": 28
+      },
+      "closed": "Le saracinesche del deposito, tutte uguali, la vernice andata.",
+      "opened": "La serratura è dura ma gira. Dentro c'è l'aria ferma di vent'anni.",
+      "requires_item": "chiave_b17",
+      "requires_declared": [
+        "magazzino_dove"
+      ],
+      "contains": [
+        "cassetta_latta",
+        "braccialetto",
+        "quaderno_vittorio",
+        "registro"
+      ]
+    }
+  }
+}

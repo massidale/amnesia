@@ -1,5 +1,4 @@
 using System.Text;
-using System.Threading.Tasks;
 using Amnesia.Dialogue;
 using Amnesia.Game;
 using UnityEngine;
@@ -7,28 +6,34 @@ using UnityEngine.UI;
 
 namespace AmnesiaUnity
 {
-    /// La conversazione a schermo. Costruita in codice perche' finche' il look
-    /// non e' deciso una scena salvata e' solo una cosa in piu' che si rompe.
+    /// La conversazione a schermo: il nome di chi hai davanti, quello che vi
+    /// siete detti, gli oggetti che puoi mettergli sul banco, e la riga in cui
+    /// scrivi.
+    ///
+    /// E' costruita in codice perche' finche' il look non e' deciso una scena
+    /// salvata e' solo una cosa in piu' che si rompe in silenzio.
     public sealed class Pannello : MonoBehaviour
     {
         /// Quanti scambi restano a schermo. Il pannello e' basso apposta: se ci
-        /// stesse tutta la conversazione, il giocatore rileggerebbe invece di
+        /// stesse tutta la conversazione il giocatore rileggerebbe invece di
         /// guardare in faccia chi ha davanti.
-        private const int TurniMostrati = 6;
+        private const int TurniMostrati = 8;
+
+        private const float DurataAvviso = 5f;
 
         public bool Aperto { get; private set; }
 
         private Bootstrap _gioco;
         private Text _detto;
         private Text _chi;
-        private Text _invito;
-        private RectTransform _fila;
-        private Font _font;
         private Text _stato;
+        private Text _invito;
         private InputField _campo;
         private GameObject _radice;
+        private RectTransform _fila;
         private string _con = "";
         private bool _inAttesa;
+        private float _avvisoFino;
 
         private void Start()
         {
@@ -37,106 +42,74 @@ namespace AmnesiaUnity
             if (!string.IsNullOrEmpty(_gioco.Problema))
             {
                 _stato.text = _gioco.Problema;
+                _stato.color = Stile.Ruggine;
                 _radice.SetActive(true);
             }
         }
 
         private void Costruisci()
         {
-            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            var canvas = new GameObject("interfaccia").AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvas.gameObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1280f, 720f);
-            canvas.gameObject.AddComponent<GraphicRaycaster>();
+            var canvas = Stile.Tela("interfaccia", 0);
             if (FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() == null)
             {
-                var es = new GameObject("eventi");
-                es.AddComponent<UnityEngine.EventSystems.EventSystem>();
-                es.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+                var eventi = new GameObject("eventi");
+                eventi.AddComponent<UnityEngine.EventSystems.EventSystem>();
+                eventi.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
             }
 
-            _radice = new GameObject("pannello");
-            _radice.transform.SetParent(canvas.transform, false);
-            var sfondo = _radice.AddComponent<Image>();
-            sfondo.color = new Color(0.05f, 0.05f, 0.06f, 0.88f);
-            var rect = _radice.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0.06f, 0.04f);
-            rect.anchorMax = new Vector2(0.94f, 0.40f);
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            _radice = Stile.Riquadro(canvas.transform, "pannello", Stile.Notte,
+                new Vector2(0.05f, 0.045f), new Vector2(0.95f, 0.44f)).gameObject;
+            // Il filo d'ottone: l'unico ornamento, e vuol dire «sei qui dentro».
+            Stile.Filo(_radice.transform, new Vector2(0f, 0.985f), new Vector2(1f, 1f), Stile.Ottone);
 
-            _chi = Etichetta(_radice.transform, font, 23, new Vector2(0.03f, 0.86f), new Vector2(0.97f, 0.99f));
-            _chi.color = new Color(0.88f, 0.82f, 0.66f);
-            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.42f), new Vector2(0.97f, 0.84f));
-            _detto.color = new Color(0.93f, 0.91f, 0.86f);
-            _detto.alignment = TextAnchor.LowerLeft;
-            _stato = Etichetta(_radice.transform, font, 15, new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.16f));
-            _stato.color = new Color(0.60f, 0.58f, 0.54f);
+            _chi = Stile.Scritta(_radice.transform, Stile.Macchina, 20, Stile.Ottone,
+                new Vector2(0.035f, 0.855f), new Vector2(0.7f, 0.965f));
 
-            _font = font;
-            var barra = new GameObject("oggetti");
+            var feritoia = Stile.Feritoia(_radice.transform, "detto",
+                new Vector2(0.035f, 0.30f), new Vector2(0.965f, 0.84f));
+            _detto = Stile.Colonna(feritoia, Stile.Libro, 23, Stile.Carta);
+
+            var barra = new GameObject("oggetti", typeof(RectTransform));
             barra.transform.SetParent(_radice.transform, false);
             var disposizione = barra.AddComponent<HorizontalLayoutGroup>();
-            disposizione.spacing = 6f;
+            disposizione.spacing = 8f;
             disposizione.childForceExpandWidth = false;
             disposizione.childForceExpandHeight = true;
             disposizione.childAlignment = TextAnchor.MiddleLeft;
-            _fila = barra.GetComponent<RectTransform>();
-            _fila.anchorMin = new Vector2(0.03f, 0.33f);
-            _fila.anchorMax = new Vector2(0.97f, 0.41f);
-            _fila.offsetMin = _fila.offsetMax = Vector2.zero;
+            _fila = Stile.Ancora((RectTransform)barra.transform,
+                new Vector2(0.035f, 0.205f), new Vector2(0.965f, 0.285f));
 
-            var riga = new GameObject("riga");
-            riga.transform.SetParent(_radice.transform, false);
-            var rigaImg = riga.AddComponent<Image>();
-            rigaImg.color = new Color(1f, 1f, 1f, 0.06f);
-            var rigaRect = riga.GetComponent<RectTransform>();
-            rigaRect.anchorMin = new Vector2(0.03f, 0.17f);
-            rigaRect.anchorMax = new Vector2(0.97f, 0.32f);
-            rigaRect.offsetMin = rigaRect.offsetMax = Vector2.zero;
+            var riga = Stile.Riquadro(_radice.transform, "riga", Stile.Incavo,
+                new Vector2(0.035f, 0.075f), new Vector2(0.965f, 0.19f));
+            var scritto = Stile.Scritta(riga, Stile.Libro, 23, Stile.Carta,
+                new Vector2(0.012f, 0f), new Vector2(0.99f, 1f));
+            scritto.alignment = TextAnchor.MiddleLeft;
+            scritto.supportRichText = false;
 
-            var testo = Etichetta(riga.transform, font, 20, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f));
-            testo.alignment = TextAnchor.MiddleLeft;
-            testo.supportRichText = false;
-
-            _campo = riga.AddComponent<InputField>();
-            _campo.textComponent = testo;
+            _campo = riga.gameObject.AddComponent<InputField>();
+            _campo.textComponent = scritto;
             _campo.lineType = InputField.LineType.SingleLine;
+            _campo.caretColor = Stile.Ottone;
+            _campo.customCaretColor = true;
             // onEndEdit scatta anche quando il campo perde il fuoco: senza il
             // filtro sull'invio, cliccare altrove manderebbe una battuta.
-            _campo.onEndEdit.AddListener(riga =>
+            _campo.onEndEdit.AddListener(testo =>
             {
                 if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 {
-                    Manda(riga);
+                    Manda(testo);
                 }
             });
 
-            // Fuori dal pannello, perche' si legge mentre si cammina.
-            _invito = Etichetta(canvas.transform, font, 18, new Vector2(0.20f, 0.44f), new Vector2(0.80f, 0.50f));
+            _stato = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+                new Vector2(0.035f, 0.012f), new Vector2(0.965f, 0.065f));
+
+            // Fuori dal pannello: si legge camminando.
+            _invito = Stile.Scritta(canvas.transform, Stile.Macchina, 17, Stile.Carta,
+                new Vector2(0.2f, 0.45f), new Vector2(0.8f, 0.51f));
             _invito.alignment = TextAnchor.MiddleCenter;
-            _invito.color = new Color(0.93f, 0.91f, 0.86f, 0.80f);
-            _invito.text = "";
 
             _radice.SetActive(false);
-        }
-
-        private static Text Etichetta(Transform genitore, Font font, int corpo, Vector2 min, Vector2 max)
-        {
-            var go = new GameObject("testo");
-            go.transform.SetParent(genitore, false);
-            var text = go.AddComponent<Text>();
-            text.font = font;
-            text.fontSize = corpo;
-            text.alignment = TextAnchor.UpperLeft;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
-            var rect = go.GetComponent<RectTransform>();
-            rect.anchorMin = min;
-            rect.anchorMax = max;
-            rect.offsetMin = rect.offsetMax = Vector2.zero;
-            return text;
         }
 
         public void Apri(string npcId)
@@ -145,16 +118,16 @@ namespace AmnesiaUnity
             _con = npcId;
             Aperto = true;
             _radice.SetActive(true);
-            // Riaprire una conversazione la ritrova dov'era: e' il registro del
-            // personaggio, non una finestra che si svuota chiudendola.
             _chi.text = _gioco.NomeDi(npcId);
             _invito.text = "";
             // Chi alza la testa per primo. Il saluto entra nel registro della
             // conversazione, quindi si scrive prima di trascrivere.
             _gioco.Accoglienza.Apri(_gioco.Session.World, _gioco.Session.Log, npcId);
             Targhette();
+            // Riaprire una conversazione la ritrova dov'era: e' il registro del
+            // personaggio, non una finestra che si svuota chiudendola.
             Trascrivi();
-            _stato.text = "invio per parlare  ·  /oggetti  ·  /taccuino  ·  Esc per andartene";
+            _stato.text = "invio per parlare   ·   /oggetti   /taccuino   ·   esc per andartene";
             _campo.text = "";
             _campo.ActivateInputField();
         }
@@ -162,9 +135,23 @@ namespace AmnesiaUnity
         /// Chi hai davanti, prima di aprire bocca. In un paese di milleduecento
         /// anime le facce si conoscono tutte: andare in giro a chiedere «lei chi
         /// e'?» a uno per uno e' una cosa che Giorgio non farebbe mai.
-        public void Suggerisci(string npcId)
+        public void Suggerimento(string testo)
         {
-            _invito.text = Aperto || string.IsNullOrEmpty(npcId) ? "" : $"E — parla con {_gioco.NomeDi(npcId)}";
+            if (Aperto || Time.time < _avvisoFino)
+            {
+                return;
+            }
+            _invito.color = Stile.Carta;
+            _invito.text = testo;
+        }
+
+        /// Quello che succede fuori dalla conversazione: una porta che non si
+        /// apre, una serratura che gira, della roba che cambia di mano.
+        public void Avviso(string testo, bool storto = false)
+        {
+            _invito.color = storto ? Stile.Grafite : Stile.Carta;
+            _invito.text = testo;
+            _avvisoFino = Time.time + DurataAvviso;
         }
 
         private void Update()
@@ -173,6 +160,11 @@ namespace AmnesiaUnity
             {
                 Aperto = false;
                 _radice.SetActive(false);
+            }
+            if (!Aperto && Time.time > _avvisoFino && _avvisoFino > 0f)
+            {
+                _invito.text = "";
+                _avvisoFino = 0f;
             }
         }
 
@@ -191,7 +183,7 @@ namespace AmnesiaUnity
             }
             _inAttesa = true;
             _campo.text = "";
-            _stato.text = "…";
+            _stato.text = "sta rispondendo…";
 
             TurnResult turno;
             try
@@ -202,7 +194,8 @@ namespace AmnesiaUnity
             {
                 // Un turno che esplode non deve lasciare il pannello muto: il
                 // mondo non si e' mosso, e il giocatore ha diritto di saperlo.
-                _stato.text = $"non ha risposto ({errore.GetType().Name})";
+                _stato.color = Stile.Ruggine;
+                _stato.text = $"non ha risposto — {errore.GetType().Name}";
                 _inAttesa = false;
                 _campo.ActivateInputField();
                 return;
@@ -211,11 +204,14 @@ namespace AmnesiaUnity
             if (turno.IsOk)
             {
                 Trascrivi();
+                Targhette();
+                _stato.color = Stile.Grafite;
                 _stato.text = Coda(turno);
             }
             else
             {
-                _stato.text = $"non ha risposto: {turno.Message}";
+                _stato.color = Stile.Ruggine;
+                _stato.text = $"non ha risposto — {turno.Message}";
             }
             _inAttesa = false;
             _campo.ActivateInputField();
@@ -234,21 +230,14 @@ namespace AmnesiaUnity
             foreach (var oggetto in _gioco.Taccuino.Tasche())
             {
                 var nome = string.IsNullOrEmpty(oggetto.Name) ? oggetto.Id : oggetto.Name;
-                var targhetta = new GameObject(oggetto.Id);
-                targhetta.transform.SetParent(_fila, false);
-                var sfondo = targhetta.AddComponent<Image>();
-                sfondo.color = new Color(1f, 1f, 1f, 0.09f);
-
-                var testo = Etichetta(targhetta.transform, _font, 15, new Vector2(0f, 0f), new Vector2(1f, 1f));
+                var targhetta = Stile.Riquadro(_fila, oggetto.Id, Stile.Incavo, Vector2.zero, Vector2.one);
+                var testo = Stile.Scritta(targhetta, Stile.Macchina, 14, Stile.Carta, Vector2.zero, Vector2.one);
                 testo.alignment = TextAnchor.MiddleCenter;
-                testo.text = "  " + nome + "  ";
-                testo.color = new Color(0.88f, 0.85f, 0.78f);
+                testo.text = nome;
 
-                var misura = targhetta.AddComponent<LayoutElement>();
-                misura.preferredWidth = testo.preferredWidth + 10f;
-
-                var bottone = targhetta.AddComponent<Button>();
-                bottone.targetGraphic = sfondo;
+                targhetta.gameObject.AddComponent<LayoutElement>().preferredWidth = testo.preferredWidth + 22f;
+                var bottone = targhetta.gameObject.AddComponent<Button>();
+                bottone.targetGraphic = targhetta.GetComponent<Image>();
                 bottone.onClick.AddListener(() => Inserisci(nome));
             }
         }
@@ -276,16 +265,17 @@ namespace AmnesiaUnity
             }
             else
             {
-                _detto.text = "/oggetti — cosa hai in tasca\n/taccuino — cosa ti hanno detto\n\nGli oggetti si mostrano anche cliccando le targhette qui sotto.";
+                _detto.text = "/oggetti    cosa hai in tasca\n/taccuino   cosa ti hanno detto";
             }
+            _stato.color = Stile.Grafite;
             _stato.text = "scrivi per tornare alla conversazione";
         }
 
         /// La conversazione come la ricorda il personaggio. La fonte e' il
         /// registro del dominio e non una lista tenuta a parte: quella che il
         /// giocatore legge deve essere la stessa cosa che rientra nel prompt il
-        /// turno dopo, o si finisce a discutere di una battuta che il modello non
-        /// ha mai avuto davanti.
+        /// turno dopo, o si finisce a discutere di una battuta che il modello
+        /// non ha mai avuto davanti.
         private void Trascrivi()
         {
             var scritto = new StringBuilder();
@@ -293,24 +283,26 @@ namespace AmnesiaUnity
             {
                 if (battuta.Role == ChatRole.User)
                 {
-                    scritto.Append("\n> ").Append(battuta.Content).Append('\n');
+                    // Le tue parole in grafite: sul foglio le hai scritte tu.
+                    // Il testo e' gia' passato dal sanificatore, quindi non puo'
+                    // contenere marcatori suoi.
+                    scritto.Append("<color=#8C8577><i>— ").Append(battuta.Content).Append("</i></color>\n");
                 }
                 else
                 {
                     scritto.Append(battuta.Content).Append('\n');
                 }
             }
-            _detto.text = scritto.ToString().TrimStart('\n');
+            _detto.text = scritto.ToString().Trim('\n');
         }
 
-        /// Cosa il motore ha registrato. A schermo perche' questa e' una scena di
-        /// prova e serve a vedere la meccanica lavorare; nel gioco vero il
-        /// giocatore vedra' il taccuino, non questa riga.
+        /// Cosa il motore ha registrato. A schermo perche' questa e' una scena
+        /// di prova e serve a vedere la meccanica lavorare.
         private string Coda(TurnResult turno)
         {
             var ora = Amnesia.Time.WorldClock.Format(turno.Minute);
-            var registrato = turno.Declared.Count > 0 ? "  ·  registrato: " + string.Join(", ", turno.Declared) : "";
-            var rifiutato = turno.RefusedTags.Count > 0 ? "  ·  non ce l'hai: " + string.Join(", ", turno.RefusedTags) : "";
+            var registrato = turno.Declared.Count > 0 ? "   ·   annotato: " + string.Join(", ", turno.Declared) : "";
+            var rifiutato = turno.RefusedTags.Count > 0 ? "   ·   non ce l'hai: " + string.Join(", ", turno.RefusedTags) : "";
             return ora + registrato + rifiutato;
         }
     }
