@@ -339,11 +339,12 @@ namespace AmnesiaUnity
             {
                 return;
             }
-            // All'altezza degli occhi dell'altro: le figure sono alte un metro
-            // e settantacinque e hanno l'origine ai piedi, quindi mirare a
-            // trentacinque centimetri voleva dire inquadrargli le ginocchia.
+            // Fra due facce, non fra due paia di piedi. Le figure — e il
+            // giocatore — hanno l'origine a terra: prendere `transform.position`
+            // come punto di vista significa guardare l'altro dal selciato.
             var verso = _bersaglio.position + Vector3.up * AltezzaDelVolto;
-            var da = verso - (verso - transform.position).normalized * 1.5f;
+            var occhi = transform.position + Vector3.up * SedeDellOcchio.y;
+            var da = verso - (verso - occhi).normalized * 1.5f;
             _occhio.transform.position = Vector3.Lerp(_occhio.transform.position, da, Time.deltaTime * 4f);
             _occhio.transform.rotation = Quaternion.Slerp(
                 _occhio.transform.rotation, Quaternion.LookRotation(verso - _occhio.transform.position), Time.deltaTime * 5f);
