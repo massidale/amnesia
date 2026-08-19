@@ -930,7 +930,7 @@ La regola è **una sola fonte per ogni cosa condivisa**, e le schede non la ripe
 - la sua storia di copertura, scritta in prima persona come convinzione sincera;
 - il suo rapporto con Giorgio e con gli altri.
 
-Tre invarianti da verificare, e sono verificabili con un grep prima ancora che con una partita:
+Tre invarianti da verificare. Un grep le **segnala**, non le decide — provato sul campo: cercare i fatti condivisi duplicati fra schede produce sia le violazioni vere sia due persone che ricordano lo stesso anno, e a distinguerle bisogna guardarle. Vale come rete, non come cancello:
 
 1. **Nessun fatto del mondo compare in due schede.** Se ce lo trovi, va in `rules.md`.
 2. **Nessuna scheda contiene un'istruzione a nascondere.** Ciò che non deve uscire non sta nel prompt: lo governa la posizione.
