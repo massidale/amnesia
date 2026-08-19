@@ -30,20 +30,29 @@
       "requires_shown": []
     },
     "avevano_una_frase": {
-      "text": "Avevano una specie di detto fra loro. Qualcosa di una porta.",
+      "text": "Avevano una specie di detto fra loro. Non me lo ricordo bene.",
       "truth": "true",
       "sources": [
-        "nino",
         "rosa",
+        "nino",
         "don_carlo",
         "teresa",
         "piero",
-        "marisa",
         "beppe",
         "lidia",
         "gino"
       ],
-      "requires_shown": []
+      "requires_shown": [],
+      "variants": {
+        "rosa": "Una frase, sì… la diceva anche tu da bambino, sai. Cinque parole. Non ci ho mai capito niente.",
+        "nino": "Al bar, vent'anni fa, gliel'ho sentita dire una volta. Una cosa di passare per primi, mi pare.",
+        "don_carlo": "Avevano una formula, sì. Ci ho predicato contro per dieci anni senza mai sentirla per intero.",
+        "teresa": "Sì, dicevano sempre una cosa fra loro. Qualcosa di una porta, mi pare. O di un cancello.",
+        "piero": "Boh. Si dicevano una roba… di tenere. Tenere qualcosa. È passato tanto di quel tempo.",
+        "beppe": "C'era un detto, sì. Parlavano di un'entrata, o di un passaggio. Io facevo il pane, mica stavo a sentire.",
+        "lidia": "Ah, quella frase! La dicevano sempre, sempre la stessa. Chiedimi le parole e non te le so dire.",
+        "gino": "Mio padre diceva che quelli lì avevano un motto. Una roba da compagnia, come le squadre."
+      }
     },
     "non_erano_gite": {
       "text": "Non erano gite. Ci si trovava per altro.",
@@ -402,6 +411,130 @@
         "elena"
       ],
       "requires_shown": []
+    },
+    "frase_per_riconoscersi": {
+      "text": "Quella frase se la dicevano per riconoscersi fra loro.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "teresa",
+        "piero",
+        "beppe",
+        "lidia",
+        "gino"
+      ],
+      "requires_shown": [
+        "frase"
+      ],
+      "variants": {
+        "rosa": "Ecco, sì… era quella. Ma tu dove l'hai sentita? Da chi?",
+        "nino": "Ah, adesso sì. Era quella. Se la dicevano fra loro per farsi riconoscere, come una parola d'ordine.",
+        "don_carlo": "…Sì. Era quella. Se la dicevano per riconoscersi, figliolo. Non chiedermi altro.",
+        "teresa": "Oh! Ma sì, era quella lì! Se la dicevano fra loro, per farsi capire che erano dei loro.",
+        "piero": "Sì. Sì, era quella. Serviva a riconoscersi, mi pare. Uno la diceva e l'altro sapeva.",
+        "beppe": "Questa qui, sì. Era il modo che avevano di riconoscersi fra loro. Chi te l'ha detta?",
+        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata.",
+        "gino": "Madonna, sì! Quella lì! Mio padre diceva che se la dicevano per riconoscersi."
+      }
+    },
+    "foto_anna_e_pietro": {
+      "text": "Quello è Pietro Ferro, è morto nel crollo. E quella è Anna, sua moglie: sta ancora qui.",
+      "truth": "true",
+      "sources": [
+        "teresa",
+        "lidia",
+        "gino",
+        "beppe",
+        "marisa"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ],
+      "variants": {
+        "teresa": "Aspetta che metto gli occhiali… Ma questo è Pietro Ferro! Poveretto, è rimasto sotto lui, nel crollo. E quella di fianco è la Anna, sua moglie — è ancora qui, in fondo alla strada. Vacci a parlare, che a lei fa piacere.",
+        "lidia": "Questo qui è Pietro Ferro, è uno dei tre rimasti sotto. E quella è la Anna, la moglie: la trovi in casa, non esce quasi mai. Se le porti quella foto ti dice più lei di me.",
+        "gino": "Oh, ma quello è Ferro! Il marito della Anna, quello morto nella frana. Lei è ancora viva, sta qui in paese — vacci, che se c'è una che se le ricorda quelle cose è lei.",
+        "beppe": "Pietro Ferro, quello. È morto lassù. La moglie è la Anna, viene a prendere il pane il sabato. Chiedi a lei.",
+        "marisa": "Quello è Pietro Ferro — è uno dei tre della cava. La moglie, la Anna, è ancora qui: sta in fondo, verso ponente. Parlaci tu, che io il banco non lo lascio."
+      }
+    },
+    "foto_matteo": {
+      "text": "Quello è Matteo Sardi, il falegname. La bottega è sulla strada alta, appena sopra la curva.",
+      "truth": "true",
+      "sources": [
+        "teresa",
+        "lidia",
+        "beppe",
+        "gino",
+        "marisa"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ],
+      "variants": {
+        "teresa": "E questo qui è il Sardi, Matteo. Il falegname, quello che aggiusta le sedie a tutte noi. La bottega è su in alto, appena passata la curva. Da ragazzo era un bel ragazzo, sai.",
+        "lidia": "Matteo Sardi. Viene qui tutti i giorni alle undici e mezza, da vent'anni. La bottega ce l'ha sulla strada alta, sopra la curva — non puoi sbagliare, si sente l'odore del legno.",
+        "beppe": "Quello è Matteo, il falegname. Bottega sulla strada alta. Prende il pane la mattina, o lo prendeva.",
+        "gino": "Ah, il Sardi! Con lui ci ho lavorato, gli ho tirato su il muretto dietro. Sta su, oltre la curva, dove c'è la bottega.",
+        "marisa": "Matteo Sardi, il falegname. Sale e scende da lì tutti i giorni: la bottega è sulla strada alta."
+      }
+    },
+    "foto_andrea": {
+      "text": "Quello è tuo padre, Andrea. Brava persona, un po' chiuso.",
+      "truth": "half",
+      "sources": [
+        "teresa",
+        "piero",
+        "lidia",
+        "gino"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ],
+      "variants": {
+        "teresa": "Oh… ma questo è tuo padre. Andrea. Che brav'uomo era, poveretto. Un po' chiuso, ecco, negli ultimi anni non parlava quasi più con nessuno.",
+        "piero": "Tuo padre. Sì, è lui. Brava persona. Di quelli che salutano e tirano dritto.",
+        "lidia": "Andrea. Tuo padre, sì. Veniva qui a prendere il caffè e non diceva una parola. Buon uomo, però.",
+        "gino": "Ma quello è il tuo vecchio! Andrea Lipari. Mi dispiace ancora, sai, era una brava persona."
+      }
+    },
+    "foto_vittorio": {
+      "text": "Quello in mezzo è Vittorio Valli. Comandava lui, in quella compagnia. È morto di malattia, la primavera prima della frana.",
+      "truth": "true",
+      "sources": [
+        "teresa",
+        "gino",
+        "beppe",
+        "piero"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ],
+      "variants": {
+        "teresa": "Quello in mezzo, quello con il cappotto buono, è Vittorio Valli. Comandava lui. È morto di malattia, poveretto, la primavera prima della disgrazia.",
+        "gino": "Quello lì è il Valli, Vittorio. Uno che parlava e gli altri stavano a sentire. È morto prima della frana, di male.",
+        "beppe": "Vittorio Valli. Quello davanti a tutti, vedi? Sempre lui davanti. Morto di malattia nel '66, in primavera.",
+        "piero": "Il Valli. Comandava lui quella compagnia lì. È morto prima, di malattia."
+      }
+    },
+    "foto_laura": {
+      "text": "Quella è Laura Valli, la moglie di Vittorio. Abita ancora qui, in cima alla strada.",
+      "truth": "true",
+      "sources": [
+        "teresa",
+        "marisa",
+        "lidia"
+      ],
+      "requires_shown": [
+        "fotografia"
+      ],
+      "variants": {
+        "teresa": "E quella di fianco a lui è la Laura, sua moglie. È ancora viva, sta in cima alla strada, di fronte alla bottega. È quella a cui è morta la bambina, poveretta.",
+        "marisa": "Quella è la Valli, Laura. La moglie di Vittorio. Viene a fare la spesa il martedì. Sta su in cima, dall'altra parte della strada rispetto alla bottega.",
+        "lidia": "La Laura. Vedova Valli. Sta in cima alla strada e non scende quasi mai — dopo quella storia della bambina non è più stata quella di prima."
+      }
     }
   }
 }

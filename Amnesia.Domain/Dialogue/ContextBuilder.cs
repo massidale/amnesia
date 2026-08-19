@@ -142,7 +142,7 @@ public sealed class ContextBuilder
         // modo suo — e il coro, che e' la prova migliore del gioco, non esiste.
         foreach (var declarationId in DeclarationService.Sayable(_declarations, _positions, npcId, world))
         {
-            var text = _declarations.TextOf(declarationId);
+            var text = _declarations.TextOf(declarationId, npcId);
             if (text.Length > 0)
             {
                 lines.Add(PlayerInput.Sanitize(text));

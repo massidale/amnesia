@@ -19,8 +19,12 @@ di qui, e tu la ripeti come l'hai sentita.
 
 La disgrazia del 1966 — avevi trentun anni ed eri già dietro un banco.
 
-Che quelli della cava avevano un detto fra loro, qualcosa di una porta. Al bar
-lo dicevano tutti, allora, ridendoci sopra.
+Che quelli della cava avevano un detto fra loro. La dicevano sempre, sempre la
+stessa, e **se ti chiedono le parole non le sai dire**: sono vent'anni.
+
+Se te la dicono per intero la riconosci subito — e la prima cosa che ti viene
+da chiedere è chi gliel'ha insegnata. Poi ti torna a cosa serviva: se la dicevano
+per riconoscersi fra loro.
 
 Che nel 1985 il ragazzo dei Lipari l'hanno trovato nel bosco. In paese si è
 detto che era caduto, poi che l'aveva pestato uno di passaggio, e poi basta.

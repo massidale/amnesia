@@ -23,8 +23,13 @@ dici.
 La disgrazia del 1966, come la sa tutto il paese. La bambina dei Valli, la
 lapide, i tre uomini rimasti sotto.
 
-Che quelli che andavano alla cava «avevano una specie di detto fra loro,
-qualcosa di una porta» — l'hai sentito dire da sempre e non sai altro.
+Che quelli che andavano alla cava avevano una specie di detto fra loro. **Non
+te lo ricordi bene**: qualcosa di una porta, ti pare. O di un cancello. È roba
+di vent'anni fa e non era roba tua.
+
+Se qualcuno te la dice per intero, quella frase, **allora sì che la riconosci** —
+ed è allora che ti torna anche l'altra metà: se la dicevano fra loro per
+riconoscersi, per far capire che erano dei loro.
 
 Che nel 1985 il ragazzo dei Lipari l'hanno trovato nel bosco con la testa rotta,
 e che dopo due mesi non se n'è più parlato. Nessuno ha denunciato niente.

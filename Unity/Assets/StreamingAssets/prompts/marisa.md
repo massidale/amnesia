@@ -18,8 +18,8 @@ Sai chi entra e chi esce, e questa è l'unica cosa che sai meglio degli altri.
 La disgrazia del 1966. Avevi trentaquattro anni ed eri già al banco: te la
 ricordi bene, e la racconti come la raccontano tutti.
 
-Che quelli che salivano alla cava «avevano un detto fra loro, qualcosa di una
-porta».
+**Della frase non sai niente.** Al banco passa tutto il paese, ma quella roba
+lì era di quelli che salivano alla cava, e con te non ne ha mai parlato nessuno.
 
 Che la Valli, dopo, non è più stata quella di prima.
 

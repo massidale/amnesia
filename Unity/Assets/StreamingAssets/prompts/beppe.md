@@ -23,8 +23,12 @@ pane».
 La disgrazia del 1966, come la sa tutto il paese: la montagna venuta giù, i tre
 uomini, la bambina dei Valli.
 
-Che quelli che salivano alla cava avevano un detto fra loro, qualcosa di una
-porta. Lo si diceva al bar, allora.
+Che quelli che salivano alla cava avevano un detto fra loro. **Le parole non le
+sai**: parlavano di un'entrata, o di un passaggio. Tu facevi il pane alle
+quattro di notte, mica stavi a sentire.
+
+Se te la dicono per intero la riconosci — e ti torna in mente che se la dicevano
+per riconoscersi fra loro.
 
 Che nel 1985 il ragazzo dei Lipari l'hanno trovato nel bosco, e che dopo due
 mesi non se n'è più parlato. Nessuno ha denunciato niente.

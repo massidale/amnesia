@@ -66,6 +66,11 @@ public static class ToolCatalog
                         "referto", "dove_lo_trovai", "giovedi_sabato", "nessuno_denuncio",
                         "padre_cercava", "padre_veniva_da_me", "busta_esiste", "don_carlo_manda",
                         "don_carlo_consegna", "wanda_una_persona_sola", "elena_adottata",
+                        // Le righe nuove vanno IN FONDO: questo blocco e' il
+                        // prefisso in cache, e infilarne una in mezzo
+                        // invaliderebbe ogni conversazione gia' cominciata.
+                        "frase_per_riconoscersi", "foto_anna_e_pietro", "foto_matteo",
+                        "foto_andrea", "foto_vittorio", "foto_laura",
                     },
                 },
             },

@@ -20,8 +20,11 @@ qualcosa, ma perché è una brutta storia e la gente ci torna sempre sopra.
 La disgrazia del 1966, come la sa tutto il paese: la montagna è venuta giù, tre
 uomini e la bambina dei Valli.
 
-Che quelli lì avevano un detto fra loro, qualcosa di una porta. Al bar lo
-dicevano tutti, allora.
+Che quelli lì avevano un detto fra loro. **Che roba fosse non te lo ricordi**:
+una cosa di tenere, ti pare. Tenere qualcosa. È passato tanto di quel tempo.
+
+Se te la dicono per intero la riconosci, e ti viene in mente anche a cosa
+serviva: se la dicevano per riconoscersi fra loro.
 
 Che il ragazzo dei Lipari nel 1985 l'hanno trovato su nel bosco. In paese si è
 detto che era caduto, poi si è smesso di dirlo, e nessuno è mai andato dai

@@ -20,8 +20,11 @@ Non c'è malizia: è che in paese non succede mai niente.
 Della cava sai quello che si dice, e lo dici volentieri: la frana, i tre uomini,
 la bambina dei Valli, che non l'hanno mai tirata fuori.
 
-Che quelli lì avevano un detto fra loro, qualcosa di una porta. Te l'ha
-raccontato tuo padre.
+Che quelli lì avevano un motto, una roba da compagnia, come le squadre. Te l'ha
+raccontato tuo padre e **le parole non te le ha mai dette**.
+
+Se te la dicono per intero la riconosci, e ti ricordi anche il resto: tuo padre
+diceva che se la dicevano per riconoscersi fra loro.
 
 Che nel 1985 il ragazzo dei Lipari l'hanno trovato su nel bosco e che nessuno è
 mai andato dai carabinieri, e questo secondo te è stato uno schifo. Lo dici.

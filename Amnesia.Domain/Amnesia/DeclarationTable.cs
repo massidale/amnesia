@@ -40,6 +40,23 @@ public sealed class Declaration
 
     [JsonPropertyName("requires_shown")]
     public List<string> RequiresShown { get; set; } = new();
+
+    /// Come se la ricorda ciascuno.
+    ///
+    /// Alcune cose il paese le dice con le stesse identiche parole — la
+    /// versione della disgrazia — e li' l'identita' letterale e' la prova. Ma
+    /// altre sono ricordi di vent'anni fa, e se dodici persone ripetono la
+    /// stessa formula suonano come dodici copie della stessa persona. Per
+    /// quelle, ogni bocca ha la sua variante: uno si ricorda una parola, uno
+    /// un'altra, e nessuno la sa intera.
+    ///
+    /// Il motore conta sempre l'identificativo, mai la stringa: le varianti
+    /// cambiano cio' che il giocatore sente, non cio' su cui il gioco decide.
+    [JsonPropertyName("variants")]
+    public Dictionary<string, string> Variants { get; set; } = new();
+
+    public string TextFor(string npcId) =>
+        Variants.TryGetValue(npcId, out var variante) && variante.Length > 0 ? variante : Text;
 }
 
 /// La tabella delle dichiarazioni: contenuto d'autore, non stato di partita.
@@ -98,6 +115,11 @@ public sealed class DeclarationTable
     public Declaration? Find(string id) => _rows.TryGetValue(id, out var row) ? row : null;
 
     public string TextOf(string id) => Find(id)?.Text ?? "";
+
+    /// Il testo come lo direbbe quella persona. Per quasi tutte le
+    /// dichiarazioni e' il testo canonico; per i ricordi mal tenuti e' la sua
+    /// variante.
+    public string TextOf(string id, string npcId) => Find(id)?.TextFor(npcId) ?? "";
 
     public IReadOnlyList<string> SourcesOf(string id) =>
         Find(id)?.Sources ?? (IReadOnlyList<string>)Array.Empty<string>();
