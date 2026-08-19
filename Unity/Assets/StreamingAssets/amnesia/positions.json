@@ -1,0 +1,189 @@
+{
+  "positions": {
+    "matteo": [
+      {
+        "id": "M0",
+        "grants": [
+          "versione_paese",
+          "elena_figlia_vittorio",
+          "corpo_mai_trovato",
+          "nessuno_denuncio",
+          "scampagnate",
+          "matteo_ero_gia_sceso",
+          "matteo_cosa_ti_ricordi"
+        ],
+        "requires_shown": []
+      },
+      {
+        "id": "M1",
+        "grants": [
+          "circolo_esisteva",
+          "non_erano_gite",
+          "padre_nel_circolo"
+        ],
+        "requires_shown": [
+          "frase"
+        ]
+      },
+      {
+        "id": "M2",
+        "grants": [
+          "il_rito",
+          "elena_prescelta"
+        ],
+        "requires_shown": [
+          "braccialetto"
+        ]
+      },
+      {
+        "id": "M3",
+        "grants": [
+          "matteo_la_porto_via",
+          "elena_viva",
+          "matteo_non_dice_dove"
+        ],
+        "requires_confronto": [
+          [
+            "anna_solo_matteo",
+            "matteo_ero_gia_sceso"
+          ]
+        ]
+      },
+      {
+        "id": "M4",
+        "grants": [
+          "matteo_mai_parlati"
+        ],
+        "requires_shown": [
+          "foglio_indirizzo"
+        ]
+      },
+      {
+        "id": "M5",
+        "grants": [
+          "matteo_confessa"
+        ],
+        "requires_any_confronto": [
+          [
+            "matteo_mai_parlati",
+            "segatura"
+          ],
+          [
+            "matteo_mai_parlati",
+            "referto"
+          ]
+        ]
+      }
+    ],
+    "anna": [
+      {
+        "id": "A0",
+        "grants": [
+          "versione_paese",
+          "elena_figlia_vittorio",
+          "corpo_mai_trovato",
+          "nessuno_denuncio",
+          "scampagnate"
+        ],
+        "requires_shown": []
+      },
+      {
+        "id": "A1",
+        "grants": [
+          "circolo_esisteva",
+          "non_erano_gite",
+          "padre_nel_circolo",
+          "magazzino_dove"
+        ],
+        "requires_shown": [
+          "frase"
+        ]
+      },
+      {
+        "id": "A2",
+        "grants": [
+          "il_rito",
+          "sacrificio_per_vittorio",
+          "elena_prescelta",
+          "anna_solo_matteo",
+          "padre_nella_cava",
+          "io_ero_con_lui"
+        ],
+        "requires_shown": [
+          "braccialetto"
+        ]
+      }
+    ],
+    "laura": [
+      {
+        "id": "L0",
+        "grants": [
+          "versione_paese",
+          "elena_figlia_vittorio",
+          "corpo_mai_trovato",
+          "nessuno_denuncio",
+          "scampagnate"
+        ],
+        "requires_shown": []
+      },
+      {
+        "id": "L1",
+        "grants": [
+          "circolo_esisteva",
+          "non_erano_gite",
+          "padre_nel_circolo",
+          "magazzino_dove"
+        ],
+        "requires_shown": [
+          "frase"
+        ]
+      },
+      {
+        "id": "L2",
+        "grants": [
+          "elena_prescelta",
+          "laura_non_cera",
+          "laura_assoggettata"
+        ],
+        "requires_shown": [
+          "braccialetto"
+        ]
+      }
+    ],
+    "don_carlo": [
+      {
+        "id": "C0",
+        "grants": [
+          "versione_paese",
+          "elena_figlia_vittorio",
+          "corpo_mai_trovato",
+          "nessuno_denuncio",
+          "circolo_esisteva",
+          "avevano_una_frase",
+          "padre_veniva_da_me",
+          "busta_esiste",
+          "giovedi_sabato"
+        ],
+        "requires_shown": []
+      },
+      {
+        "id": "C1",
+        "grants": [
+          "don_carlo_manda"
+        ],
+        "requires_shown": [
+          "braccialetto"
+        ]
+      },
+      {
+        "id": "C2",
+        "grants": [
+          "don_carlo_consegna"
+        ],
+        "requires_declared": [
+          "elena_viva"
+        ]
+      }
+    ]
+  }
+}

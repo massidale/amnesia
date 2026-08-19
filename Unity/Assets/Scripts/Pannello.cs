@@ -1,0 +1,178 @@
+using System.Threading.Tasks;
+using Amnesia.Game;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace AmnesiaUnity
+{
+    /// La conversazione a schermo. Costruita in codice perche' finche' il look
+    /// non e' deciso una scena salvata e' solo una cosa in piu' che si rompe.
+    public sealed class Pannello : MonoBehaviour
+    {
+        public bool Aperto { get; private set; }
+
+        private Bootstrap _gioco;
+        private Text _detto;
+        private Text _stato;
+        private InputField _campo;
+        private GameObject _radice;
+        private string _con = "";
+        private bool _inAttesa;
+
+        private void Start()
+        {
+            _gioco = FindFirstObjectByType<Bootstrap>();
+            Costruisci();
+            if (!string.IsNullOrEmpty(_gioco.Problema))
+            {
+                _stato.text = _gioco.Problema;
+                _radice.SetActive(true);
+            }
+        }
+
+        private void Costruisci()
+        {
+            var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var canvas = new GameObject("interfaccia").AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            var scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1280f, 720f);
+            canvas.gameObject.AddComponent<GraphicRaycaster>();
+            if (FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() == null)
+            {
+                var es = new GameObject("eventi");
+                es.AddComponent<UnityEngine.EventSystems.EventSystem>();
+                es.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            }
+
+            _radice = new GameObject("pannello");
+            _radice.transform.SetParent(canvas.transform, false);
+            var sfondo = _radice.AddComponent<Image>();
+            sfondo.color = new Color(0.05f, 0.05f, 0.06f, 0.88f);
+            var rect = _radice.GetComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.06f, 0.04f);
+            rect.anchorMax = new Vector2(0.94f, 0.40f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+
+            _detto = Etichetta(_radice.transform, font, 22, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.96f));
+            _detto.color = new Color(0.93f, 0.91f, 0.86f);
+            _stato = Etichetta(_radice.transform, font, 15, new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.16f));
+            _stato.color = new Color(0.60f, 0.58f, 0.54f);
+
+            var riga = new GameObject("riga");
+            riga.transform.SetParent(_radice.transform, false);
+            var rigaImg = riga.AddComponent<Image>();
+            rigaImg.color = new Color(1f, 1f, 1f, 0.06f);
+            var rigaRect = riga.GetComponent<RectTransform>();
+            rigaRect.anchorMin = new Vector2(0.03f, 0.17f);
+            rigaRect.anchorMax = new Vector2(0.97f, 0.32f);
+            rigaRect.offsetMin = rigaRect.offsetMax = Vector2.zero;
+
+            var testo = Etichetta(riga.transform, font, 20, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f));
+            testo.alignment = TextAnchor.MiddleLeft;
+            testo.supportRichText = false;
+
+            _campo = riga.AddComponent<InputField>();
+            _campo.textComponent = testo;
+            _campo.lineType = InputField.LineType.SingleLine;
+            // onEndEdit scatta anche quando il campo perde il fuoco: senza il
+            // filtro sull'invio, cliccare altrove manderebbe una battuta.
+            _campo.onEndEdit.AddListener(riga =>
+            {
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    Manda(riga);
+                }
+            });
+
+            _radice.SetActive(false);
+        }
+
+        private static Text Etichetta(Transform genitore, Font font, int corpo, Vector2 min, Vector2 max)
+        {
+            var go = new GameObject("testo");
+            go.transform.SetParent(genitore, false);
+            var text = go.AddComponent<Text>();
+            text.font = font;
+            text.fontSize = corpo;
+            text.alignment = TextAnchor.UpperLeft;
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            var rect = go.GetComponent<RectTransform>();
+            rect.anchorMin = min;
+            rect.anchorMax = max;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            return text;
+        }
+
+        public void Apri(string npcId)
+        {
+            _con = npcId;
+            Aperto = true;
+            _radice.SetActive(true);
+            _detto.text = "";
+            _stato.text = $"{npcId} — invio per parlare, Esc per andartene";
+            _campo.text = "";
+            _campo.ActivateInputField();
+        }
+
+        private void Update()
+        {
+            if (Aperto && Input.GetKeyDown(KeyCode.Escape) && !_inAttesa)
+            {
+                Aperto = false;
+                _radice.SetActive(false);
+            }
+        }
+
+        private async void Manda(string riga)
+        {
+            if (_inAttesa || string.IsNullOrWhiteSpace(riga))
+            {
+                return;
+            }
+            _inAttesa = true;
+            _campo.text = "";
+            _stato.text = "…";
+
+            TurnResult turno;
+            try
+            {
+                turno = await _gioco.Session.TakeTurnAsync(_con, riga);
+            }
+            catch (System.Exception errore)
+            {
+                // Un turno che esplode non deve lasciare il pannello muto: il
+                // mondo non si e' mosso, e il giocatore ha diritto di saperlo.
+                _stato.text = $"non ha risposto ({errore.GetType().Name})";
+                _inAttesa = false;
+                _campo.ActivateInputField();
+                return;
+            }
+
+            if (turno.IsOk)
+            {
+                _detto.text = turno.Reply;
+                _stato.text = Coda(turno);
+            }
+            else
+            {
+                _stato.text = $"non ha risposto: {turno.Message}";
+            }
+            _inAttesa = false;
+            _campo.ActivateInputField();
+        }
+
+        /// Cosa il motore ha registrato. A schermo perche' questa e' una scena di
+        /// prova e serve a vedere la meccanica lavorare; nel gioco vero il
+        /// giocatore vedra' il taccuino, non questa riga.
+        private string Coda(TurnResult turno)
+        {
+            var ora = Amnesia.Time.WorldClock.Format(turno.Minute);
+            var registrato = turno.Declared.Count > 0 ? "  ·  registrato: " + string.Join(", ", turno.Declared) : "";
+            var rifiutato = turno.RefusedTags.Count > 0 ? "  ·  non ce l'hai: " + string.Join(", ", turno.RefusedTags) : "";
+            return ora + registrato + rifiutato;
+        }
+    }
+}
