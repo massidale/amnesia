@@ -17,7 +17,8 @@ namespace AmnesiaUnity
     /// che sembra — il gioco fermo ad aspettarti.
     public sealed class Menu : MonoBehaviour
     {
-        private const int Zoom = 14;
+        private const float ZoomMinimo = 4f;
+        private const float ZoomMassimo = 26f;
 
         private enum Pagina { Tasche, Paese, Taccuino }
 
@@ -27,9 +28,16 @@ namespace AmnesiaUnity
         private Transform _giocatore;
         private GameObject _radice;
         private Text _foglio;
+        private Text _coda;
         private GameObject _pianta;
+        private RectTransform _vista;
         private RectTransform _carta;
         private RectTransform _iosono;
+        private readonly List<(RectTransform Etichetta, float X, float Y)> _didascalie =
+            new List<(RectTransform, float, float)>();
+        private float _zoom = 12f;
+        private Vector3 _presa;
+        private bool _trascino;
         private readonly Dictionary<Pagina, Text> _linguette = new Dictionary<Pagina, Text>();
         private readonly Dictionary<Pagina, RectTransform> _sottolineature = new Dictionary<Pagina, RectTransform>();
         private Pagina _pagina = Pagina.Tasche;
@@ -80,6 +88,18 @@ namespace AmnesiaUnity
             Apri(pagina);
         }
 
+        /// La prima volta che si apre la pianta si guarda dove si e'.
+        private void InquadraIlGiocatore()
+        {
+            if (_giocatore == null)
+            {
+                return;
+            }
+            var qui = _gioco.CellaDi(_giocatore.position);
+            _carta.anchoredPosition = -SulFoglio(qui.X + 0.5f, qui.Y + 0.5f);
+            Trattieni();
+        }
+
         /// Le pagine girano con Tab e con le frecce, come in un menu di allora.
         public void Scorri(int verso)
         {
@@ -91,6 +111,15 @@ namespace AmnesiaUnity
         {
             _foglio.transform.parent.gameObject.SetActive(_pagina != Pagina.Paese);
             _pianta.SetActive(_pagina == Pagina.Paese);
+            if (_pagina == Pagina.Paese)
+            {
+                if (_zoom <= 0f)
+                {
+                    _zoom = 12f;
+                }
+                Ridisegna();
+                InquadraIlGiocatore();
+            }
             if (_pagina == Pagina.Tasche)
             {
                 _foglio.text = Inventario.Oggetti(_gioco);
@@ -99,6 +128,9 @@ namespace AmnesiaUnity
             {
                 _foglio.text = Inventario.Righe(_gioco);
             }
+            _coda.text = _pagina == Pagina.Paese
+                ? "esc riprende   ·   tab cambia pagina   ·   rotella per lo zoom, trascina o WASD per spostarti"
+                : "esc riprende   ·   tab e frecce cambiano pagina";
             foreach (var linguetta in _linguette)
             {
                 var scelta = linguetta.Key == _pagina;
@@ -109,13 +141,56 @@ namespace AmnesiaUnity
 
         private void Update()
         {
-            if (!Aperto || _pagina != Pagina.Paese || _giocatore == null)
+            if (!Aperto || _pagina != Pagina.Paese)
             {
                 return;
             }
-            var qui = _gioco.CellaDi(_giocatore.position);
-            _iosono.anchoredPosition = SulFoglio(qui.X + 0.5f, qui.Y + 0.5f);
+            if (_giocatore != null)
+            {
+                var qui = _gioco.CellaDi(_giocatore.position);
+                _iosono.anchoredPosition = SulFoglio(qui.X + 0.5f, qui.Y + 0.5f);
+            }
+
+            var rotella = Input.mouseScrollDelta.y;
+            if (Mathf.Abs(rotella) > 0.01f)
+            {
+                _zoom = Mathf.Clamp(_zoom * (1f + rotella * 0.12f), ZoomMinimo, ZoomMassimo);
+                Ridisegna();
+            }
+
+            // Si trascina con il mouse, o con le frecce per chi ha le mani sulla
+            // tastiera. Le frecce qui non cambiano pagina: cambiano vista.
+            if (Input.GetMouseButtonDown(0))
+            {
+                _presa = Input.mousePosition;
+                _trascino = true;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                _trascino = false;
+            }
+            if (_trascino)
+            {
+                var scarto = Input.mousePosition - _presa;
+                _presa = Input.mousePosition;
+                _carta.anchoredPosition += new Vector2(scarto.x, scarto.y);
+                Trattieni();
+            }
+            else
+            {
+                var passo = 420f * Time.unscaledDeltaTime;
+                var mossa = new Vector2(
+                    (Premuto(KeyCode.A) - Premuto(KeyCode.D)) * passo,
+                    (Premuto(KeyCode.S) - Premuto(KeyCode.W)) * passo);
+                if (mossa != Vector2.zero)
+                {
+                    _carta.anchoredPosition += mossa;
+                    Trattieni();
+                }
+            }
         }
+
+        private static float Premuto(KeyCode tasto) => Input.GetKey(tasto) ? 1f : 0f;
 
         private void Costruisci()
         {
@@ -146,9 +221,8 @@ namespace AmnesiaUnity
 
             CostruisciLaPianta();
 
-            var coda = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+            _coda = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
                 new Vector2(0.07f, 0.035f), new Vector2(0.93f, 0.075f));
-            coda.text = "esc riprende   ·   tab e frecce cambiano pagina";
 
             _radice.SetActive(false);
         }
@@ -157,23 +231,17 @@ namespace AmnesiaUnity
         {
             _pianta = new GameObject("paese", typeof(RectTransform));
             _pianta.transform.SetParent(_radice.transform, false);
-            Stile.Ancora((RectTransform)_pianta.transform, new Vector2(0f, 0.09f), new Vector2(1f, 0.825f));
+            Stile.Ancora((RectTransform)_pianta.transform, new Vector2(0.06f, 0.09f), new Vector2(0.94f, 0.825f));
 
-            var larghezza = _gioco.Map.Width * Zoom;
-            var altezza = _gioco.Map.Height * Zoom;
-
-            // La cornice: un bordo intorno alla carta, che la stacca dal nero e
-            // dice dove finisce il paese.
-            var cornice = Stile.Riquadro(_pianta.transform, "cornice", Stile.Grafite,
-                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
-            cornice.sizeDelta = new Vector2(larghezza + 4f, altezza + 4f);
-
+            // La carta sta dentro una feritoia: il paese e' piu' grande della
+            // finestra, e una pianta che non si puo' spostare mostra meta' paese
+            // e taglia l'altra.
+            _vista = Stile.Feritoia(_pianta.transform, "vista", Vector2.zero, Vector2.one);
             var disegno = new GameObject("carta", typeof(RectTransform));
-            disegno.transform.SetParent(cornice, false);
+            disegno.transform.SetParent(_vista, false);
             disegno.AddComponent<RawImage>().texture = Pianta.Disegna(_gioco.Map);
-            _carta = Stile.Ancora((RectTransform)disegno.transform, Vector2.zero, Vector2.one);
-            _carta.offsetMin = new Vector2(2f, 2f);
-            _carta.offsetMax = new Vector2(-2f, -2f);
+            _carta = (RectTransform)disegno.transform;
+            _carta.anchorMin = _carta.anchorMax = new Vector2(0.5f, 0.5f);
 
             foreach (var luogo in _gioco.Map.Places)
             {
@@ -190,8 +258,7 @@ namespace AmnesiaUnity
                 etichetta.text = Pianta.NomeDi(luogo.Key);
                 var rect = etichetta.GetComponent<RectTransform>();
                 rect.sizeDelta = new Vector2(170f, 16f);
-                rect.anchoredPosition = SulFoglio(
-                    rettangolo.X + rettangolo.W / 2f, rettangolo.Y + rettangolo.H / 2f);
+                _didascalie.Add((rect, rettangolo.X + rettangolo.W / 2f, rettangolo.Y + rettangolo.H / 2f));
             }
 
             var segno = Stile.Riquadro(_carta, "io", Stile.Ottone,
@@ -202,9 +269,34 @@ namespace AmnesiaUnity
             _pianta.SetActive(false);
         }
 
+        /// La carta al passo giusto: alla prima apertura ci sta tutta, poi
+        /// resta come l'hai lasciata.
+        private void Ridisegna()
+        {
+            _carta.sizeDelta = new Vector2(_gioco.Map.Width * _zoom, _gioco.Map.Height * _zoom);
+            foreach (var (etichetta, x, y) in _didascalie)
+            {
+                etichetta.anchoredPosition = SulFoglio(x, y);
+                etichetta.gameObject.SetActive(_zoom >= 8f);
+            }
+            Trattieni();
+        }
+
+        /// La carta non si perde: si puo' spostare finche' un pezzo resta in
+        /// vista, non oltre.
+        private void Trattieni()
+        {
+            var mezza = new Vector2(_carta.sizeDelta.x, _carta.sizeDelta.y) * 0.5f;
+            var finestra = new Vector2(_vista.rect.width, _vista.rect.height) * 0.5f;
+            var margine = new Vector2(Mathf.Max(mezza.x - finestra.x, 0f), Mathf.Max(mezza.y - finestra.y, 0f));
+            _carta.anchoredPosition = new Vector2(
+                Mathf.Clamp(_carta.anchoredPosition.x, -margine.x, margine.x),
+                Mathf.Clamp(_carta.anchoredPosition.y, -margine.y, margine.y));
+        }
+
         private Vector2 SulFoglio(float x, float y) => new Vector2(
-            (x - _gioco.Map.Width / 2f) * Zoom,
-            (_gioco.Map.Height / 2f - y) * Zoom);
+            (x - _gioco.Map.Width / 2f) * _zoom,
+            (_gioco.Map.Height / 2f - y) * _zoom);
 
         private void Linguetta(Transform genitore, Pagina pagina, string testo, string tasto)
         {
