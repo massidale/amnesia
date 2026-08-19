@@ -191,6 +191,10 @@ namespace AmnesiaUnity
 
         public Vector3 InScena(Cell cell) => new Vector3(cell.X * CellSize, 0f, -cell.Y * CellSize);
 
+        public Cell CellaDi(Vector3 punto) => new Cell(
+            Mathf.Clamp(Mathf.RoundToInt(punto.x / CellSize), 0, Map.Width - 1),
+            Mathf.Clamp(Mathf.RoundToInt(-punto.z / CellSize), 0, Map.Height - 1));
+
         private void CostruisciIlPaese()
         {
             Scenografia.Costruisci(Map, CellSize, new GameObject("paese").transform);

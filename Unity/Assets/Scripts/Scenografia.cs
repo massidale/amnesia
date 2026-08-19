@@ -25,6 +25,7 @@ namespace AmnesiaUnity
         private static readonly Color Acqua = new Color(0.24f, 0.32f, 0.36f);
         private static readonly Color Intonaco = new Color(0.62f, 0.56f, 0.47f);
         private static readonly Color Roccia = new Color(0.31f, 0.31f, 0.30f);
+        private static readonly Color Bosco = new Color(0.22f, 0.30f, 0.20f);
 
         /// Ottobre in montagna: cielo chiuso, luce bassa, foschia che mangia il
         /// fondo valle. La nebbia non e' atmosfera, e' quello che impedisce di
@@ -60,16 +61,30 @@ namespace AmnesiaUnity
 
         public static Color ColoreDelCielo => Cielo;
 
+        /// Il colore di un simbolo della mappa. Lo chiedono in due — il paese in
+        /// tre dimensioni e la pianta nel menu — e devono rispondere uguale, o
+        /// la carta che il giocatore guarda non e' del posto in cui cammina.
+        public static Color ColoreDi(char simbolo)
+        {
+            switch (simbolo)
+            {
+                case ',': return Prato;
+                case '~': return Pavimento;
+                case '+': return Soglia;
+                case '"': return Sottobosco;
+                case '=': return Acqua;
+                case '#': return Intonaco;
+                case '^': return Roccia;
+                case 'T': return Bosco;
+                default: return Strada;
+            }
+        }
+
         private static void Terreno(VillageMap mappa, float cella, Transform radice)
         {
-            var suoli = new Dictionary<char, (Color colore, float quota)>
+            var quote = new Dictionary<char, float>
             {
-                ['.'] = (Strada, 0f),
-                [','] = (Prato, 0f),
-                ['~'] = (Pavimento, 0.02f),
-                ['+'] = (Soglia, 0.02f),
-                ['"'] = (Sottobosco, 0f),
-                ['='] = (Acqua, -0.25f),
+                ['.'] = 0f, [','] = 0f, ['~'] = 0.02f, ['+'] = 0.02f, ['"'] = 0f, ['='] = -0.25f,
             };
             var falde = new Dictionary<char, Falda>();
 
@@ -80,13 +95,13 @@ namespace AmnesiaUnity
                     var simbolo = mappa.Rows[y][x];
                     // Sotto i muri e la montagna il terreno c'e' lo stesso: senza,
                     // ogni porta si aprirebbe sul vuoto.
-                    var chiave = suoli.ContainsKey(simbolo) ? simbolo : '.';
+                    var chiave = quote.ContainsKey(simbolo) ? simbolo : '.';
                     if (!falde.TryGetValue(chiave, out var falda))
                     {
                         falda = new Falda();
                         falde[chiave] = falda;
                     }
-                    falda.Quadrato(x * cella, suoli[chiave].quota, -y * cella, cella);
+                    falda.Quadrato(x * cella, quote[chiave], -y * cella, cella);
                 }
             }
 
@@ -96,7 +111,7 @@ namespace AmnesiaUnity
                 go.transform.SetParent(radice);
                 var mesh = pair.Value.Mesh();
                 go.AddComponent<MeshFilter>().sharedMesh = mesh;
-                go.AddComponent<MeshRenderer>().sharedMaterial = Materiale(suoli[pair.Key].colore);
+                go.AddComponent<MeshRenderer>().sharedMaterial = Materiale(ColoreDi(pair.Key));
                 // Il terreno si vede *e* si calpesta. Senza questo il giocatore
                 // parte, la gravita' lo prende, e precipita attraverso il paese.
                 go.AddComponent<MeshCollider>().sharedMesh = mesh;

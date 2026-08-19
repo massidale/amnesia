@@ -26,6 +26,7 @@ namespace AmnesiaUnity
         private Bootstrap _gioco;
         private Camera _occhio;
         private Pannello _pannello;
+        private Menu _menu;
         private Transform _bersaglio;
         private CharacterController _corpo;
         private float _caduta;
@@ -36,6 +37,14 @@ namespace AmnesiaUnity
         {
             _gioco = FindFirstObjectByType<Bootstrap>();
             _pannello = FindFirstObjectByType<Pannello>();
+            // Se la scena non ce l'ha, il menu se lo fa da solo: la scena di
+            // prova e' tre oggetti vuoti, e non deve diventare una cosa da
+            // tenere allineata a mano ogni volta che si aggiunge una schermata.
+            _menu = FindFirstObjectByType<Menu>();
+            if (_menu == null)
+            {
+                _menu = new GameObject("menu").AddComponent<Menu>();
+            }
 
             var posizione = _gioco.World.ActorOf("player").Position ?? new Cell(0, 0);
             transform.position = _gioco.InScena(posizione) + Vector3.up * 0.2f;
@@ -87,9 +96,59 @@ namespace AmnesiaUnity
                 InquadraIlVolto();
                 return;
             }
+            if (_menu != null && _menu.Aperto)
+            {
+                Libera(true);
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    _menu.Chiudi();
+                }
+                else if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    _menu.Scorri(1);
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    _menu.Scorri(-1);
+                }
+                else if (Input.GetKeyDown(KeyCode.I))
+                {
+                    _menu.Alterna(0);
+                }
+                else if (Input.GetKeyDown(KeyCode.M))
+                {
+                    _menu.Alterna(1);
+                }
+                else if (Input.GetKeyDown(KeyCode.T))
+                {
+                    _menu.Alterna(2);
+                }
+                return;
+            }
             if (Cursor.lockState != CursorLockMode.Locked)
             {
                 Libera(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                _menu.Apri();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                _menu.Apri(0);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                _menu.Apri(1);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                _menu.Apri(2);
+                return;
             }
 
             Guarda();

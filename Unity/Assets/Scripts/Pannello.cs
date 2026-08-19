@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Amnesia.Dialogue;
@@ -23,6 +22,8 @@ namespace AmnesiaUnity
         private Text _detto;
         private Text _chi;
         private Text _invito;
+        private RectTransform _fila;
+        private Font _font;
         private Text _stato;
         private InputField _campo;
         private GameObject _radice;
@@ -67,11 +68,24 @@ namespace AmnesiaUnity
 
             _chi = Etichetta(_radice.transform, font, 23, new Vector2(0.03f, 0.86f), new Vector2(0.97f, 0.99f));
             _chi.color = new Color(0.88f, 0.82f, 0.66f);
-            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.84f));
+            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.42f), new Vector2(0.97f, 0.84f));
             _detto.color = new Color(0.93f, 0.91f, 0.86f);
             _detto.alignment = TextAnchor.LowerLeft;
             _stato = Etichetta(_radice.transform, font, 15, new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.16f));
             _stato.color = new Color(0.60f, 0.58f, 0.54f);
+
+            _font = font;
+            var barra = new GameObject("oggetti");
+            barra.transform.SetParent(_radice.transform, false);
+            var disposizione = barra.AddComponent<HorizontalLayoutGroup>();
+            disposizione.spacing = 6f;
+            disposizione.childForceExpandWidth = false;
+            disposizione.childForceExpandHeight = true;
+            disposizione.childAlignment = TextAnchor.MiddleLeft;
+            _fila = barra.GetComponent<RectTransform>();
+            _fila.anchorMin = new Vector2(0.03f, 0.33f);
+            _fila.anchorMax = new Vector2(0.97f, 0.41f);
+            _fila.offsetMin = _fila.offsetMax = Vector2.zero;
 
             var riga = new GameObject("riga");
             riga.transform.SetParent(_radice.transform, false);
@@ -127,6 +141,7 @@ namespace AmnesiaUnity
 
         public void Apri(string npcId)
         {
+            FindFirstObjectByType<Menu>()?.Chiudi();
             _con = npcId;
             Aperto = true;
             _radice.SetActive(true);
@@ -137,6 +152,7 @@ namespace AmnesiaUnity
             // Chi alza la testa per primo. Il saluto entra nel registro della
             // conversazione, quindi si scrive prima di trascrivere.
             _gioco.Accoglienza.Apri(_gioco.Session.World, _gioco.Session.Log, npcId);
+            Targhette();
             Trascrivi();
             _stato.text = "invio per parlare  ·  /oggetti  ·  /taccuino  ·  Esc per andartene";
             _campo.text = "";
@@ -205,59 +221,64 @@ namespace AmnesiaUnity
             _campo.ActivateInputField();
         }
 
+        /// Gli oggetti che hai addosso, uno per targhetta. Cliccarne una scrive
+        /// il tag nella riga invece di mandarlo: mostrare una cosa non e' una
+        /// mossa a se', e' una cosa che si fa *mentre* si dice qualcosa — ed e'
+        /// il giocatore a decidere cosa.
+        private void Targhette()
+        {
+            foreach (Transform vecchia in _fila)
+            {
+                Destroy(vecchia.gameObject);
+            }
+            foreach (var oggetto in _gioco.Taccuino.Tasche())
+            {
+                var nome = string.IsNullOrEmpty(oggetto.Name) ? oggetto.Id : oggetto.Name;
+                var targhetta = new GameObject(oggetto.Id);
+                targhetta.transform.SetParent(_fila, false);
+                var sfondo = targhetta.AddComponent<Image>();
+                sfondo.color = new Color(1f, 1f, 1f, 0.09f);
+
+                var testo = Etichetta(targhetta.transform, _font, 15, new Vector2(0f, 0f), new Vector2(1f, 1f));
+                testo.alignment = TextAnchor.MiddleCenter;
+                testo.text = "  " + nome + "  ";
+                testo.color = new Color(0.88f, 0.85f, 0.78f);
+
+                var misura = targhetta.AddComponent<LayoutElement>();
+                misura.preferredWidth = testo.preferredWidth + 10f;
+
+                var bottone = targhetta.AddComponent<Button>();
+                bottone.targetGraphic = sfondo;
+                bottone.onClick.AddListener(() => Inserisci(nome));
+            }
+        }
+
+        private void Inserisci(string nome)
+        {
+            var scritto = _campo.text.TrimEnd();
+            _campo.text = (scritto.Length == 0 ? "" : scritto + " ") + $"[mostra: {nome}] ";
+            _campo.ActivateInputField();
+            _campo.caretPosition = _campo.text.Length;
+        }
+
         /// Le tasche e il taccuino, senza spendere un turno e senza passare dal
         /// modello: sono roba del motore, e chiedere a un personaggio cosa hai
         /// in tasca sarebbe chiederlo alla persona sbagliata.
         private void Comando(string riga)
         {
-            var scritto = new StringBuilder();
             if (riga.StartsWith("/ogg"))
             {
-                scritto.Append("Quello che hai addosso:\n");
-                foreach (var oggetto in _gioco.Taccuino.Tasche())
-                {
-                    var nome = string.IsNullOrEmpty(oggetto.Name) ? oggetto.Id : oggetto.Name;
-                    scritto.Append("  · ").Append(nome);
-                    if (!string.IsNullOrEmpty(oggetto.Description))
-                    {
-                        scritto.Append(" — ").Append(oggetto.Description);
-                    }
-                    scritto.Append('\n');
-                }
-                scritto.Append("\nSi mostrano scrivendo [mostra: ").Append(Primo()).Append("] dentro una frase.");
+                _detto.text = Inventario.Oggetti(_gioco);
             }
             else if (riga.StartsWith("/tac"))
             {
-                var righe = _gioco.Taccuino.Dette();
-                scritto.Append(righe.Count == 0 ? "Il taccuino e' ancora bianco." : "Quello che ti hanno detto:\n");
-                foreach (var detta in righe)
-                {
-                    scritto.Append("  · «").Append(detta.Testo).Append("»  — ");
-                    scritto.Append(string.Join(", ", detta.Bocche.Select(_gioco.NomeDi)));
-                    if (detta.Volte > detta.Bocche.Count)
-                    {
-                        scritto.Append("  (").Append(detta.Volte).Append(" volte)");
-                    }
-                    scritto.Append('\n');
-                }
-                if (righe.Count > 1)
-                {
-                    scritto.Append("\nDue righe si accostano scrivendo [confronto: ")
-                        .Append(righe[0].Id).Append(" | ").Append(righe[1].Id).Append("].");
-                }
+                _detto.text = Inventario.Righe(_gioco);
             }
             else
             {
-                scritto.Append("/oggetti — cosa hai in tasca\n/taccuino — cosa ti hanno detto");
+                _detto.text = "/oggetti — cosa hai in tasca\n/taccuino — cosa ti hanno detto\n\nGli oggetti si mostrano anche cliccando le targhette qui sotto.";
             }
-            _detto.text = scritto.ToString();
             _stato.text = "scrivi per tornare alla conversazione";
-        }
-
-        private string Primo()
-        {
-            var tasche = _gioco.Taccuino.Tasche();
-            return tasche.Count == 0 ? "oggetto" : (string.IsNullOrEmpty(tasche[0].Name) ? tasche[0].Id : tasche[0].Name);
         }
 
         /// La conversazione come la ricorda il personaggio. La fonte e' il

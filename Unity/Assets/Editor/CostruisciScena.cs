@@ -18,12 +18,13 @@ namespace AmnesiaUnity.Editor
             new GameObject("gioco").AddComponent<Bootstrap>();
             new GameObject("pannello").AddComponent<Pannello>();
             new GameObject("giocatore").AddComponent<Giocatore>();
+            new GameObject("menu").AddComponent<Menu>();
 
             System.IO.Directory.CreateDirectory("Assets/Scenes");
             EditorSceneManager.SaveScene(scena, "Assets/Scenes/Prova.unity");
             EditorSceneManager.MarkSceneDirty(scena);
 
-            Debug.Log("Scena di prova pronta. Premi Play: WASD per camminare, E per parlare, Esc per andartene.");
+            Debug.Log("Scena di prova pronta. Premi Play: WASD per camminare, E per parlare, Esc per la pausa.");
         }
     }
 }
