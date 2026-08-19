@@ -108,7 +108,29 @@ namespace AmnesiaUnity
                     pezzo.enabled = diSpalle;
                 }
             }
-            _occhio.transform.localPosition = diSpalle ? SpallaDestra : SedeDellOcchio;
+            _occhio.transform.localPosition = diSpalle ? DietroLaSpalla() : SedeDellOcchio;
+        }
+
+        /// Dove sta davvero la telecamera in terza persona: dietro la spalla, o
+        /// piu' vicino se in mezzo c'e' un muro. Senza questo, chi si mette con
+        /// la schiena a una casa si ritrova a guardare il paese da dentro
+        /// l'intonaco.
+        private Vector3 DietroLaSpalla()
+        {
+            var testa = transform.TransformPoint(new Vector3(0f, SpallaDestra.y, 0f));
+            var voluta = transform.TransformPoint(SpallaDestra);
+            var verso = voluta - testa;
+            // Solo la scenografia: le figure e il proprio corpo non contano, o
+            // la telecamera scatterebbe in avanti ogni volta che passi accanto
+            // a qualcuno.
+            if (Physics.SphereCast(testa, 0.22f, verso.normalized, out var urto, verso.magnitude,
+                    ~0, QueryTriggerInteraction.Ignore)
+                && urto.collider.GetComponentInParent<Giocatore>() == null)
+            {
+                var quanto = Mathf.Max(urto.distance - 0.15f, 0.1f);
+                return transform.InverseTransformPoint(testa + verso.normalized * quanto);
+            }
+            return SpallaDestra;
         }
 
         /// Il puntatore sparisce mentre si cammina e torna quando si parla,
@@ -280,7 +302,7 @@ namespace AmnesiaUnity
             // Posizione e rotazione insieme, ogni fotogramma: e' quello che
             // disfa l'inquadratura della conversazione appena si torna a
             // camminare, qualunque cosa le avesse fatto.
-            _occhio.transform.localPosition = _diSpalle ? SpallaDestra : SedeDellOcchio;
+            _occhio.transform.localPosition = _diSpalle ? DietroLaSpalla() : SedeDellOcchio;
             _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
         }
 
