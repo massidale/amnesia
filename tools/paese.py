@@ -14,7 +14,7 @@ import json
 import os
 from collections import deque
 
-LARGHEZZA, ALTEZZA = 48, 32
+LARGHEZZA, ALTEZZA = 64, 56
 
 ROCCIA, TERRENO, STRADA, PAVIMENTO, PORTA, SOTTOBOSCO, MURO, ALBERO, FERROVIA = \
     "^", ".", ",", "~", "+", '"', "#", "T", "="
@@ -24,6 +24,25 @@ ROCCIA, TERRENO, STRADA, PAVIMENTO, PORTA, SOTTOBOSCO, MURO, ALBERO, FERROVIA = 
 # quella che cerca la curva sotto la bottega — la legge cosi'.
 LEGENDA = {".": True, ",": True, "~": True, "+": True, '"': True,
            "#": False, "T": False, "^": False, "=": False}
+
+# La spina dorsale del paese, per punti: (riga, colonna di sinistra). Larga due
+# caselle da cima a fondo e mai dritta per piu' di dieci righe — un paese di
+# montagna segue il terreno, e una strada dritta si legge come un corridoio.
+# Il gomito piu' importante e' quello sotto la bottega: da quello dipende una
+# battuta di Nino e con essa un atto intero.
+NODI = [(8, 34), (21, 34), (24, 40), (27, 40), (32, 27), (41, 27), (45, 33), (53, 33)]
+
+
+def spina():
+    righe = {}
+    for (y0, x0), (y1, x1) in zip(NODI, NODI[1:]):
+        for y in range(y0, y1 + 1):
+            quota = (y - y0) / max(y1 - y0, 1)
+            righe[y] = round(x0 + (x1 - x0) * quota)
+    return righe
+
+
+STRADA_X = spina()
 
 
 def vuoto():
@@ -37,111 +56,119 @@ def riempi(g, x0, y0, x1, y1, simbolo):
                 g[y][x] = simbolo
 
 
+def strada(g):
+    """Due caselle di larghezza, piu' i raccordi dove la spina piega."""
+    for y, x in sorted(STRADA_X.items()):
+        riempi(g, x, y, x + 1, y, STRADA)
+        prima = STRADA_X.get(y - 1)
+        if prima is not None and prima != x:
+            # Il gomito: senza, la strada si spezza in diagonale e non ci si passa.
+            riempi(g, min(x, prima), y, max(x, prima) + 1, y, STRADA)
+
+
 def stanza(g, x0, y0, x1, y1, porte):
-    """Quattro muri, un pavimento e le porte che le si dicono."""
     riempi(g, x0, y0, x1, y1, MURO)
     riempi(g, x0 + 1, y0 + 1, x1 - 1, y1 - 1, PAVIMENTO)
     for x, y in porte:
         g[y][x] = PORTA
-    # Il rettangolo del luogo e' il *dentro*: chi ci sta, ci sta dentro.
     return {"x": x0 + 1, "y": y0 + 1, "w": x1 - x0 - 1, "h": y1 - y0 - 1}
+
+
+def affacciata(g, x0, y0, x1, y1, verso, porta):
+    """Una casa che guarda la strada, con l'aia davanti fino alla carreggiata.
+
+    Nessuna casa di questo paese guarda il retro di un'altra: la porta sta sul
+    muro rivolto alla via, e il battuto davanti la unisce alla carreggiata.
+    """
+    y = porta
+    if verso == "levante":
+        luogo = stanza(g, x0, y0, x1, y1, [(x1, y)])
+        riempi(g, x1 + 1, y - 1, STRADA_X[y] - 1, y + 1, TERRENO)
+    else:
+        luogo = stanza(g, x0, y0, x1, y1, [(x0, y)])
+        riempi(g, STRADA_X[y] + 2, y - 1, x0 - 1, y + 1, TERRENO)
+    return luogo
 
 
 def paese():
     g = vuoto()
     luoghi = {}
 
-    # --- Pian della Soglia: la cava in cima, e la galleria murata ----------
-    riempi(g, 3, 1, 15, 2, TERRENO)
-    luoghi["cava"] = {"x": 3, "y": 1, "w": 13, "h": 2}
-    # La galleria e' murata: ci si arriva davanti e non si passa. Il luogo e' lo
-    # spiazzo davanti al muro — un posto che il gioco nomina e nessuno apre.
-    riempi(g, 5, 0, 10, 0, MURO)
-    luoghi["galleria"] = {"x": 5, "y": 1, "w": 6, "h": 1}
-    # Il sentiero non sale dritto: fa un tornante sulla cengia, come tutti i
-    # sentieri di montagna. Salire alla cava deve costare piu' che attraversare
-    # il paese, o Pian della Soglia e' dietro l'angolo e non e' mai stato dietro
-    # l'angolo per nessuno.
-    riempi(g, 13, 5, 14, 11, STRADA)
-    riempi(g, 13, 4, 22, 4, STRADA)
-    riempi(g, 22, 2, 22, 4, STRADA)
-    riempi(g, 16, 2, 22, 2, STRADA)
+    # --- Pian della Soglia, in cima, e la galleria murata -----------------
+    riempi(g, 3, 1, 15, 3, TERRENO)
+    luoghi["cava"] = {"x": 3, "y": 1, "w": 13, "h": 3}
+    riempi(g, 6, 0, 12, 0, MURO)
+    luoghi["galleria"] = {"x": 6, "y": 1, "w": 7, "h": 1}
 
-    # --- Il castagneto, che sta sopra la curva ----------------------------
-    riempi(g, 8, 5, 30, 10, SOTTOBOSCO)
-    riempi(g, 8, 5, 30, 5, ALBERO)
-    riempi(g, 8, 10, 19, 10, ALBERO)
-    riempi(g, 23, 10, 30, 10, ALBERO)
-    for y in range(5, 11):
-        g[y][8] = ALBERO
-        g[y][30] = ALBERO
-    riempi(g, 13, 5, 14, 10, STRADA)
-    # Il rettangolo con il nome sta sopra la bottega: e' quello il castagneto di
-    # cui parla Nino. Gli alberi vanno oltre, come vanno oltre i boschi.
-    luoghi["castagneto"] = {"x": 17, "y": 6, "w": 8, "h": 4}
+    # Tre tornanti e un traverso: alla cava non ci si arriva per sbaglio, e
+    # nessuno ci passa andando da qualche altra parte.
+    riempi(g, 15, 2, 16, 4, STRADA)
+    riempi(g, 16, 4, 27, 5, STRADA)
+    riempi(g, 26, 5, 27, 7, STRADA)
+    riempi(g, 27, 7, 35, 7, STRADA)
 
-    # Il fondovalle. Le case stanno su un prato, non incastrate nella roccia:
-    # la montagna chiude il paese in cima e ai lati, e non ci passa in mezzo.
-    riempi(g, 2, 11, 46, 30, TERRENO)
+    # --- Il fondovalle, e il bosco che lo chiude in alto ------------------
+    riempi(g, 2, 8, 61, 53, TERRENO)
+    riempi(g, 4, 8, 30, 16, SOTTOBOSCO)
+    riempi(g, 4, 8, 30, 8, ALBERO)
+    riempi(g, 4, 16, 30, 16, ALBERO)
+    riempi(g, 38, 8, 58, 14, SOTTOBOSCO)
+    riempi(g, 38, 8, 58, 8, ALBERO)
+    for y in range(8, 17):
+        g[y][4] = ALBERO
+    for y in range(8, 15):
+        g[y][58] = ALBERO
+    # Il castagneto col nome e' quello sopra la bottega: e' li' che nel 1985
+    # hanno trovato Giorgio, ed e' li' che la battuta di Nino deve cadere.
+    riempi(g, 38, 9, 47, 14, SOTTOBOSCO)
+    luoghi["castagneto"] = {"x": 38, "y": 9, "w": 9, "h": 5}
 
-    # --- La strada alta, la curva, la bottega ------------------------------
-    riempi(g, 2, 12, 45, 12, STRADA)
-    riempi(g, 20, 10, 22, 11, SOTTOBOSCO)
-    # La curva: la strada piega qui, e sopra c'e' il bosco. E' la geografia da
-    # cui dipende il quarto atto — chi ha camminato per il paese deve
-    # riconoscere «il castagneto sopra la curva» senza che glielo spieghino.
-    riempi(g, 21, 10, 21, 12, STRADA)
-    luoghi["bottega"] = stanza(g, 17, 13, 24, 18, [(20, 18), (21, 13)])
-    riempi(g, 20, 19, 20, 20, STRADA)
+    strada(g)
 
-    # --- Le due case sulla strada alta ------------------------------------
-    luoghi["casa_ferro"] = stanza(g, 2, 14, 8, 19, [(5, 19)])
-    riempi(g, 5, 20, 5, 20, STRADA)
-    # Casa Lipari e la bottega a duecento metri: e' scritto nella storia, e va
-    # scritto nella mappa — meta' di quello che succede dipende da quanto e'
-    # corta questa strada.
-    luoghi["casa_lipari"] = stanza(g, 33, 14, 40, 19, [(36, 19)])
-    riempi(g, 36, 20, 36, 20, STRADA)
+    # --- La bottega, sopra il gomito della strada -------------------------
+    luoghi["bottega"] = affacciata(g, 38, 15, 46, 21, "ponente", 18)
+    g[15][42] = PORTA          # la porta di dietro, che da' sul castagneto
+    luoghi["casa_valli"] = affacciata(g, 24, 15, 31, 21, "levante", 18)
 
-    # --- La strada del paese ----------------------------------------------
-    riempi(g, 2, 20, 45, 21, TERRENO)
-    riempi(g, 2, 20, 45, 20, STRADA)
+    # --- Il paese alto ----------------------------------------------------
+    luoghi["panetteria"] = affacciata(g, 44, 25, 52, 31, "ponente", 28)
+    luoghi["casa_ferro"] = affacciata(g, 16, 26, 24, 32, "levante", 29)
 
-    # --- Il bar, la chiesa, la canonica, casa Valli ------------------------
-    luoghi["casa_valli"] = stanza(g, 2, 22, 9, 27, [(5, 22)])
-    riempi(g, 5, 21, 5, 21, STRADA)
-    luoghi["chiesa"] = stanza(g, 11, 22, 19, 27, [(15, 22)])
-    riempi(g, 15, 21, 15, 21, STRADA)
-    luoghi["canonica"] = stanza(g, 21, 22, 27, 27, [(24, 22)])
-    riempi(g, 24, 21, 24, 21, STRADA)
-    luoghi["bar"] = stanza(g, 41, 22, 46, 27, [(43, 22)])
-    riempi(g, 43, 21, 43, 21, STRADA)
-    # Il negozio sta sulla piazza, con la porta sulla piazza: una che dice «hai
-    # il pane dietro di te» deve avere un banco dietro cui stare.
-    luoghi["negozio"] = stanza(g, 34, 22, 39, 26, [(36, 22)])
-    riempi(g, 36, 21, 36, 21, STRADA)
+    # --- La piazza: la strada si allarga, ed e' li' che il paese si parla --
+    riempi(g, 24, 33, 34, 39, TERRENO)
+    luoghi["piazza"] = {"x": 24, "y": 34, "w": 9, "h": 4}
+    luoghi["chiesa"] = affacciata(g, 12, 33, 22, 41, "levante", 37)
+    luoghi["negozio"] = affacciata(g, 36, 34, 44, 39, "ponente", 36)
 
-    # --- La piazza e il giardino ------------------------------------------
-    riempi(g, 29, 21, 39, 29, TERRENO)
-    luoghi["piazza"] = {"x": 29, "y": 21, "w": 5, "h": 4}
-    for x in (30, 32, 34, 36):
-        g[27][x] = ALBERO
-    luoghi["giardino"] = {"x": 29, "y": 28, "w": 11, "h": 2}
+    # --- Il paese basso ---------------------------------------------------
+    luoghi["bar"] = affacciata(g, 36, 41, 45, 47, "ponente", 44)
+    luoghi["canonica"] = affacciata(g, 13, 43, 20, 49, "levante", 46)
+    luoghi["casa_lipari"] = affacciata(g, 36, 48, 44, 54, "ponente", 51)
 
-    # --- La stazione e, in fondo alla massicciata, il deposito -------------
-    # La stradina bassa: dalla piazza dietro la chiesa, e poi in fondo.
-    riempi(g, 11, 28, 29, 28, TERRENO)
-    riempi(g, 11, 29, 20, 29, TERRENO)
-    luoghi["stazione"] = stanza(g, 21, 29, 28, 31, [(24, 29)])
-    riempi(g, 29, 30, 39, 30, TERRENO)
-    riempi(g, 29, 31, 47, 31, FERROVIA)
-    # Il deposito sta in fondo, dalla parte opposta a tutto il resto: non si
-    # vede dalla piazza, non ci si passa andando da nessuna parte, e per
-    # arrivarci bisogna sapere che c'e'. Dentro, dieci saracinesche uguali.
-    luoghi["deposito"] = stanza(g, 2, 27, 10, 31, [(10, 29)])
-    luoghi["magazzino_b17"] = {"x": 4, "y": 28, "w": 5, "h": 2}
+    riempi(g, 22, 51, 32, 52, TERRENO)
+    for x in (23, 26, 29):
+        g[52][x] = ALBERO
+    luoghi["giardino"] = {"x": 22, "y": 51, "w": 10, "h": 1}
 
-    luoghi["strada"] = {"x": 2, "y": 20, "w": 44, "h": 1}
+    # --- In fondo: la ferrovia, la stazione, il deposito ------------------
+    riempi(g, 2, 53, 61, 53, TERRENO)
+    luoghi["stazione"] = affacciata(g, 46, 49, 54, 54, "ponente", 52)
+    riempi(g, 0, 55, 63, 55, FERROVIA)
+
+    # Il deposito sta in fondo al paese, dall'altra parte da tutto: non si vede
+    # dalla piazza, non ci si passa andando da nessuna parte, e non c'e' niente
+    # che ce lo indichi. Dieci saracinesche uguali, una e' la diciassette, e
+    # sotto c'e' una scala.
+    riempi(g, 12, 51, 21, 52, TERRENO)
+    luoghi["deposito"] = stanza(g, 2, 48, 11, 54, [(11, 51)])
+    luoghi["magazzino_b17"] = {"x": 3, "y": 49, "w": 4, "h": 4}
+    luoghi["seminterrato"] = {"x": 8, "y": 49, "w": 2, "h": 4}
+
+    luoghi["strada"] = {"x": 27, "y": 32, "w": 2, "h": 9}
+
+    # La strada si ripassa alla fine: la piazza, il giardino e le aie sono
+    # stesi sopra il fondovalle e le mangiavano il selciato.
+    strada(g)
     return g, luoghi
 
 
@@ -160,9 +187,10 @@ def raggiungibili(g, partenza):
 
 
 SPAWN = {
-    "player": (35, 16), "rosa": (37, 17), "matteo": (20, 15), "anna": (5, 16),
-    "laura": (5, 24), "don_carlo": (24, 24), "nino": (20, 8),
-    "teresa": (33, 28), "piero": (43, 24), "marisa": (36, 24),
+    "player": (39, 52), "rosa": (41, 53), "matteo": (42, 18), "anna": (20, 29),
+    "laura": (27, 18), "don_carlo": (16, 47), "nino": (42, 11),
+    "teresa": (26, 51), "piero": (40, 44), "marisa": (39, 36),
+    "beppe": (47, 28), "lidia": (42, 45), "gino": (30, 36),
 }
 
 
@@ -189,12 +217,25 @@ def verifica(g, luoghi):
         if not any(c in visti for c in celle):
             problemi.append(f"{nome} non si raggiunge")
 
+    nomi = list(luoghi)
+    for i, primo in enumerate(nomi):
+        a = luoghi[primo]
+        for secondo in nomi[i + 1:]:
+            b = luoghi[secondo]
+            if (a["x"] < b["x"] + b["w"] and b["x"] < a["x"] + a["w"]
+                    and a["y"] < b["y"] + b["h"] and b["y"] < a["y"] + a["h"]
+                    and {primo, secondo} not in ({"deposito", "magazzino_b17"},
+                                                 {"deposito", "seminterrato"},
+                                                 {"strada", "piazza"},
+                                                 {"cava", "galleria"})):
+                problemi.append(f"{primo} e {secondo} si sovrappongono")
+
     # Nessuna casa vuota: ogni stanza chiusa deve avere qualcuno dentro.
     abitate = {nome for nome, r in luoghi.items()
                for chi, (x, y) in SPAWN.items()
                if r["x"] <= x < r["x"] + r["w"] and r["y"] <= y < r["y"] + r["h"]}
     for nome in ("casa_lipari", "casa_ferro", "casa_valli", "bottega", "canonica",
-                 "bar", "negozio"):
+                 "bar", "negozio", "panetteria"):
         if nome not in abitate:
             problemi.append(f"{nome} e' vuota")
     return problemi

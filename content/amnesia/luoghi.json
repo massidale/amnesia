@@ -1,22 +1,17 @@
 {
   "places": {
     "magazzino_b17": {
-      "door": {
-        "x": 6,
-        "y": 28
-      },
-      "closed": "Le saracinesche del deposito, tutte uguali, la vernice andata.",
-      "opened": "La serratura è dura ma gira. Dentro c'è l'aria ferma di vent'anni.",
+      "door": {"x": 11, "y": 51},
+      "closed": "Una saracinesca di lamiera in fondo alla fila, uguale alle altre nove. Sopra, una targhetta d'ottone: B-17.",
+      "opened": "La serratura è dura ma gira. Dentro c'è l'aria ferma di vent'anni, e la roba di una cava accatastata contro il muro.",
       "requires_item": "chiave_b17",
-      "requires_declared": [
-        "magazzino_dove"
-      ],
-      "contains": [
-        "cassetta_latta",
-        "braccialetto",
-        "quaderno_vittorio",
-        "registro"
-      ]
+      "contains": ["registro", "quaderno_vittorio"]
+    },
+    "seminterrato": {
+      "door": {"x": 5, "y": 51},
+      "closed": "Una botola nel pavimento, sotto la polvere. Sotto ci sono quattro scalini e il buio.",
+      "opened": "Sotto è tutto più freddo. In fondo, su un ripiano di mattoni, una cassetta di latta legata con lo spago.",
+      "contains": ["cassetta_latta", "braccialetto"]
     }
   }
 }

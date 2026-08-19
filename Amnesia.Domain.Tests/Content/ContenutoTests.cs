@@ -68,8 +68,8 @@ public class ContenutoTests
     public void ITreFileDiContenutoSiCaricano()
     {
         var map = Map();
-        Assert.That(map.Width, Is.EqualTo(48));
-        Assert.That(map.Height, Is.EqualTo(32));
+        Assert.That(map.Width, Is.EqualTo(64));
+        Assert.That(map.Height, Is.EqualTo(56));
         Assert.That(Routines().Entries, Is.Not.Empty);
         Assert.That(Items().Items, Is.Not.Empty);
     }

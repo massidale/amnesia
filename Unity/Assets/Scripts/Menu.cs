@@ -177,6 +177,10 @@ namespace AmnesiaUnity
 
             foreach (var luogo in _gioco.Map.Places)
             {
+                if (!Pianta.SiScrive(luogo.Key))
+                {
+                    continue;
+                }
                 var rettangolo = luogo.Value;
                 var etichetta = Stile.Scritta(_carta, Stile.Macchina, 12, Stile.Carta,
                     new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));

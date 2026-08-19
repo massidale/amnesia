@@ -171,7 +171,8 @@ namespace AmnesiaUnity
                 ("player", "casa_lipari"), ("rosa", "casa_lipari"), ("matteo", "bottega"),
                 ("anna", "casa_ferro"), ("laura", "casa_valli"), ("don_carlo", "canonica"),
                 ("nino", "castagneto"), ("teresa", "giardino"), ("piero", "bar"),
-                ("marisa", "piazza"),
+                ("marisa", "negozio"), ("beppe", "panetteria"), ("lidia", "bar"),
+                ("gino", "piazza"),
             })
             {
                 // Il posto scritto nella mappa vince sul centro geometrico del
@@ -275,6 +276,7 @@ namespace AmnesiaUnity
             ["rosa"] = "e", ["anna"] = "e", ["laura"] = "e",
             ["matteo"] = "q", ["don_carlo"] = "j", ["nino"] = "a",
             ["teresa"] = "e", ["piero"] = "k", ["marisa"] = "e",
+            ["beppe"] = "k", ["lidia"] = "e", ["gino"] = "c",
         };
 
         private void CostruisciLeFigure()
