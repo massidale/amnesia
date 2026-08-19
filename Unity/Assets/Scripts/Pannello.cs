@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using System.Text;
+using Amnesia.Dialogue;
 using Amnesia.Game;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +11,11 @@ namespace AmnesiaUnity
     /// non e' deciso una scena salvata e' solo una cosa in piu' che si rompe.
     public sealed class Pannello : MonoBehaviour
     {
+        /// Quanti scambi restano a schermo. Il pannello e' basso apposta: se ci
+        /// stesse tutta la conversazione, il giocatore rileggerebbe invece di
+        /// guardare in faccia chi ha davanti.
+        private const int TurniMostrati = 6;
+
         public bool Aperto { get; private set; }
 
         private Bootstrap _gioco;
@@ -55,8 +62,9 @@ namespace AmnesiaUnity
             rect.anchorMax = new Vector2(0.94f, 0.40f);
             rect.offsetMin = rect.offsetMax = Vector2.zero;
 
-            _detto = Etichetta(_radice.transform, font, 22, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.96f));
+            _detto = Etichetta(_radice.transform, font, 20, new Vector2(0.03f, 0.34f), new Vector2(0.97f, 0.96f));
             _detto.color = new Color(0.93f, 0.91f, 0.86f);
+            _detto.alignment = TextAnchor.LowerLeft;
             _stato = Etichetta(_radice.transform, font, 15, new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.16f));
             _stato.color = new Color(0.60f, 0.58f, 0.54f);
 
@@ -111,7 +119,9 @@ namespace AmnesiaUnity
             _con = npcId;
             Aperto = true;
             _radice.SetActive(true);
-            _detto.text = "";
+            // Riaprire una conversazione la ritrova dov'era: e' il registro del
+            // personaggio, non una finestra che si svuota chiudendola.
+            Trascrivi();
             _stato.text = $"{npcId} — invio per parlare, Esc per andartene";
             _campo.text = "";
             _campo.ActivateInputField();
@@ -153,7 +163,7 @@ namespace AmnesiaUnity
 
             if (turno.IsOk)
             {
-                _detto.text = turno.Reply;
+                Trascrivi();
                 _stato.text = Coda(turno);
             }
             else
@@ -162,6 +172,28 @@ namespace AmnesiaUnity
             }
             _inAttesa = false;
             _campo.ActivateInputField();
+        }
+
+        /// La conversazione come la ricorda il personaggio. La fonte e' il
+        /// registro del dominio e non una lista tenuta a parte: quella che il
+        /// giocatore legge deve essere la stessa cosa che rientra nel prompt il
+        /// turno dopo, o si finisce a discutere di una battuta che il modello non
+        /// ha mai avuto davanti.
+        private void Trascrivi()
+        {
+            var scritto = new StringBuilder();
+            foreach (var battuta in _gioco.Session.Log.Recent(_con, TurniMostrati * 2))
+            {
+                if (battuta.Role == ChatRole.User)
+                {
+                    scritto.Append("\n> ").Append(battuta.Content).Append('\n');
+                }
+                else
+                {
+                    scritto.Append(battuta.Content).Append('\n');
+                }
+            }
+            _detto.text = scritto.ToString().TrimStart('\n');
         }
 
         /// Cosa il motore ha registrato. A schermo perche' questa e' una scena di
