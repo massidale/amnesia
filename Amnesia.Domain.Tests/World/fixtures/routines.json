@@ -1,0 +1,9 @@
+{
+  "anna": [{"from_minute": 540, "place": "cucina"}],
+  "matteo": [{"from_minute": 540, "place": "sala"}],
+  "bruno": [
+    {"from_minute": 540, "place": "bottega"},
+    {"from_minute": 780, "place": "strada"},
+    {"from_minute": 840, "place": "bottega"}
+  ]
+}

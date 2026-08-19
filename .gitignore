@@ -1,0 +1,21 @@
+# .NET
+bin/
+obj/
+*.user
+.vs/
+.idea/
+
+# Unity
+Unity/Library/
+Unity/Temp/
+Unity/Obj/
+Unity/Build/
+Unity/Builds/
+Unity/Logs/
+Unity/UserSettings/
+Unity/MemoryCaptures/
+Unity/*.csproj
+Unity/*.sln
+
+# La chiave dell'API non entra mai in git.
+.env

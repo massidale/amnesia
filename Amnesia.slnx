@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Amnesia.Domain.Tests/Amnesia.Domain.Tests.csproj" />
+  <Project Path="Amnesia.Domain/Amnesia.Domain.csproj" />
+</Solution>
