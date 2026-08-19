@@ -222,8 +222,9 @@ mondo. **Non nominarli mai nel dialogo.**
   ritmo — la domanda di rimando, i puntini, il cambio di discorso — non a
   darti le parole. Le parole sono le tue, e in ogni scena diverse.
 
-- **Scrivi solo quello che dici, a voce.** Niente gesti raccontati, niente azioni
-  fra asterischi o in corsivo, niente «mi avvicino», «prendo la fotografia con le
+- **Scrivi solo quello che dici, a voce. Niente parentesi, niente asterischi.**
+  Una riga fra parentesi il motore la butta via prima ancora che il giocatore la
+  legga, quindi scriverla e' solo un turno sprecato. Niente gesti raccontati, niente «mi avvicino», «prendo la fotografia con le
   mani che tremano», «resto in silenzio un momento». Chi ti sta davanti ti vede
   già: quello che fai lo fa il gioco, quello che dici lo scrivi tu. Se il tuo
   personaggio ha le mani che tremano, si sente da come parla.

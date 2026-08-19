@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -45,12 +46,50 @@ public sealed class ConversationLog
     /// sull'uscio di casa non va a capo due volte per dare enfasi.
     internal static string Compatta(string content)
     {
-        var pulito = content.Replace("\r\n", "\n").Replace('\r', '\n').Trim();
+        var pulito = SenzaDidascalie(content.Replace("\r\n", "\n").Replace('\r', '\n')).Trim();
         while (pulito.Contains("\n\n"))
         {
             pulito = pulito.Replace("\n\n", "\n");
         }
         return pulito;
+    }
+
+    /// Le didascalie non sono parlato.
+    ///
+    /// Le regole vietano di raccontare i gesti, e i modelli lo fanno lo stesso:
+    /// «(la pialla si ferma di colpo)» prima della battuta. E' la stessa
+    /// separazione fra le parole e i fatti su cui regge tutto il gioco — un
+    /// personaggio puo' dire quello che vuole, ma non decide cosa succede — e
+    /// una regola che il motore non fa rispettare, prima o poi, non e' una
+    /// regola.
+    ///
+    /// Si toglie solo la riga *intera* fra parentesi o fra asterischi: una
+    /// parentesi in mezzo a una frase e' parlato («era il '66, o il '67, non
+    /// ricordo»), e toglierla mutilerebbe la battuta.
+    private static string SenzaDidascalie(string content)
+    {
+        var righe = content.Split('\n');
+        var tenute = new List<string>();
+        foreach (var riga in righe)
+        {
+            var nuda = riga.Trim();
+            var didascalia =
+                (nuda.StartsWith("(") && nuda.EndsWith(")") && nuda.Length > 2)
+                || (nuda.StartsWith("*") && nuda.EndsWith("*") && nuda.Length > 2)
+                || (nuda.StartsWith("_") && nuda.EndsWith("_") && nuda.Length > 2);
+            if (!didascalia)
+            {
+                tenute.Add(riga);
+            }
+        }
+        // Se il modello ha scritto *soltanto* una didascalia, meglio la
+        // didascalia spogliata che il silenzio: un personaggio muto e' un turno
+        // perso, e il giocatore l'ha pagato.
+        if (tenute.Count == 0 || tenute.All(riga => riga.Trim().Length == 0))
+        {
+            return content.Replace("(", "").Replace(")", "").Replace("*", "").Replace("_", "");
+        }
+        return string.Join("\n", tenute);
     }
 
     public IReadOnlyList<LoggedMessage> Recent(string npcId, int window)

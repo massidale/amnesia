@@ -63,4 +63,38 @@ public class ConversationLogTests
         Assert.That(log.Recent("matteo", 4).Single().Content,
             Is.EqualTo("Giorgio.\nSiediti.\nChe in piedi non stai."));
     }
+
+    /// I modelli scrivono le didascalie anche quando le regole le vietano. Una
+    /// regola che il motore non fa rispettare, prima o poi, non e' una regola.
+    [Test]
+    public void LeDidascalieNonSonoParlato()
+    {
+        var log = new ConversationLog();
+
+        log.Append("matteo", ChatRole.Assistant,
+            "(La pialla si ferma di colpo.)\nDove l'hai sentita, quella frase?\n*resta in silenzio*");
+
+        Assert.That(log.Recent("matteo", 4).Single().Content, Is.EqualTo("Dove l'hai sentita, quella frase?"));
+    }
+
+    [Test]
+    public void UnaParentesiInMezzoAUnaFraseResta()
+    {
+        var log = new ConversationLog();
+
+        log.Append("anna", ChatRole.Assistant, "Era il '66 (o il '67, non ricordo bene) e pioveva da giorni.");
+
+        Assert.That(log.Recent("anna", 4).Single().Content, Does.Contain("(o il '67"));
+    }
+
+    /// Un personaggio muto e' un turno perso, e il giocatore l'ha pagato.
+    [Test]
+    public void SeCEraSoloUnaDidascaliaSiTieneSpogliata()
+    {
+        var log = new ConversationLog();
+
+        log.Append("nino", ChatRole.Assistant, "(alza le spalle)");
+
+        Assert.That(log.Recent("nino", 4).Single().Content, Is.EqualTo("alza le spalle"));
+    }
 }
