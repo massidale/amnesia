@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using Amnesia;
 using Amnesia.Core;
 using Amnesia.Dialogue;
 using Amnesia.Game;
