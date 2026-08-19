@@ -1,5 +1,6 @@
-using System.Threading.Tasks;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Amnesia.Dialogue;
 using Amnesia.Game;
 using UnityEngine;
@@ -131,10 +132,13 @@ namespace AmnesiaUnity
             _radice.SetActive(true);
             // Riaprire una conversazione la ritrova dov'era: e' il registro del
             // personaggio, non una finestra che si svuota chiudendola.
-            Trascrivi();
             _chi.text = _gioco.NomeDi(npcId);
             _invito.text = "";
-            _stato.text = "invio per parlare, Esc per andartene";
+            // Chi alza la testa per primo. Il saluto entra nel registro della
+            // conversazione, quindi si scrive prima di trascrivere.
+            _gioco.Accoglienza.Apri(_gioco.Session.World, _gioco.Session.Log, npcId);
+            Trascrivi();
+            _stato.text = "invio per parlare  ·  /oggetti  ·  /taccuino  ·  Esc per andartene";
             _campo.text = "";
             _campo.ActivateInputField();
         }
@@ -160,6 +164,13 @@ namespace AmnesiaUnity
         {
             if (_inAttesa || string.IsNullOrWhiteSpace(riga))
             {
+                return;
+            }
+            if (riga.TrimStart().StartsWith("/"))
+            {
+                Comando(riga.Trim());
+                _campo.text = "";
+                _campo.ActivateInputField();
                 return;
             }
             _inAttesa = true;
@@ -192,6 +203,61 @@ namespace AmnesiaUnity
             }
             _inAttesa = false;
             _campo.ActivateInputField();
+        }
+
+        /// Le tasche e il taccuino, senza spendere un turno e senza passare dal
+        /// modello: sono roba del motore, e chiedere a un personaggio cosa hai
+        /// in tasca sarebbe chiederlo alla persona sbagliata.
+        private void Comando(string riga)
+        {
+            var scritto = new StringBuilder();
+            if (riga.StartsWith("/ogg"))
+            {
+                scritto.Append("Quello che hai addosso:\n");
+                foreach (var oggetto in _gioco.Taccuino.Tasche())
+                {
+                    var nome = string.IsNullOrEmpty(oggetto.Name) ? oggetto.Id : oggetto.Name;
+                    scritto.Append("  · ").Append(nome);
+                    if (!string.IsNullOrEmpty(oggetto.Description))
+                    {
+                        scritto.Append(" — ").Append(oggetto.Description);
+                    }
+                    scritto.Append('\n');
+                }
+                scritto.Append("\nSi mostrano scrivendo [mostra: ").Append(Primo()).Append("] dentro una frase.");
+            }
+            else if (riga.StartsWith("/tac"))
+            {
+                var righe = _gioco.Taccuino.Dette();
+                scritto.Append(righe.Count == 0 ? "Il taccuino e' ancora bianco." : "Quello che ti hanno detto:\n");
+                foreach (var detta in righe)
+                {
+                    scritto.Append("  · «").Append(detta.Testo).Append("»  — ");
+                    scritto.Append(string.Join(", ", detta.Bocche.Select(_gioco.NomeDi)));
+                    if (detta.Volte > detta.Bocche.Count)
+                    {
+                        scritto.Append("  (").Append(detta.Volte).Append(" volte)");
+                    }
+                    scritto.Append('\n');
+                }
+                if (righe.Count > 1)
+                {
+                    scritto.Append("\nDue righe si accostano scrivendo [confronto: ")
+                        .Append(righe[0].Id).Append(" | ").Append(righe[1].Id).Append("].");
+                }
+            }
+            else
+            {
+                scritto.Append("/oggetti — cosa hai in tasca\n/taccuino — cosa ti hanno detto");
+            }
+            _detto.text = scritto.ToString();
+            _stato.text = "scrivi per tornare alla conversazione";
+        }
+
+        private string Primo()
+        {
+            var tasche = _gioco.Taccuino.Tasche();
+            return tasche.Count == 0 ? "oggetto" : (string.IsNullOrEmpty(tasche[0].Name) ? tasche[0].Id : tasche[0].Name);
         }
 
         /// La conversazione come la ricorda il personaggio. La fonte e' il

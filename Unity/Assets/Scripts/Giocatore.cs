@@ -11,7 +11,8 @@ namespace AmnesiaUnity
     {
         public const float PortataDiParola = 2.5f;
 
-        private const float Passo = 4.5f;
+        private const float Passo = 3.6f;
+        private const float Gravita = 18f;
         private const float Sensibilita = 2.2f;
         private const float GradiAlSecondo = 110f;
         private const float PendenzaMassima = 75f;
@@ -20,12 +21,14 @@ namespace AmnesiaUnity
         /// conversazione sposta la telecamera nel mondo, quindi questo e' il
         /// posto a cui deve tornare: senza, ogni chiacchierata te la lasciava
         /// dove l'aveva messa l'ultima faccia.
-        private static readonly Vector3 SedeDellOcchio = new Vector3(0f, 0.6f, 0f);
+        private static readonly Vector3 SedeDellOcchio = new Vector3(0f, 1.62f, 0f);
 
         private Bootstrap _gioco;
         private Camera _occhio;
         private Pannello _pannello;
         private Transform _bersaglio;
+        private CharacterController _corpo;
+        private float _caduta;
         private float _imbardata;
         private float _beccheggio;
 
@@ -35,7 +38,17 @@ namespace AmnesiaUnity
             _pannello = FindFirstObjectByType<Pannello>();
 
             var posizione = _gioco.World.ActorOf("player").Position ?? new Cell(0, 0);
-            transform.position = _gioco.InScena(posizione) + Vector3.up * 0.9f;
+            transform.position = _gioco.InScena(posizione) + Vector3.up * 0.2f;
+
+            // Un corpo, finalmente: i muri fermano, la montagna ferma, e un
+            // paese in cui si passa attraverso le case non ha ne' dentro ne'
+            // fuori — e questo gioco e' tutto un entrare in casa d'altri.
+            _corpo = gameObject.AddComponent<CharacterController>();
+            _corpo.height = 1.75f;
+            _corpo.radius = 0.28f;
+            _corpo.center = new Vector3(0f, 0.88f, 0f);
+            _corpo.slopeLimit = 50f;
+            _corpo.stepOffset = 0.35f;
 
             // Il paese sta verso -Z, e un giocatore che nasce con rotazione zero
             // guarda verso +Z: di spalle a tutto. E' quello che faceva sembrare
@@ -47,6 +60,9 @@ namespace AmnesiaUnity
             _occhio.transform.SetParent(transform, false);
             _occhio.transform.localPosition = SedeDellOcchio;
             _occhio.fieldOfView = 62f;
+            _occhio.clearFlags = CameraClearFlags.SolidColor;
+            _occhio.backgroundColor = Scenografia.ColoreDelCielo;
+            _occhio.farClipPlane = 120f;
 
             Libera(false);
         }
@@ -120,8 +136,17 @@ namespace AmnesiaUnity
             var verso = transform.forward * avanti + transform.right * lato;
             if (verso.sqrMagnitude > 0.001f)
             {
-                transform.position += verso.normalized * (Passo * Time.deltaTime);
+                verso = verso.normalized * Passo;
             }
+            else
+            {
+                verso = Vector3.zero;
+            }
+            // La gravita' serve anche in piano: senza, il controller resta
+            // appeso al primo gradino che sale e non ridiscende piu'.
+            _caduta = _corpo.isGrounded ? -1f : _caduta - Gravita * Time.deltaTime;
+            verso.y = _caduta;
+            _corpo.Move(verso * Time.deltaTime);
         }
 
         private static float Premuto(KeyCode tasto) => Input.GetKey(tasto) ? 1f : 0f;

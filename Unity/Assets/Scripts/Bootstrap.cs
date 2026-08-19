@@ -26,10 +26,17 @@ namespace AmnesiaUnity
         public VillageMap Map { get; private set; }
         public ItemCatalog Items { get; private set; }
         public ConversationSession Session { get; private set; }
+        public Greeter Accoglienza { get; private set; }
         public string Problema { get; private set; } = "";
 
         private readonly Dictionary<string, Transform> _corpi = new Dictionary<string, Transform>();
         private readonly Dictionary<string, string> _nomi = new Dictionary<string, string>();
+        private DeclarationTable _dichiarazioni;
+
+        /// Il taccuino si costruisce sul mondo di adesso e non si conserva: la
+        /// sessione sostituisce il mondo a ogni turno riuscito, e un taccuino
+        /// tenuto da parte leggerebbe la partita di due battute fa.
+        public Taccuino Taccuino => new Taccuino(Session.World, _dichiarazioni, Items);
 
         private static string Contenuto(params string[] parti) =>
             Path.Combine(Application.streamingAssetsPath, Path.Combine(parti));
@@ -100,6 +107,15 @@ namespace AmnesiaUnity
                 return false;
             }
 
+            var saluti = GreetingTable.Load(Contenuto("amnesia", "saluti.json"));
+            if (!saluti.IsOk)
+            {
+                Problema = saluti.Message;
+                return false;
+            }
+            _dichiarazioni = dichiarazioni.Value;
+            Accoglienza = new Greeter(saluti.Value, posizioni.Value);
+
             var tabelle = new DeclarationService(dichiarazioni.Value, posizioni.Value);
             var contesto = new ContextBuilder(regole, schede, Items, true, dichiarazioni.Value, posizioni.Value);
             Session = new ConversationSession(
@@ -144,10 +160,13 @@ namespace AmnesiaUnity
                 ("nino", "segheria"),
             })
             {
-                var centro = Map.CenterOf(pair.Item2);
-                if (centro.HasValue)
+                // Il posto scritto nella mappa vince sul centro geometrico del
+                // luogo: uno sta sulla soglia o dietro il banco, non nel mezzo
+                // matematico della stanza.
+                var dove = Map.Spawn(pair.Item1) ?? Map.CenterOf(pair.Item2);
+                if (dove.HasValue)
                 {
-                    World.ActorOf(pair.Item1).Position = centro.Value;
+                    World.ActorOf(pair.Item1).Position = dove.Value;
                 }
             }
         }
@@ -172,57 +191,74 @@ namespace AmnesiaUnity
 
         public Vector3 InScena(Cell cell) => new Vector3(cell.X * CellSize, 0f, -cell.Y * CellSize);
 
-        /// Un cubo per ogni cella solida. Brutto e sufficiente: serve a capire se
-        /// una conversazione regge come momento di gioco, non a fare un paese.
         private void CostruisciIlPaese()
         {
-            var terra = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            terra.name = "terra";
-            terra.transform.localScale = new Vector3(Map.Width * CellSize / 10f, 1f, Map.Height * CellSize / 10f);
-            terra.transform.position = new Vector3(Map.Width * CellSize / 2f, 0f, -Map.Height * CellSize / 2f);
-            terra.GetComponent<Renderer>().material.color = new Color(0.42f, 0.40f, 0.36f);
-
-            var muri = new GameObject("muri").transform;
-            for (var y = 0; y < Map.Height; y++)
-            {
-                for (var x = 0; x < Map.Width; x++)
-                {
-                    if (Map.IsWalkable(new Cell(x, y)))
-                    {
-                        continue;
-                    }
-                    var blocco = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    blocco.transform.SetParent(muri);
-                    blocco.transform.position = InScena(new Cell(x, y)) + Vector3.up * (CellSize * 0.5f);
-                    blocco.transform.localScale = Vector3.one * CellSize;
-                    blocco.GetComponent<Renderer>().material.color = new Color(0.30f, 0.28f, 0.26f);
-                }
-            }
-
-            var sole = new GameObject("sole").AddComponent<Light>();
-            sole.type = LightType.Directional;
-            sole.transform.rotation = Quaternion.Euler(38f, 205f, 0f);
-            sole.color = new Color(1f, 0.94f, 0.82f);
-            sole.intensity = 1.1f;
-            RenderSettings.ambientLight = new Color(0.30f, 0.32f, 0.38f);
+            Scenografia.Costruisci(Map, CellSize, new GameObject("paese").transform);
         }
+
+        /// Quale corpo indossa ciascuno. Le mesh sono di Kenney (CC0); le
+        /// facce le dipinge `tools/facce.py`, che tiene la stessa lista: se qui
+        /// cambia una lettera, va cambiata anche la'.
+        private static readonly Dictionary<string, string> Corpo = new Dictionary<string, string>
+        {
+            ["rosa"] = "e", ["anna"] = "e", ["laura"] = "e",
+            ["matteo"] = "q", ["don_carlo"] = "j", ["nino"] = "a",
+        };
 
         private void CostruisciLeFigure()
         {
-            foreach (var id in new[] { "rosa", "matteo", "anna", "laura", "don_carlo", "nino" })
+            var gente = new GameObject("gente").transform;
+            foreach (var pair in Corpo)
             {
-                var posizione = World.ActorOf(id).Position;
+                var posizione = World.ActorOf(pair.Key).Position;
                 if (!posizione.HasValue)
                 {
                     continue;
                 }
-                var figura = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                figura.name = id;
-                figura.transform.position = InScena(posizione.Value) + Vector3.up * CellSize;
-                figura.transform.localScale = new Vector3(CellSize * 0.7f, CellSize, CellSize * 0.7f);
-                figura.GetComponent<Renderer>().material.color = new Color(0.72f, 0.62f, 0.50f);
-                _corpi[id] = figura.transform;
+                var figura = Figura(pair.Key, pair.Value);
+                figura.name = pair.Key;
+                figura.transform.SetParent(gente);
+                figura.transform.position = InScena(posizione.Value);
+                _corpi[pair.Key] = figura.transform;
             }
+        }
+
+        /// La mesh di Kenney con sopra la faccia dipinta per questa persona. Se
+        /// il modello non c'e' — import non riuscito, cartella spostata — resta
+        /// una capsula: il gioco deve poter partire lo stesso, perche' la scena
+        /// serve a provare le conversazioni, non i poligoni.
+        private static GameObject Figura(string id, string mesh)
+        {
+            var modello = Resources.Load<GameObject>("kenney/persone/character-" + mesh);
+            if (modello == null)
+            {
+                var ripiego = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                ripiego.transform.localScale = new Vector3(0.6f, 0.9f, 0.6f);
+                return ripiego;
+            }
+            var figura = Instantiate(modello);
+            figura.transform.localScale = Vector3.one * 0.65f;
+
+            var faccia = Resources.Load<Texture2D>("kenney/persone/facce/" + id);
+            if (faccia != null)
+            {
+                // Il materiale si assegna qui e non si eredita dal .mtl:
+                // l'importatore OBJ di Unity a volte non trova la texture, e una
+                // faccia bianca sarebbe un difetto invisibile finche' non lo
+                // guardi in gioco.
+                var materiale = new Material(Shader.Find("Standard")) { mainTexture = faccia };
+                materiale.SetFloat("_Glossiness", 0f);
+                foreach (var pezzo in figura.GetComponentsInChildren<Renderer>())
+                {
+                    pezzo.sharedMaterial = materiale;
+                }
+            }
+
+            var urto = figura.AddComponent<CapsuleCollider>();
+            urto.height = 2.7f;
+            urto.radius = 0.5f;
+            urto.center = new Vector3(0f, 1.35f, 0f);
+            return figura;
         }
 
         /// Chi e' abbastanza vicino da poterci parlare.
@@ -232,7 +268,9 @@ namespace AmnesiaUnity
             var distanza = portata;
             foreach (var pair in _corpi)
             {
-                var quanto = Vector3.Distance(da, pair.Value.position);
+                // Distanza a terra: uno alto e uno basso sono vicini uguale.
+                var quanto = Vector2.Distance(
+                    new Vector2(da.x, da.z), new Vector2(pair.Value.position.x, pair.Value.position.z));
                 if (quanto < distanza)
                 {
                     distanza = quanto;
