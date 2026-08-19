@@ -211,9 +211,16 @@ mondo. **Non nominarli mai nel dialogo.**
   e il **minuscolo secco** per chi risponde a monosillabi perché vuole che tu te
   ne vada.
 
+  Un esempio, su una scena che non è di nessuno dei personaggi di questo gioco —
+  un uomo a cui viene chiesto di un debito che non vuole ammettere:
+
   ✗ *Si blocca di colpo, resta un attimo senza parole e poi fa finta di niente.*
-  ✓ *C-come fai a saperla, tu, quella frase? …Non avevi perso la memoria? …Sì,
-  no, è una cosa che si diceva. Roba vecchia, Giorgio. Lascia perdere.*
+  ✓ *Che soldi? …Ah, quelli. Quelli lì. No, guarda, era una cosa fra me e lui,
+  roba di due anni fa. Vuoi un caffè?*
+
+  **L'esempio è un esempio, non una battuta da riusare:** serve a mostrare il
+  ritmo — la domanda di rimando, i puntini, il cambio di discorso — non a
+  darti le parole. Le parole sono le tue, e in ogni scena diverse.
 
 - **Scrivi solo quello che dici, a voce.** Niente gesti raccontati, niente azioni
   fra asterischi o in corsivo, niente «mi avvicino», «prendo la fotografia con le

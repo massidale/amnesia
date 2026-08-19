@@ -39,13 +39,19 @@ public sealed record ChatRequest
 
 public sealed record ProviderPreferences
 {
-    /// Per latenza e non per throughput: quello che si aspetta e' la prima
-    /// parola, non le successive. E restare sullo stesso fornitore fa un
-    /// secondo regalo — il prefisso del prompt gli resta in cache, e un prompt
-    /// da cinquemila token gia' visto torna in quattro decimi invece che in
-    /// cinque secondi.
-    [JsonPropertyName("sort")]
-    public string Sort { get; init; } = "latency";
+    /// I fornitori si nominano invece di ordinarli per velocita', e la ragione
+    /// e' il conto: sullo stesso modello il piu' rapido (Friendli) costa
+    /// 0,50 $/M contro gli 0,21 di GMICloud, e ordinare per latenza ci finiva
+    /// dritto. Misurati sul prompt vero: Baidu 2,2-3,3 s, StreamLake 3,3-3,5 s,
+    /// GMICloud 3,5-4,3 s — contro gli 1,5-3,6 di Friendli, che pero' costa il
+    /// doppio e tiene la cache a 0,25 $/M invece che a 0,02.
+    ///
+    /// Un ordine esplicito fa anche la cosa che conta di piu': tiene le battute
+    /// sullo stesso fornitore, e cosi' il prefisso del prompt — cinquemila
+    /// token di regole e scheda — resta in cache invece di essere rimacinato a
+    /// ogni turno.
+    [JsonPropertyName("order")]
+    public IReadOnlyList<string> Order { get; init; } = new[] { "Baidu", "StreamLake", "GMICloud" };
 
     /// Se il fornitore piu' veloce cade, si passa al successivo invece di
     /// restituire un errore: e' la differenza fra una battuta che tarda e una
