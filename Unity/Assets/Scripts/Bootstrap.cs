@@ -99,7 +99,9 @@ namespace AmnesiaUnity
             }
 
             World = new WorldState();
-            foreach (var starting in new[] { "fotografia", "frase", "foglio_indirizzo", "chiave_b17", "taccuino" })
+            // La frase non e' fra questi: non e' un oggetto, e' una riga del
+            // taccuino. Si usa dicendola.
+            foreach (var starting in new[] { "fotografia", "foglio_indirizzo", "chiave_b17", "taccuino" })
             {
                 World.ItemOwners[starting] = "player";
             }

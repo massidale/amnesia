@@ -37,10 +37,7 @@
         "nino",
         "don_carlo",
         "teresa",
-        "piero",
-        "beppe",
-        "lidia",
-        "gino"
+        "lidia"
       ],
       "requires_shown": [],
       "variants": {
@@ -48,10 +45,7 @@
         "nino": "Al bar, vent'anni fa, gliel'ho sentita dire una volta. Una cosa di passare per primi, mi pare.",
         "don_carlo": "Avevano una formula, sì. Ci ho predicato contro per dieci anni senza mai sentirla per intero.",
         "teresa": "Sì, dicevano sempre una cosa fra loro. Qualcosa di una porta, mi pare. O di un cancello.",
-        "piero": "Boh. Si dicevano una roba… di tenere. Tenere qualcosa. È passato tanto di quel tempo.",
-        "beppe": "C'era un detto, sì. Parlavano di un'entrata, o di un passaggio. Io facevo il pane, mica stavo a sentire.",
-        "lidia": "Ah, quella frase! La dicevano sempre, sempre la stessa. Chiedimi le parole e non te le so dire.",
-        "gino": "Mio padre diceva che quelli lì avevano un motto. Una roba da compagnia, come le squadre."
+        "lidia": "Ah, quella frase! La dicevano sempre, sempre la stessa. Chiedimi le parole e non te le so dire."
       }
     },
     "non_erano_gite": {
@@ -420,10 +414,7 @@
         "nino",
         "don_carlo",
         "teresa",
-        "piero",
-        "beppe",
-        "lidia",
-        "gino"
+        "lidia"
       ],
       "requires_shown": [
         "frase"
@@ -433,10 +424,7 @@
         "nino": "Ah, adesso sì. Era quella. Se la dicevano fra loro per farsi riconoscere, come una parola d'ordine.",
         "don_carlo": "…Sì. Era quella. Se la dicevano per riconoscersi, figliolo. Non chiedermi altro.",
         "teresa": "Oh! Ma sì, era quella lì! Se la dicevano fra loro, per farsi capire che erano dei loro.",
-        "piero": "Sì. Sì, era quella. Serviva a riconoscersi, mi pare. Uno la diceva e l'altro sapeva.",
-        "beppe": "Questa qui, sì. Era il modo che avevano di riconoscersi fra loro. Chi te l'ha detta?",
-        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata.",
-        "gino": "Madonna, sì! Quella lì! Mio padre diceva che se la dicevano per riconoscersi."
+        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata."
       }
     },
     "foto_anna_e_pietro": {

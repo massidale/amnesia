@@ -64,6 +64,17 @@ public sealed class ConversationSession
             draft.MarkShown(npcId, itemId);
         }
 
+        // La frase non e' un oggetto: e' cinque parole scritte sulla prima pagina
+        // del taccuino, e il modo di usarle e' dirle. Il motore le riconosce
+        // mentre le scrivi e le segna come messe davanti a questa persona —
+        // percio' tutto cio' che gia' dipendeva dall'averla mostrata continua a
+        // valere senza cambiare una riga.
+        var fraseDetta = Frase.Detta(utterance.Spoken);
+        if (fraseDetta)
+        {
+            draft.MarkShown(npcId, "frase");
+        }
+
         // Un confronto conta per chi se l'e' visto davanti: convincere Anna non
         // convince Matteo, ed e' proprio quello il lavoro da fare in bottega.
         if (utterance.Confronto is { } pair)

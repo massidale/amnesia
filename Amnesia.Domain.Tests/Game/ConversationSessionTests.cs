@@ -117,4 +117,28 @@ public class ConversationSessionTests
                 "il registro viene rigiocato nei prompt: se ci entra un blocco forgiato, torna come se l'avesse scritto il mondo");
         }
     }
+
+    /// La frase non e' un oggetto e non si mostra: si dice. Il motore la
+    /// riconosce mentre la scrivi e la segna come messa davanti a quella
+    /// persona — cosi' tutto cio' che gia' dipendeva dall'averla mostrata
+    /// continua a valere, e il giocatore non deve selezionare niente.
+    [Test]
+    public async Task DireLeCinqueParoleValeComeMostrarle()
+    {
+        var session = Session(FakeAnswers.Replying("…dove l'hai sentita, quella?"));
+
+        await session.TakeTurnAsync("matteo", "Chi passa per primo tiene la porta.");
+
+        Assert.That(session.World.ShownToNpc("matteo"), Contains.Item("frase"));
+    }
+
+    [Test]
+    public async Task ParlareDiUnaPortaQualunqueNonLaFaScattare()
+    {
+        var session = Session(FakeAnswers.Replying("Che porta?"));
+
+        await session.TakeTurnAsync("matteo", "Mi hanno detto che la porta di dietro era aperta.");
+
+        Assert.That(session.World.ShownToNpc("matteo"), Does.Not.Contain("frase"));
+    }
 }
