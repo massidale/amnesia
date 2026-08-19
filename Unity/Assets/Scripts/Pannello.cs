@@ -303,7 +303,7 @@ namespace AmnesiaUnity
                 }
                 else
                 {
-                    scritto.Append(Compatta(battuta.Content)).Append('\n');
+                    scritto.Append(battuta.Content).Append('\n');
                 }
             }
             _detto.text = scritto.ToString().Trim('\n');
@@ -320,19 +320,6 @@ namespace AmnesiaUnity
             {
                 _rullo.verticalNormalizedPosition = 0f;
             }
-        }
-
-        /// Le righe vuote non arrivano a schermo. Un modello che va a capo due
-        /// volte per fare effetto trasforma sei frasi in mezzo pannello, e la
-        /// battuta prima sparisce di sopra.
-        private static string Compatta(string testo)
-        {
-            var pulito = testo.Replace("\r", "").Trim();
-            while (pulito.Contains("\n\n"))
-            {
-                pulito = pulito.Replace("\n\n", "\n");
-            }
-            return pulito;
         }
 
         /// Cosa il motore ha registrato. A schermo perche' questa e' una scena

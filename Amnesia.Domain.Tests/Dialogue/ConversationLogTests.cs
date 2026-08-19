@@ -49,4 +49,18 @@ public class ConversationLogTests
         Assert.That(restored.Recent("giorgio", 4), Is.EqualTo(log.Recent("giorgio", 4)));
         Assert.That(restored.Recent("giulia", 10).Single().Role, Is.EqualTo(ChatRole.User), "e i ruoli tornano indietro ruoli");
     }
+
+    /// Una riga vuota non e' una cosa detta — e soprattutto: il registro e'
+    /// anche cio' che il modello si rilegge il turno dopo. Lasciandocele si
+    /// finisce per insegnargli a scrivere spaziato.
+    [Test]
+    public void LeRigheVuoteNonEntranoNelRegistro()
+    {
+        var log = new ConversationLog();
+
+        log.Append("matteo", ChatRole.Assistant, "  Giorgio.\n\n\nSiediti.\r\n\r\nChe in piedi non stai.  ");
+
+        Assert.That(log.Recent("matteo", 4).Single().Content,
+            Is.EqualTo("Giorgio.\nSiediti.\nChe in piedi non stai."));
+    }
 }

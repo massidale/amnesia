@@ -34,7 +34,23 @@ public sealed class ConversationLog
             history = new List<LoggedMessage>();
             Histories[npcId] = history;
         }
-        history.Add(new LoggedMessage(role, content));
+        history.Add(new LoggedMessage(role, Compatta(content)));
+    }
+
+    /// Una riga vuota non e' una cosa detta.
+    ///
+    /// Si toglie qui e non a schermo perche' il registro e' anche cio' che il
+    /// modello si rilegge il turno dopo: lasciarcele dentro vuol dire mostrargli
+    /// il proprio testo spaziato e insegnargli a continuare cosi'. Chi parla
+    /// sull'uscio di casa non va a capo due volte per dare enfasi.
+    internal static string Compatta(string content)
+    {
+        var pulito = content.Replace("\r\n", "\n").Replace('\r', '\n').Trim();
+        while (pulito.Contains("\n\n"))
+        {
+            pulito = pulito.Replace("\n\n", "\n");
+        }
+        return pulito;
     }
 
     public IReadOnlyList<LoggedMessage> Recent(string npcId, int window)

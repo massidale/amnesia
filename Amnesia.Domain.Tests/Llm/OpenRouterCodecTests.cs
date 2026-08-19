@@ -44,7 +44,7 @@ public class OpenRouterCodecTests
             new[] { SampleTool }));
 
         Assert.That(body, Is.EqualTo(
-            """{"model":"anthropic/claude-sonnet-4.5","messages":[{"role":"user","content":"ciao"}],"tools":[{"type":"function","function":{"name":"prova","description":"descrizione","parameters":{"type":"object","properties":{"x":{"type":"string"}},"required":["x"]}}}],"tool_choice":"auto"}"""));
+            """{"model":"anthropic/claude-sonnet-4.5","messages":[{"role":"user","content":"ciao"}],"tools":[{"type":"function","function":{"name":"prova","description":"descrizione","parameters":{"type":"object","properties":{"x":{"type":"string"}},"required":["x"]}}}],"tool_choice":"auto","max_tokens":340,"provider":{"sort":"latency","allow_fallbacks":true}}"""));
     }
 
     [Test]

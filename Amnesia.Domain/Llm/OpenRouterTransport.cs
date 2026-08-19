@@ -40,11 +40,32 @@ public sealed class OpenRouterTransport : IChatTransport
     {
     }
 
+    /// Una battuta persa non e' un errore da mostrare: e' una conversazione che
+    /// si ferma a meta'. Quando la richiesta scade o il fornitore risponde 5xx
+    /// si riprova una volta sola — la seconda volta di solito arriva, e se non
+    /// arriva il giocatore ha diritto di saperlo invece di aspettare in eterno.
     public async Task<Result<LlmReply>> ChatAsync(
         string model,
         IReadOnlyList<ChatMessage> messages,
         IReadOnlyList<ToolDefinition> tools,
         CancellationToken cancellationToken = default)
+    {
+        var primo = await UnTentativo(model, messages, tools, cancellationToken).ConfigureAwait(false);
+        if (primo.IsOk || cancellationToken.IsCancellationRequested || !VaRiprovato(primo.Code))
+        {
+            return primo;
+        }
+        return await UnTentativo(model, messages, tools, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static bool VaRiprovato(string codice) =>
+        codice == "timeout" || codice == "transport_error" || codice == "server_error";
+
+    private async Task<Result<LlmReply>> UnTentativo(
+        string model,
+        IReadOnlyList<ChatMessage> messages,
+        IReadOnlyList<ToolDefinition> tools,
+        CancellationToken cancellationToken)
     {
         var body = OpenRouterCodec.SerializeRequest(OpenRouterCodec.BuildRequest(model, messages, tools));
 
@@ -72,9 +93,12 @@ public sealed class OpenRouterTransport : IChatTransport
                 // Nel messaggio entra solo il corpo della risposta. Mai la
                 // richiesta: porta l'header Authorization, e un errore finisce
                 // nei log e negli screenshot.
-                return Result<LlmReply>.Fail(
-                    "api_error",
-                    $"status {(int)response.StatusCode}: {Truncate(text, ErrorBodyLimit)}");
+                // Un 5xx o un 429 sono il fornitore che arranca, non una
+                // richiesta sbagliata: hanno un codice loro perche' sono gli
+                // unici che ha senso riprovare.
+                var stato = (int)response.StatusCode;
+                var codice = stato >= 500 || stato == 429 ? "server_error" : "api_error";
+                return Result<LlmReply>.Fail(codice, $"status {stato}: {Truncate(text, ErrorBodyLimit)}");
             }
 
             return OpenRouterCodec.ParseResponse(text);

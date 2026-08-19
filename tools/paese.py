@@ -116,13 +116,17 @@ def paese():
     riempi(g, 24, 21, 24, 21, STRADA)
     luoghi["bar"] = stanza(g, 41, 22, 46, 27, [(43, 22)])
     riempi(g, 43, 21, 43, 21, STRADA)
+    # Il negozio sta sulla piazza, con la porta sulla piazza: una che dice «hai
+    # il pane dietro di te» deve avere un banco dietro cui stare.
+    luoghi["negozio"] = stanza(g, 34, 22, 39, 26, [(36, 22)])
+    riempi(g, 36, 21, 36, 21, STRADA)
 
     # --- La piazza e il giardino ------------------------------------------
     riempi(g, 29, 21, 39, 29, TERRENO)
-    luoghi["piazza"] = {"x": 29, "y": 21, "w": 11, "h": 4}
-    for x in (30, 33, 36, 39):
-        g[25][x] = ALBERO
-    luoghi["giardino"] = {"x": 29, "y": 26, "w": 11, "h": 4}
+    luoghi["piazza"] = {"x": 29, "y": 21, "w": 5, "h": 4}
+    for x in (30, 32, 34, 36):
+        g[27][x] = ALBERO
+    luoghi["giardino"] = {"x": 29, "y": 28, "w": 11, "h": 2}
 
     # --- La stazione e, in fondo alla massicciata, il deposito -------------
     # La stradina bassa: dalla piazza dietro la chiesa, e poi in fondo.
@@ -158,7 +162,7 @@ def raggiungibili(g, partenza):
 SPAWN = {
     "player": (35, 16), "rosa": (37, 17), "matteo": (20, 15), "anna": (5, 16),
     "laura": (5, 24), "don_carlo": (24, 24), "nino": (20, 8),
-    "teresa": (33, 27), "piero": (43, 24), "marisa": (33, 22),
+    "teresa": (33, 28), "piero": (43, 24), "marisa": (36, 24),
 }
 
 
@@ -189,7 +193,8 @@ def verifica(g, luoghi):
     abitate = {nome for nome, r in luoghi.items()
                for chi, (x, y) in SPAWN.items()
                if r["x"] <= x < r["x"] + r["w"] and r["y"] <= y < r["y"] + r["h"]}
-    for nome in ("casa_lipari", "casa_ferro", "casa_valli", "bottega", "canonica"):
+    for nome in ("casa_lipari", "casa_ferro", "casa_valli", "bottega", "canonica",
+                 "bar", "negozio"):
         if nome not in abitate:
             problemi.append(f"{nome} e' vuota")
     return problemi

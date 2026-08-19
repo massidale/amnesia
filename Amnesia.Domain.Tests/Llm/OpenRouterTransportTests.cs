@@ -41,8 +41,22 @@ public class OpenRouterTransportTests
         var result = await Chat(new OpenRouterTransport(client, FakeKey, TimeSpan.FromSeconds(5)));
 
         Assert.That(result.IsOk, Is.False);
-        Assert.That(result.Code, Is.EqualTo("api_error"));
+        // Un 5xx ha un codice suo: e' l'unico caso in cui riprovare ha senso.
+        Assert.That(result.Code, Is.EqualTo("server_error"));
         Assert.That(result.Message, Does.Contain("500").And.Contain("il provider e' giu'"));
+        Assert.That(handler.Chiamate, Is.EqualTo(2), "una battuta persa si riprova una volta sola");
+    }
+
+    [Test]
+    public async Task UnaRichiestaSbagliataNonSiRiprova()
+    {
+        var handler = StubHandler.Returning(HttpStatusCode.BadRequest, "modello inesistente");
+        using var client = new HttpClient(handler);
+
+        var result = await Chat(new OpenRouterTransport(client, FakeKey, TimeSpan.FromSeconds(5)));
+
+        Assert.That(result.Code, Is.EqualTo("api_error"));
+        Assert.That(handler.Chiamate, Is.EqualTo(1), "riprovare una richiesta malformata la sbaglia due volte");
     }
 
     [Test]
@@ -134,6 +148,8 @@ public class OpenRouterTransportTests
 
         public string? LastBody { get; private set; }
 
+        public int Chiamate { get; private set; }
+
         public static StubHandler Returning(HttpStatusCode status, string body) =>
             new() { _status = status, _body = body };
 
@@ -143,6 +159,7 @@ public class OpenRouterTransportTests
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            Chiamate++;
             LastRequestUri = request.RequestUri?.ToString();
             LastAuthorization = request.Headers.Authorization?.ToString();
             LastBody = request.Content is null ? null : await request.Content.ReadAsStringAsync().ConfigureAwait(false);

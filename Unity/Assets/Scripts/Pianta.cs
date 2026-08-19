@@ -21,7 +21,7 @@ namespace AmnesiaUnity
             ["bottega"] = "la bottega di Matteo", ["segheria"] = "la segheria", ["casa_lipari"] = "casa mia",
             ["casa_valli"] = "casa Valli", ["casa_ferro"] = "casa Ferro", ["strada"] = "la strada",
             ["chiesa"] = "la chiesa", ["canonica"] = "la canonica", ["piazza"] = "la piazza",
-            ["bar"] = "il bar", ["stazione"] = "la stazione", ["deposito"] = "il deposito",
+            ["bar"] = "il bar", ["negozio"] = "il negozio", ["stazione"] = "la stazione", ["deposito"] = "il deposito",
             ["magazzino_b17"] = "il magazzino B-17",
         };
 

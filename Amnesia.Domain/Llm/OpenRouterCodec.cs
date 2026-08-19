@@ -21,6 +21,37 @@ public sealed record ChatRequest
     /// chiamare anche quando la battuta giusta e' solo parlare.
     [JsonPropertyName("tool_choice")]
     public string ToolChoice { get; init; } = "auto";
+
+    /// Le regole chiedono da due a sei frasi. Senza un tetto il modello ogni
+    /// tanto scrive un tema, e il giocatore aspetta trenta secondi una risposta
+    /// che gli arriva lunga il doppio di quanto dovrebbe essere.
+    [JsonPropertyName("max_tokens")]
+    public int MaxTokens { get; init; } = 340;
+
+    /// Lo stesso modello, su OpenRouter, gira su piu' fornitori, e la
+    /// differenza fra il piu' rapido e il piu' lento e' quasi tutta la latenza
+    /// che si sente giocando. Misurato sul prompt vero (5100 token): con la
+    /// scelta lasciata al caso, dai 5 agli 11 secondi; scegliendo per latenza,
+    /// da 1,6 a 3,6. La generazione, in mezzo, vale meno di due secondi.
+    [JsonPropertyName("provider")]
+    public ProviderPreferences Provider { get; init; } = new();
+}
+
+public sealed record ProviderPreferences
+{
+    /// Per latenza e non per throughput: quello che si aspetta e' la prima
+    /// parola, non le successive. E restare sullo stesso fornitore fa un
+    /// secondo regalo — il prefisso del prompt gli resta in cache, e un prompt
+    /// da cinquemila token gia' visto torna in quattro decimi invece che in
+    /// cinque secondi.
+    [JsonPropertyName("sort")]
+    public string Sort { get; init; } = "latency";
+
+    /// Se il fornitore piu' veloce cade, si passa al successivo invece di
+    /// restituire un errore: e' la differenza fra una battuta che tarda e una
+    /// conversazione che si interrompe.
+    [JsonPropertyName("allow_fallbacks")]
+    public bool AllowFallbacks { get; init; } = true;
 }
 
 /// La traduzione fra il dominio e il formato sul filo di OpenRouter, in
