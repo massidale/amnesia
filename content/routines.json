@@ -1,0 +1,39 @@
+{
+  "rosa": [
+    {"from_minute": 0, "place": "casa_lipari"},
+    {"from_minute": 510, "place": "piazza"},
+    {"from_minute": 600, "place": "casa_lipari"}
+  ],
+  "matteo": [
+    {"from_minute": 0, "place": "bottega"},
+    {"from_minute": 750, "place": "bar"},
+    {"from_minute": 810, "place": "bottega"},
+    {"from_minute": 1170, "place": "bar"},
+    {"from_minute": 1290, "place": "bottega"}
+  ],
+  "don_carlo": [
+    {"from_minute": 0, "place": "canonica"},
+    {"from_minute": 390, "place": "chiesa"},
+    {"from_minute": 480, "place": "canonica"},
+    {"from_minute": 900, "place": "chiesa"},
+    {"from_minute": 1080, "place": "canonica"}
+  ],
+  "anna": [
+    {"from_minute": 0, "place": "casa_ferro"},
+    {"from_minute": 390, "place": "chiesa"},
+    {"from_minute": 480, "place": "piazza"},
+    {"from_minute": 570, "place": "casa_ferro"}
+  ],
+  "laura": [
+    {"from_minute": 0, "place": "casa_valli"},
+    {"from_minute": 660, "place": "chiesa"},
+    {"from_minute": 720, "place": "casa_valli"}
+  ],
+  "nino": [
+    {"from_minute": 0, "place": "segheria"},
+    {"from_minute": 360, "place": "castagneto"},
+    {"from_minute": 720, "place": "segheria"},
+    {"from_minute": 1110, "place": "bar"},
+    {"from_minute": 1260, "place": "segheria"}
+  ]
+}

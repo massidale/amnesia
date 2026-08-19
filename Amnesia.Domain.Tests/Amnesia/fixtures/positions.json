@@ -1,0 +1,8 @@
+{
+  "positions": {
+    "matteo": [
+      {"id": "M0", "grants": ["scampagnate", "circolo_esisteva"], "requires_shown": []},
+      {"id": "M1", "grants": ["non_erano_gite"], "requires_shown": ["frase"]}
+    ]
+  }
+}

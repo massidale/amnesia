@@ -13,6 +13,10 @@ public sealed record TurnContext
 
     public string ClockText { get; init; } = "";
 
+    /// Le due righe che il giocatore accosta, se ne ha accostate due che ha
+    /// davvero raccolto. Ci arriva solo cio' che PlayerInput ha validato.
+    public Confronto? Confronto { get; init; }
+
     /// Cio' che e' arrivato a questo personaggio mentre il giocatore era altrove:
     /// il canale degli eventi ce l'ha lasciato, e il chiamante lo consuma una volta
     /// che questo prompt e' partito.

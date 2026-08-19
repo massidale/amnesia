@@ -11,7 +11,7 @@ namespace Amnesia.Tests.Llm;
 public class ToolCatalogTests
 {
     private const string Golden = """
-[{"type":"function","function":{"name":"record_claim","description":"Registra un'affermazione fattuale del giocatore, senza renderla vera.","parameters":{"type":"object","properties":{"fact_id":{"type":"string","description":"Identificatore breve in snake_case dell'affermazione."},"content":{"type":"string"},"confidence":{"type":"number","description":"Quanto il personaggio ci crede.","minimum":0,"maximum":1}},"required":["fact_id","content","confidence"]}}},{"type":"function","function":{"name":"attempt_action","description":"Descrive un tentativo fisico del personaggio. Azioni non supportate restano impraticabili.","parameters":{"type":"object","properties":{"action":{"type":"string"},"target":{"type":"string"},"means":{"type":"string"}},"required":["action","target"]}}},{"type":"function","function":{"name":"resolve_signature_request","description":"SOLO per Giorgio, SOLO quando il giocatore chiede esplicitamente la firma. Il motore decide l'esito.","parameters":{"type":"object","properties":{"perceived_request":{"type":"string","description":"Cosa Giorgio crede di firmare.","enum":["deposition","innocuous_paper"]}},"required":["perceived_request"]}}},{"type":"function","function":{"name":"end_conversation","description":"Chiude la conversazione dal lato del personaggio.","parameters":{"type":"object","properties":{"reason":{"type":"string"}},"required":["reason"]}}}]
+[{"type":"function","function":{"name":"record_claim","description":"Registra un'affermazione fattuale del giocatore, senza renderla vera.","parameters":{"type":"object","properties":{"fact_id":{"type":"string","description":"Identificatore breve in snake_case dell'affermazione."},"content":{"type":"string"},"confidence":{"type":"number","description":"Quanto il personaggio ci crede.","minimum":0,"maximum":1}},"required":["fact_id","content","confidence"]}}},{"type":"function","function":{"name":"attempt_action","description":"Descrive un tentativo fisico del personaggio. Azioni non supportate restano impraticabili.","parameters":{"type":"object","properties":{"action":{"type":"string"},"target":{"type":"string"},"means":{"type":"string"}},"required":["action","target"]}}},{"type":"function","function":{"name":"end_conversation","description":"Chiude la conversazione dal lato del personaggio.","parameters":{"type":"object","properties":{"reason":{"type":"string"}},"required":["reason"]}}},{"type":"function","function":{"name":"dichiaro","description":"Segnala che il tuo personaggio ha appena detto una di queste cose. Scegli l'identificativo che corrisponde a cio' che hai detto; se non ne corrisponde nessuno, non chiamarlo.","parameters":{"type":"object","properties":{"id":{"type":"string","enum":["circolo_esisteva","scampagnate","non_erano_gite"]}},"required":["id"]}}}]
 """;
 
     private static string Serialized() =>
@@ -26,8 +26,8 @@ public class ToolCatalogTests
         {
             "record_claim",
             "attempt_action",
-            "resolve_signature_request",
             "end_conversation",
+            "dichiaro",
         }), "gli strumenti nuovi vanno in fondo, mai in mezzo");
     }
 
@@ -58,6 +58,8 @@ public class ToolCatalogTests
         var names = ToolCatalog.Schemas().Select(tool => tool.Function.Name).ToArray();
 
         Assert.That(names, Does.Not.Contain("appraise_turn"), "il nuovo disegno non ha punteggi numerici");
+        Assert.That(names, Does.Not.Contain("resolve_signature_request"),
+            "la firma era la deposizione del gioco di prima: in Amnesia non si firma niente");
         Assert.That(names, Does.Not.Contain("accept_offer"));
         Assert.That(names, Does.Not.Contain("propose_terms"));
         Assert.That(names, Does.Not.Contain("respond_to_proposal"));
@@ -71,16 +73,6 @@ public class ToolCatalogTests
         Assert.That(parameters.Required, Is.EqualTo(new[] { "fact_id", "content", "confidence" }));
         Assert.That(parameters.Properties!["confidence"].Minimum, Is.EqualTo(0.0));
         Assert.That(parameters.Properties!["confidence"].Maximum, Is.EqualTo(1.0));
-    }
-
-    [Test]
-    public void LaFirmaHaSoloDueCosePercepite()
-    {
-        var perceived = ToolCatalog.Schemas()
-            .Single(tool => tool.Function.Name == "resolve_signature_request")
-            .Function.Parameters.Properties!["perceived_request"];
-
-        Assert.That(perceived.EnumValues, Is.EqualTo(new[] { "deposition", "innocuous_paper" }));
     }
 
     [Test]

@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Update="World\fixtures\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Amnesia\fixtures\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

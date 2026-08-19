@@ -12,20 +12,29 @@ public sealed class ContextBuilder
     private readonly IReadOnlyDictionary<string, string> _characterTexts;
     private readonly ItemCatalog _items;
     private readonly bool _useCacheControl;
+    private readonly DeclarationTable? _declarations;
+    private readonly PositionTable? _positions;
 
     /// Il catalogo sta qui insieme alle regole e alle schede perche' e' la stessa
     /// materia: testo d'autore che vale per tutta la partita, non stato che cambia
     /// da un turno all'altro.
+    /// Le due tabelle sono facoltative: un personaggio senza scala di posizione
+    /// non perde niente, e un chiamante che non le ha costruisce lo stesso prompt
+    /// di prima.
     public ContextBuilder(
         string rules,
         IReadOnlyDictionary<string, string> characters,
         ItemCatalog items,
-        bool useCacheControl)
+        bool useCacheControl,
+        DeclarationTable? declarations = null,
+        PositionTable? positions = null)
     {
         _rulesText = rules;
         _characterTexts = characters;
         _items = items;
         _useCacheControl = useCacheControl;
+        _declarations = declarations;
+        _positions = positions;
     }
 
     /// Identico byte per byte a ogni turno: qui dentro non puo' colare niente di
@@ -70,8 +79,13 @@ public sealed class ContextBuilder
         var parts = new List<string>
         {
             $"<stato_mondo>ora: {turn.ClockText}</stato_mondo>",
-            $"<conoscenze>{KnowledgeLines(npcId, world)}</conoscenze>",
         };
+        var stance = PositionLines(npcId, world);
+        if (stance.Length > 0)
+        {
+            parts.Add($"<posizione>{stance}</posizione>");
+        }
+        parts.Add($"<conoscenze>{KnowledgeLines(npcId, world)}</conoscenze>");
         foreach (var note in turn.NpcNotes)
         {
             // SICUREZZA: una nota la scrive il motore oggi, ma e' stato del mondo —
@@ -86,10 +100,51 @@ public sealed class ContextBuilder
             // percorso di dati possa mai forgiare un blocco qui.
             parts.Add($"<osservazione_motore>Il giocatore mostra: {PlayerInput.Sanitize(_items.VisibleOf(itemId))}</osservazione_motore>");
         }
+        // Il motore constata: quelle due righe SONO state dette, e lui lo sa. Non
+        // sono parole del giocatore, e un modello che nega un'accusa non puo'
+        // comunque disdirle. Il motore cita, quindi non cita cio' di cui non ha il
+        // testo: senza le tabelle, o senza una delle due righe, il blocco non c'e'.
+        if (turn.Confronto is { } pair && _declarations is not null)
+        {
+            var first = _declarations.TextOf(pair.First);
+            var second = _declarations.TextOf(pair.Second);
+            if (first.Length > 0 && second.Length > 0)
+            {
+                // SICUREZZA: testo autoriale, neutralizzato come ogni altra stringa
+                // che entra nel prompt.
+                parts.Add(
+                    "<osservazione_motore>Il giocatore ti mette davanti due cose che sono state dette: "
+                    + $"«{PlayerInput.Sanitize(first)}» e «{PlayerInput.Sanitize(second)}».</osservazione_motore>");
+            }
+        }
         // SICUREZZA: le parole del giocatore non sono fidate — si neutralizzano
         // perche' non possano forgiare blocchi.
         parts.Add($"<parole_giocatore>{PlayerInput.Sanitize(turn.Spoken)}</parole_giocatore>");
         return string.Join("\n", parts);
+    }
+
+    /// Cio' che questo personaggio, oggi, ritiene di poter dire — in prima persona
+    /// e come convinzione sincera. Mai una scaletta: il nome del gradino non entra
+    /// qui, e non c'e' nessuna istruzione a tacere. Cio' che non deve uscire
+    /// semplicemente non compare, perche' un modello non trapela quello che non ha.
+    /// SECURITY: testo autoriale, ma passa dal prompt come tutto il resto —
+    /// sanitizzato per la stessa ragione delle conoscenze.
+    private string PositionLines(string npcId, WorldState world)
+    {
+        if (_declarations is null || _positions is null)
+        {
+            return "";
+        }
+        var lines = new List<string>();
+        foreach (var declarationId in _positions.Granted(npcId, world))
+        {
+            var text = _declarations.TextOf(declarationId);
+            if (text.Length > 0)
+            {
+                lines.Add(PlayerInput.Sanitize(text));
+            }
+        }
+        return string.Join(" ", lines);
     }
 
     /// SICUREZZA: la conoscenza non e' testo d'autore — RecordClaim lascia che il

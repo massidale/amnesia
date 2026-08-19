@@ -34,19 +34,6 @@ public static class ToolCatalog
             },
             Required = new[] { "action", "target" },
         }),
-        Function("resolve_signature_request", "SOLO per Giorgio, SOLO quando il giocatore chiede esplicitamente la firma. Il motore decide l'esito.", new JsonSchema
-        {
-            Properties = new Dictionary<string, JsonSchema>
-            {
-                ["perceived_request"] = new()
-                {
-                    Type = "string",
-                    Description = "Cosa Giorgio crede di firmare.",
-                    EnumValues = new[] { "deposition", "innocuous_paper" },
-                },
-            },
-            Required = new[] { "perceived_request" },
-        }),
         Function("end_conversation", "Chiude la conversazione dal lato del personaggio.", new JsonSchema
         {
             Properties = new Dictionary<string, JsonSchema>
@@ -54,6 +41,22 @@ public static class ToolCatalog
                 ["reason"] = new() { Type = "string" },
             },
             Required = new[] { "reason" },
+        }),
+        // Il vocabolario e' chiuso: il modello non scrive un fatto, sceglie un id.
+        // La prosa resta sua, solo l'id ha effetto sul mondo — ed e' l'esecutore a
+        // decidere se quel personaggio, adesso, quella cosa ce l'ha davvero.
+        // L'enum va tenuto allineato a content/amnesia/declarations.json.
+        Function("dichiaro", "Segnala che il tuo personaggio ha appena detto una di queste cose. Scegli l'identificativo che corrisponde a cio' che hai detto; se non ne corrisponde nessuno, non chiamarlo.", new JsonSchema
+        {
+            Properties = new Dictionary<string, JsonSchema>
+            {
+                ["id"] = new()
+                {
+                    Type = "string",
+                    EnumValues = new[] { "circolo_esisteva", "scampagnate", "non_erano_gite" },
+                },
+            },
+            Required = new[] { "id" },
         }),
         // Gli strumenti nuovi vanno QUI, in fondo: il blocco e' un prefisso messo
         // in cache, e inserirne uno in mezzo invalida ogni conversazione (design §13).

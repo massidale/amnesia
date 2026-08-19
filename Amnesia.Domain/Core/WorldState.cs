@@ -33,6 +33,13 @@ public sealed class WorldState
     /// Le catene autoriali a colpo singolo: acceso una volta, resta acceso.
     public Dictionary<string, bool> Flags { get; set; } = new();
 
+    /// Il registro delle dichiarazioni: chi ha detto cosa, e quante volte. E'
+    /// stato del mondo come tutto il resto — sopravvive a un salvataggio, e due
+    /// registri sullo stesso mondo concordano perche' leggono di qui.
+    /// In GDScript era una chiave dentro il sacco dei flag; qui i flag sono
+    /// booleani, e questo e' cio' che e' sempre stato: una riga per dichiarazione.
+    public Dictionary<string, RegisterEntry> Declarations { get; set; } = new();
+
     /// Dove qualcuno ha mandato un personaggio, a dispetto della sua routine.
     /// In GDScript era una chiave dentro il sacco dei flag, che li' erano
     /// dizionari di qualunque cosa; qui i flag sono booleani e questo e' un

@@ -9,7 +9,15 @@ namespace Amnesia.Dialogue;
 public sealed record PlayerUtterance(
     string Spoken,
     IReadOnlyList<string> ShownItemIds,
-    IReadOnlyList<string> InvalidTags);
+    IReadOnlyList<string> InvalidTags,
+    Confronto? Confronto = null);
+
+/// Due righe del taccuino messe una accanto all'altra. Meccanicamente e' una
+/// coppia di identificativi, verificabile, senza niente da interpretare — ma il
+/// lavoro e' tutto del giocatore, perche' la partita sta nello scegliere quali
+/// due. Un modello puo' negare un'accusa; non puo' disdire due righe che il
+/// motore ha registrato.
+public sealed record Confronto(string First, string Second);
 
 /// Il confine di sicurezza del gioco: un modello puo' mentire a parole, ma non
 /// puo' muovere la merce. Il tag `[mostra: <oggetto>]` lo legge il motore — mai
@@ -24,10 +32,17 @@ public static class PlayerInput
     private static readonly Regex TagPattern =
         new(@"\[mostra\s*:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
 
+    // La stessa proprieta' del tag `mostra`, applicata alle parole: il giocatore
+    // accosta due righe soltanto se le ha raccolte davvero.
+    private static readonly Regex ConfrontoPattern =
+        new(@"\[confronto\s*:\s*([^\]|]+)\|([^\]]+)\]", RegexOptions.IgnoreCase);
+
     public static PlayerUtterance Parse(string raw, WorldState world, ItemCatalog items, string playerId)
     {
         var shown = new List<string>();
         var invalid = new List<string>();
+        var register = new Register(world);
+        Confronto? confronto = null;
         var spoken = raw;
         // Ogni passata cerca sul testo gia' ripulito, mai sull'input originale: i
         // tag si annidano, e toglierne uno insieme ne mutila e ne espone altri.
@@ -52,13 +67,38 @@ public static class PlayerInput
                 }
                 spoken = spoken.Replace(tag.Value, "");
             }
+            // Nella STESSA spazzata dei tag `mostra`, e sul testo che quella
+            // passata ha appena lasciato: un ciclo separato riaprirebbe esattamente
+            // il buco che la spazzata esiste per chiudere, e un `confronto` che
+            // inghiotte un `mostra` resterebbe in piedi come testo forgiabile.
+            foreach (Match tag in ConfrontoPattern.Matches(spoken))
+            {
+                var first = tag.Groups[1].Value.Trim();
+                var second = tag.Groups[2].Value.Trim();
+                // Una riga mai raccolta non si puo' accostare, esattamente come non
+                // si puo' mostrare un oggetto che non si possiede. E un turno porta
+                // un accostamento solo: il secondo tag e' una mossa che questo turno
+                // non puo' fare, e il gioco lo ridice invece di ingoiarla.
+                if (confronto is null
+                    && register.SupportsFor(first).Count > 0
+                    && register.SupportsFor(second).Count > 0)
+                {
+                    confronto = new Confronto(first, second);
+                }
+                else
+                {
+                    invalid.Add(first);
+                    invalid.Add(second);
+                }
+                spoken = spoken.Replace(tag.Value, "");
+            }
             if (spoken == before)
             {
                 break;
             }
         }
         spoken = spoken.Replace("  ", " ").Replace(" ,", ",").Replace(" .", ".").Trim();
-        return new PlayerUtterance(spoken, shown, invalid);
+        return new PlayerUtterance(spoken, shown, invalid, confronto);
     }
 
     /// Ogni nome con cui il giocatore puo' aver letto la cosa. L'id e' quello che

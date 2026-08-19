@@ -1,0 +1,22 @@
+{
+  "declarations": {
+    "circolo_esisteva": {
+      "text": "C'era un gruppo che si trovava, si facevano chiamare il Circolo della Soglia.",
+      "truth": "true",
+      "sources": ["rosa", "matteo"],
+      "requires_shown": []
+    },
+    "scampagnate": {
+      "text": "Era una compagnia di amici. Si andava su alla cava a fare le scampagnate, roba di quando eravamo giovani.",
+      "truth": "false",
+      "sources": ["matteo"],
+      "requires_shown": []
+    },
+    "non_erano_gite": {
+      "text": "Non erano gite. Ci si trovava per altro.",
+      "truth": "true",
+      "sources": ["matteo"],
+      "requires_shown": ["frase"]
+    }
+  }
+}
