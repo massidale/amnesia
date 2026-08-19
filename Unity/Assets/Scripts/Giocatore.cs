@@ -3,18 +3,25 @@ using UnityEngine;
 
 namespace AmnesiaUnity
 {
-    /// Cammina, e si ferma quando si parla. La telecamera sta dietro le spalle e
-    /// scende in faccia quando comincia una conversazione: in un gioco in cui la
-    /// meccanica e' guardare in faccia uno che mente, l'inquadratura non e' un
-    /// dettaglio di regia.
+    /// Cammina, e si ferma quando si parla. La telecamera sta negli occhi e
+    /// scende in faccia a chi hai davanti quando comincia una conversazione: in
+    /// un gioco in cui la meccanica e' guardare in faccia uno che mente,
+    /// l'inquadratura non e' un dettaglio di regia.
     public sealed class Giocatore : MonoBehaviour
     {
         public const float PortataDiParola = 2.5f;
+
+        private const float Passo = 4.5f;
+        private const float Sensibilita = 2.2f;
+        private const float GradiAlSecondo = 110f;
+        private const float PendenzaMassima = 75f;
 
         private Bootstrap _gioco;
         private Camera _occhio;
         private Pannello _pannello;
         private Transform _bersaglio;
+        private float _imbardata;
+        private float _beccheggio;
 
         private void Start()
         {
@@ -24,10 +31,26 @@ namespace AmnesiaUnity
             var posizione = _gioco.World.ActorOf("player").Position ?? new Cell(0, 0);
             transform.position = _gioco.InScena(posizione) + Vector3.up * 0.9f;
 
+            // Il paese sta verso -Z, e un giocatore che nasce con rotazione zero
+            // guarda verso +Z: di spalle a tutto. E' quello che faceva sembrare
+            // W invertito — non lo era, camminava solo fuori dalla mappa.
+            _imbardata = 180f;
+            transform.rotation = Quaternion.Euler(0f, _imbardata, 0f);
+
             _occhio = new GameObject("occhio").AddComponent<Camera>();
             _occhio.transform.SetParent(transform, false);
             _occhio.transform.localPosition = new Vector3(0f, 0.6f, 0f);
             _occhio.fieldOfView = 62f;
+
+            Libera(false);
+        }
+
+        /// Il puntatore sparisce mentre si cammina e torna quando si parla,
+        /// perche' nel pannello bisogna poter scrivere e cliccare.
+        private static void Libera(bool libero)
+        {
+            Cursor.lockState = libero ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = libero;
         }
 
         private void Update()
@@ -38,21 +61,18 @@ namespace AmnesiaUnity
             }
             if (_pannello != null && _pannello.Aperto)
             {
+                Libera(true);
                 InquadraIlVolto();
                 return;
             }
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                Libera(false);
+                _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
+            }
 
-            var avanti = Input.GetAxisRaw("Vertical");
-            var lato = Input.GetAxisRaw("Horizontal");
-            if (Input.GetKey(KeyCode.Mouse1))
-            {
-                transform.Rotate(0f, Input.GetAxis("Mouse X") * 3f, 0f);
-            }
-            else
-            {
-                transform.Rotate(0f, lato * 90f * Time.deltaTime, 0f);
-            }
-            transform.position += transform.forward * (avanti * 4.5f * Time.deltaTime);
+            Guarda();
+            Cammina();
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -64,6 +84,38 @@ namespace AmnesiaUnity
                 }
             }
         }
+
+        /// Mouse per guardarsi intorno, frecce per chi preferisce i tasti. Il
+        /// beccheggio sta sulla telecamera e l'imbardata sul corpo: girare la
+        /// testa in su non deve inclinare il paese.
+        private void Guarda()
+        {
+            var giroTasti = (Premuto(KeyCode.RightArrow) - Premuto(KeyCode.LeftArrow)) * GradiAlSecondo * Time.deltaTime;
+            var alzataTasti = (Premuto(KeyCode.DownArrow) - Premuto(KeyCode.UpArrow)) * GradiAlSecondo * Time.deltaTime;
+
+            _imbardata += Input.GetAxisRaw("Mouse X") * Sensibilita + giroTasti;
+            _beccheggio = Mathf.Clamp(
+                _beccheggio - Input.GetAxisRaw("Mouse Y") * Sensibilita + alzataTasti,
+                -PendenzaMassima, PendenzaMassima);
+
+            transform.rotation = Quaternion.Euler(0f, _imbardata, 0f);
+            _occhio.transform.localRotation = Quaternion.Euler(_beccheggio, 0f, 0f);
+        }
+
+        /// I tasti si leggono uno per uno e non con GetAxis: gli assi di Unity
+        /// includono anche le frecce, e non c'e' modo di distinguerle da WASD.
+        private void Cammina()
+        {
+            var avanti = Premuto(KeyCode.W) - Premuto(KeyCode.S);
+            var lato = Premuto(KeyCode.D) - Premuto(KeyCode.A);
+            var verso = transform.forward * avanti + transform.right * lato;
+            if (verso.sqrMagnitude > 0.001f)
+            {
+                transform.position += verso.normalized * (Passo * Time.deltaTime);
+            }
+        }
+
+        private static float Premuto(KeyCode tasto) => Input.GetKey(tasto) ? 1f : 0f;
 
         /// Mentre si parla la telecamera va addosso, e ci resta. Il resto del
         /// paese smette di esistere: e' l'unica cosa che questa scena di prova
