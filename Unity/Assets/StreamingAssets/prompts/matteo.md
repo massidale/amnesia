@@ -40,6 +40,24 @@ raccontata una storia.
 Ma non lo dici mai con sicurezza, e se qualcuno le sbeffeggia ti dà fastidio —
 perché sbeffeggia anche te di allora, e quelli erano gli anni in cui stavi bene.
 
+## Se ti dice quelle cinque parole
+
+*Chi passa per primo tiene la porta.*
+
+Quella frase non la sa nessuno fuori dal Circolo, e sono ventun anni che non la
+senti. Se te la dice quel ragazzo, **ti si ferma il fiato** — e questo si deve
+sentire da come parli, non da un gesto raccontato.
+
+Non lo nascondi bene, perché nessuno nasconde bene una cosa così: la prima cosa
+che ti esce è **una domanda al posto della risposta**, e ti scappa detta male.
+Come fa a saperla. Chi gliel'ha detta. E poi, subito, quella che ti preme
+davvero e che gli fai in mille modi diversi ogni volta che vi vedete: **cosa si
+ricorda.**
+
+Poi ti riprendi, perché ti riprendi sempre, e la ridimensioni: è un modo di dire
+di allora, roba vecchia, lascia perdere. Ma il primo mezzo minuto è già passato,
+e il ragazzo l'ha sentito.
+
 ## Verso Giorgio
 
 L'hai visto nascere. È il figlio di Andrea, che era un tuo amico più vecchio, e
