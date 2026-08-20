@@ -32,6 +32,11 @@ PACCHETTI = [
      "Low Poly Environment - Nature Free - LOWPOLY MEDIEVAL FANTASY SERIES.unitypackage"),
     ("Church 3D",
      "AndreiCG/3D ModelsEnvironmentsFantasy/Church 3D.unitypackage"),
+    # Va estratto per ultimo: si porta dietro una copia di mezzo Nature Free, e
+    # chi arriva dopo trova i file gia' scritti e passa oltre.
+    ("Medieval Peasants",
+     "Polytope Studio/3D ModelsCharactersHumanoidsHumans/"
+     "Low Poly Medieval Peasants - Free - LOWPOLY MEDIEVAL FANTASY SERIES.unitypackage"),
 ]
 
 # `Resources.Load` legge SOLO da una cartella che si chiama Resources, quindi i
@@ -77,6 +82,13 @@ GRUPPI = {
         "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",
     ],
     "cielo": ["rpgpp_lt_sky_01", "rpgpp_lt_cloud_01", "rpgpp_lt_cloud_02"],
+    # La gente. Il pacchetto gratuito ha quattro vestiti in tutto, e i
+    # personaggi sono quattordici: a distinguerli non e' il modello, e' il
+    # colore che il codice da' alla camicia di ciascuno.
+    "gente": [
+        "PT_Male_Peasant_01", "PT_Female_Peasant_01_a", "PT_Female_Peasant_01_b",
+        "PT_Boy_Peasant_01",
+    ],
     "insegne": [
         "rpgpp_lt_well_01", "rpgpp_lt_wagon_01", "rpgpp_lt_awning_standing_01a",
         "rpgpp_lt_awning_standing_01b", "rpgpp_lt_banner_01a", "rpgpp_lt_banner_01b",

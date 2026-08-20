@@ -301,15 +301,45 @@ namespace AmnesiaUnity
 
         public string DescrizioneDellaPorta(string id) => Porte.Descrizione(id);
 
-        /// Quale corpo indossa ciascuno. Le mesh sono di Kenney (CC0); le
-        /// facce le dipinge `tools/facce.py`, che tiene la stessa lista: se qui
-        /// cambia una lettera, va cambiata anche la'.
+        /// Quale corpo indossa ciascuno. Le mesh sono di Polytope Studio, e nel
+        /// pacchetto gratuito i vestiti sono quattro in tutto: a distinguere
+        /// dodici persone non e' il modello, e' `Panni` qui sotto.
         private static readonly Dictionary<string, string> Corpo = new Dictionary<string, string>
         {
-            ["rosa"] = "e", ["anna"] = "e", ["laura"] = "e",
-            ["matteo"] = "q", ["don_carlo"] = "j", ["nino"] = "a",
-            ["teresa"] = "e", ["piero"] = "k", ["marisa"] = "e",
-            ["beppe"] = "k", ["lidia"] = "e", ["gino"] = "c",
+            ["rosa"] = "PT_Female_Peasant_01_a", ["anna"] = "PT_Female_Peasant_01_b",
+            ["laura"] = "PT_Female_Peasant_01_a", ["teresa"] = "PT_Female_Peasant_01_b",
+            ["marisa"] = "PT_Female_Peasant_01_a", ["lidia"] = "PT_Female_Peasant_01_b",
+            ["matteo"] = "PT_Male_Peasant_01", ["don_carlo"] = "PT_Male_Peasant_01",
+            ["nino"] = "PT_Male_Peasant_01", ["piero"] = "PT_Male_Peasant_01",
+            ["beppe"] = "PT_Male_Peasant_01", ["gino"] = "PT_Male_Peasant_01",
+        };
+
+        /// La stoffa e i capelli di ciascuno.
+        ///
+        /// Lo shader di Polytope tiene le tinte separate — pelle, capelli, quattro
+        /// stoffe, quattro cuoi — quindi dodici persone si distinguono da lontano
+        /// senza dodici modelli. E' anche l'unico posto del gioco in cui si puo'
+        /// dire qualcosa di una persona senza che nessuno parli: **Anna e' vestita
+        /// di nero dal 1966**, e chi lo nota lo ha capito da solo.
+        ///
+        /// Sono colori del 1987 in montagna, a ottobre: lana, grembiuli, tute da
+        /// lavoro. Niente di saturo, o il paese sembra una fiera.
+        private static readonly Dictionary<string, (Color Stoffa, Color Capelli)> Panni =
+            new Dictionary<string, (Color, Color)>
+        {
+            ["anna"]      = (new Color(0.11f, 0.10f, 0.11f), new Color(0.62f, 0.60f, 0.57f)),
+            ["don_carlo"] = (new Color(0.09f, 0.09f, 0.10f), new Color(0.72f, 0.70f, 0.66f)),
+            ["rosa"]      = (new Color(0.42f, 0.38f, 0.42f), new Color(0.35f, 0.28f, 0.24f)),
+            ["laura"]     = (new Color(0.28f, 0.31f, 0.38f), new Color(0.24f, 0.18f, 0.15f)),
+            ["teresa"]    = (new Color(0.33f, 0.27f, 0.34f), new Color(0.84f, 0.83f, 0.80f)),
+            ["marisa"]    = (new Color(0.45f, 0.53f, 0.58f), new Color(0.33f, 0.24f, 0.18f)),
+            ["lidia"]     = (new Color(0.48f, 0.26f, 0.21f), new Color(0.21f, 0.16f, 0.14f)),
+            ["matteo"]    = (new Color(0.40f, 0.30f, 0.20f), new Color(0.22f, 0.17f, 0.14f)),
+            ["nino"]      = (new Color(0.26f, 0.30f, 0.21f), new Color(0.55f, 0.54f, 0.51f)),
+            ["piero"]     = (new Color(0.36f, 0.35f, 0.33f), new Color(0.66f, 0.65f, 0.62f)),
+            ["beppe"]     = (new Color(0.72f, 0.69f, 0.61f), new Color(0.58f, 0.55f, 0.50f)),
+            ["gino"]      = (new Color(0.24f, 0.31f, 0.42f), new Color(0.28f, 0.21f, 0.17f)),
+            ["giorgio"]   = (new Color(0.30f, 0.32f, 0.34f), new Color(0.25f, 0.19f, 0.16f)),
         };
 
         private void CostruisciLeFigure()
@@ -330,42 +360,100 @@ namespace AmnesiaUnity
             }
         }
 
-        /// La mesh di Kenney con sopra la faccia dipinta per questa persona. Se
-        /// il modello non c'e' — import non riuscito, cartella spostata — resta
-        /// una capsula: il gioco deve poter partire lo stesso, perche' la scena
-        /// serve a provare le conversazioni, non i poligoni.
-        public static GameObject Figura(string id, string mesh)
+        /// Una persona, vestita come dice `Panni`. Se il modello non c'e' — import
+        /// non riuscito, cartella spostata — resta una capsula: il gioco deve
+        /// poter partire lo stesso, perche' la scena serve a provare le
+        /// conversazioni, non i poligoni.
+        public static GameObject Figura(string id, string modello)
         {
-            var modello = Resources.Load<GameObject>("kenney/persone/character-" + mesh);
-            if (modello == null)
+            var prefab = Resources.Load<GameObject>("paese/gente/" + modello);
+            if (prefab == null)
             {
                 var ripiego = GameObject.CreatePrimitive(PrimitiveType.Capsule);
                 ripiego.transform.localScale = new Vector3(0.6f, 0.9f, 0.6f);
                 return ripiego;
             }
-            var figura = Instantiate(modello);
-            figura.transform.localScale = Vector3.one * 0.65f;
-
-            var faccia = Resources.Load<Texture2D>("kenney/persone/facce/" + id);
-            if (faccia != null)
-            {
-                // Il materiale si assegna qui e non si eredita dal .mtl:
-                // l'importatore OBJ di Unity a volte non trova la texture, e una
-                // faccia bianca sarebbe un difetto invisibile finche' non lo
-                // guardi in gioco.
-                var materiale = new Material(Shader.Find("Standard")) { mainTexture = faccia };
-                materiale.SetFloat("_Glossiness", 0f);
-                foreach (var pezzo in figura.GetComponentsInChildren<Renderer>())
-                {
-                    pezzo.sharedMaterial = materiale;
-                }
-            }
+            var figura = Instantiate(prefab);
+            // I modelli sono in metri veri e la cella e' un metro: si lasciano
+            // com'erano.
+            figura.transform.localScale = Vector3.one;
+            Vesti(figura, id);
+            Posa(figura);
 
             var urto = figura.AddComponent<CapsuleCollider>();
-            urto.height = 2.7f;
-            urto.radius = 0.5f;
-            urto.center = new Vector3(0f, 1.35f, 0f);
+            urto.height = 1.8f;
+            urto.radius = 0.3f;
+            urto.center = new Vector3(0f, 0.9f, 0f);
             return figura;
+        }
+
+        /// Le braccia giu'.
+        ///
+        /// Il pacchetto gratuito non porta nessuna animazione: senza un
+        /// controller la figura resta nella posa di legatura, e se quella e' una
+        /// T ci sono dodici persone in piazza a braccia aperte.
+        ///
+        /// Non si indovina come sia modellata: si guarda dove sta la mano. Se
+        /// pende gia', non si tocca niente; se no, si gira la spalla finche' il
+        /// braccio non punta in basso. Girare di tot gradi su un asse scelto a
+        /// occhio funziona con una gabbia e non con la successiva — questo
+        /// funziona con qualunque.
+        private static void Posa(GameObject figura)
+        {
+            var ossa = new Dictionary<string, Transform>();
+            foreach (var osso in figura.GetComponentsInChildren<Transform>())
+            {
+                ossa[osso.name] = osso;
+            }
+            Penzoloni(ossa, "PT_LeftArm", "PT_LeftHand", new Vector3(-0.22f, -1f, 0.06f));
+            Penzoloni(ossa, "PT_RightArm", "PT_RightHand", new Vector3(0.22f, -1f, 0.06f));
+        }
+
+        private static void Penzoloni(
+            Dictionary<string, Transform> ossa, string spalla, string mano, Vector3 voluta)
+        {
+            if (!ossa.TryGetValue(spalla, out var alto) || !ossa.TryGetValue(mano, out var basso))
+            {
+                return;
+            }
+            var braccio = basso.position - alto.position;
+            if (braccio.sqrMagnitude < 0.0001f || braccio.normalized.y < -0.6f)
+            {
+                return;
+            }
+            alto.rotation = Quaternion.FromToRotation(braccio, voluta) * alto.rotation;
+        }
+
+        /// Le tinte di una persona sola.
+        ///
+        /// Il materiale si duplica per ciascuno: quello del pacchetto e' uno solo
+        /// e condiviso, e cambiarlo in luogo vestirebbe tutto il paese uguale — e
+        /// peggio, resterebbe cambiato sul disco anche dopo aver chiuso il gioco.
+        private static void Vesti(GameObject figura, string id)
+        {
+            if (!Panni.TryGetValue(id, out var panni))
+            {
+                return;
+            }
+            foreach (var pezzo in figura.GetComponentsInChildren<Renderer>())
+            {
+                var suo = new Material(pezzo.sharedMaterial);
+                // Lo shader di Polytope: se un giorno il modello cambia, queste
+                // chiamate non trovano la proprieta' e non fanno niente. Nessuno
+                // schianto, solo un paese vestito come l'ha lasciato l'autore.
+                if (suo.HasProperty("_CLOTH1COLOR"))
+                {
+                    suo.SetColor("_CLOTH1COLOR", panni.Stoffa);
+                    suo.SetColor("_CLOTH2COLOR", panni.Stoffa * 0.78f);
+                    suo.SetColor("_CLOTH3COLOR", panni.Stoffa * 1.15f);
+                    suo.SetColor("_CLOTH4COLOR", panni.Stoffa * 0.9f);
+                }
+                if (suo.HasProperty("_HAIRCOLOR"))
+                {
+                    suo.SetColor("_HAIRCOLOR", panni.Capelli);
+                }
+                pezzo.sharedMaterial = suo;
+            }
         }
 
         /// Chi e' abbastanza vicino da poterci parlare.

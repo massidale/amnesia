@@ -84,7 +84,7 @@ namespace AmnesiaUnity
             // Il corpo di Giorgio esiste sempre e si vede solo di spalle: in
             // prima persona guardarsi addosso vuol dire vedersi il collo da
             // dentro.
-            _figura = Bootstrap.Figura("giorgio", "c").transform;
+            _figura = Bootstrap.Figura("giorgio", "PT_Male_Peasant_01").transform;
             _figura.name = "giorgio";
             _figura.SetParent(transform, false);
             _figura.localPosition = Vector3.zero;
