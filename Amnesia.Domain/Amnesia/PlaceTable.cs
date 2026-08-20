@@ -35,6 +35,12 @@ public sealed class PlaceLock
 
     public List<string> Contains { get; set; } = new();
 
+    /// Una botola non e' una porta: sta per terra. Serve a chi la disegna —
+    /// una serranda alta due metri in mezzo a una stanza si legge come un muro,
+    /// e il giocatore le gira intorno senza capire che si apre.
+    [JsonPropertyName("botola")]
+    public bool Botola { get; set; }
+
     /// Una chiave che nessuno legge e' un lucchetto che non scatta e nessuno se
     /// ne accorge fino a partita in corso: un refuso qui deve fermare il
     /// caricamento, non costare una serata.

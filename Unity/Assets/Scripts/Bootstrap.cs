@@ -251,9 +251,22 @@ namespace AmnesiaUnity
                 var battente = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 battente.name = id;
                 battente.transform.SetParent(porte);
-                battente.transform.position = InScena(luogo.Door.Cell()) + Vector3.up * (CellSize * 1.1f);
-                battente.transform.localScale = new Vector3(CellSize, CellSize * 2.2f, CellSize * 0.25f);
-                battente.GetComponent<Renderer>().sharedMaterial = Scenografia.Materiale(new Color(0.24f, 0.21f, 0.18f));
+                if (luogo.Botola)
+                {
+                    // Per terra, e non in piedi: una botola disegnata come una
+                    // porta si legge come un muro, e ci si gira intorno.
+                    battente.transform.position = InScena(luogo.Door.Cell()) + Vector3.up * (CellSize * 0.06f);
+                    battente.transform.localScale = new Vector3(CellSize * 0.9f, CellSize * 0.12f, CellSize * 0.9f);
+                    battente.GetComponent<Renderer>().sharedMaterial =
+                        Scenografia.Materiale(new Color(0.20f, 0.17f, 0.14f));
+                }
+                else
+                {
+                    battente.transform.position = InScena(luogo.Door.Cell()) + Vector3.up * (CellSize * 1.1f);
+                    battente.transform.localScale = new Vector3(CellSize, CellSize * 2.2f, CellSize * 0.25f);
+                    battente.GetComponent<Renderer>().sharedMaterial =
+                        Scenografia.Materiale(new Color(0.24f, 0.21f, 0.18f));
+                }
                 _porte[id] = battente.transform;
             }
         }

@@ -2,7 +2,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Amnesia.Core;
+using Amnesia.Dialogue;
 using Amnesia.Llm;
+using Amnesia.World;
 using NUnit.Framework;
 
 namespace Amnesia.Tests.Content;
@@ -555,5 +557,53 @@ public class TabelleTests
 
         [JsonPropertyName("requires_shown")]
         public List<string> RequiresShown { get; set; } = new();
+    }
+
+    /// Una porta con le coordinate sbagliate non rompe niente: il gioco parte,
+    /// il battente si costruisce da qualche parte fuori dal paese, e quella
+    /// stanza non si apre piu'. Lo si scopre camminando, e non si capisce
+    /// perche'.
+    [Test]
+    public void OgniPortaSivaAdApriteConLeProprieGambe()
+    {
+        var luoghi = PlaceTable.Load(PathOf("amnesia", "luoghi.json"));
+        Assert.That(luoghi.IsOk, Is.True, luoghi.Message);
+        var mappa = VillageMap.Load(PathOf("village_map.json")).Value!;
+        var catalogo = Items();
+
+        foreach (var id in luoghi.Value!.Ids)
+        {
+            var luogo = luoghi.Value.Find(id)!;
+            var cella = luogo.Door.Cell();
+            Assert.That(cella.X, Is.InRange(0, mappa.Width - 1), $"la porta di {id} e' fuori dalla mappa");
+            Assert.That(cella.Y, Is.InRange(0, mappa.Height - 1), $"la porta di {id} e' fuori dalla mappa");
+
+            // Ci si deve poter arrivare davanti: una serranda dentro un muro non
+            // la apre nessuno.
+            var accostabile = mappa.IsWalkable(cella)
+                || mappa.IsWalkable(new Cell(cella.X + 1, cella.Y))
+                || mappa.IsWalkable(new Cell(cella.X - 1, cella.Y))
+                || mappa.IsWalkable(new Cell(cella.X, cella.Y + 1))
+                || mappa.IsWalkable(new Cell(cella.X, cella.Y - 1));
+            Assert.That(accostabile, Is.True, $"davanti alla porta di {id} non ci si arriva");
+
+            foreach (var oggetto in luogo.Contains)
+            {
+                Assert.That(catalogo.Find(oggetto), Is.Not.Null, $"{id} contiene {oggetto}, che non sta nel catalogo");
+            }
+            if (luogo.RequiresItem.Length > 0)
+            {
+                Assert.That(catalogo.Find(luogo.RequiresItem), Is.Not.Null,
+                    $"{id} chiede {luogo.RequiresItem}, che non sta nel catalogo");
+            }
+        }
+    }
+
+    private static ItemCatalog Items()
+    {
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var definizioni = JsonSerializer.Deserialize<List<ItemDefinition>>(File.ReadAllText(PathOf("items.json")), options);
+        Assert.That(definizioni, Is.Not.Null);
+        return new ItemCatalog(definizioni!);
     }
 }
