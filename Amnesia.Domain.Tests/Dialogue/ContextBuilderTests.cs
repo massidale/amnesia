@@ -270,6 +270,103 @@ public class ContextBuilderTests
             ClockText = "9:41",
         }));
 
-        Assert.That(text, Does.Contain("<osservazione_motore>Il giocatore mostra: oggetto_ignoto</osservazione_motore>"));
+        Assert.That(text, Does.Contain("che tiene in mano lui: oggetto_ignoto"),
+            "l'oggetto ignoto passa col suo id, e il motore dice comunque che e' del giocatore");
+    }
+
+    public class CopioneDegliOggetti
+    {
+        private static ContextBuilder ConReazioni()
+        {
+            var declarations = Amnesia.Tests.Declarations.TestDeclarations.Table();
+            var positions = Amnesia.Tests.Declarations.TestDeclarations.Positions();
+            var reazioni = ReactionTable.FromJson("""
+            {"Reazioni": {
+              "chiunque": {"sempre": {"fotografia": "riconosci solo chi conosci"}},
+              "matteo": {
+                "M0": {"fotografia": "scampagnate e la tua domanda"},
+                "M1": {"fotografia": "ammetti il circolo"}
+              }
+            }}
+            """).Value!;
+            var items = new ItemCatalog(new[]
+            {
+                new ItemDefinition("fotografia", "una foto di gruppo davanti a una cava"),
+            });
+            return new ContextBuilder("regole", new Dictionary<string, string>(),
+                items, useCacheControl: false, declarations, positions, reazioni);
+        }
+
+        private static string Coda(ContextBuilder builder, WorldState world, TurnContext turn)
+        {
+            var messages = builder.Build("matteo", world, Array.Empty<LoggedMessage>(), turn);
+            return messages[messages.Count - 1].Parts[0].Text;
+        }
+
+        [Test]
+        public void MostrareUnOggettoPortaIlSuoCopioneAlGradinoGiusto()
+        {
+            var builder = ConReazioni();
+            var world = new WorldState();
+            var turn = new TurnContext { Spoken = "guarda", ShownItemIds = new[] { "fotografia" } };
+
+            Assert.That(Coda(builder, world, turn), Does.Contain("scampagnate e la tua domanda"));
+
+            world.MarkShown("matteo", "frase");
+            Assert.That(Coda(builder, world, turn), Does.Contain("ammetti il circolo"));
+        }
+
+        [Test]
+        public void UnOggettoSenzaCopioneRiceveIlRipiegoNonLoConosci()
+        {
+            var builder = ConReazioni();
+            var items = new ItemCatalog(new[] { new ItemDefinition("ombrello", "un ombrello nero") });
+            var senza = new ContextBuilder("regole", new Dictionary<string, string>(),
+                items, useCacheControl: false,
+                Amnesia.Tests.Declarations.TestDeclarations.Table(),
+                Amnesia.Tests.Declarations.TestDeclarations.Positions());
+            var turn = new TurnContext { Spoken = "guarda", ShownItemIds = new[] { "ombrello" } };
+
+            var coda = Coda(senza, new WorldState(), turn);
+            Assert.That(coda, Does.Contain("<come_reagisci>"));
+            Assert.That(coda, Does.Contain("non ti dice niente"));
+        }
+
+        [Test]
+        public void LOggettoMostratoEDichiaratamenteSuo()
+        {
+            var builder = ConReazioni();
+            var turn = new TurnContext { Spoken = "guarda", ShownItemIds = new[] { "fotografia" } };
+
+            var coda = Coda(builder, new WorldState(), turn);
+            Assert.That(coda, Does.Contain("una cosa SUA"));
+            Assert.That(coda, Does.Contain("appartiene a lui"));
+        }
+
+        [Test]
+        public void LaSvoltaAutorizzaASforareLeSeiRighe()
+        {
+            var builder = ConReazioni();
+            var turn = new TurnContext { Spoken = "ecco", Svolta = true };
+
+            Assert.That(Coda(builder, new WorldState(), turn), Does.Contain("superare le sei righe"));
+        }
+
+        [Test]
+        public void LaFraseDettaPescaIlCopioneConChiaveFrase()
+        {
+            var declarations = Amnesia.Tests.Declarations.TestDeclarations.Table();
+            var positions = Amnesia.Tests.Declarations.TestDeclarations.Positions();
+            var reazioni = ReactionTable.FromJson("""
+            {"Reazioni": {"matteo": {"M0": {"frase": "panico, chiedi cosa ricorda"}}}}
+            """).Value!;
+            var builder = new ContextBuilder("regole", new Dictionary<string, string>(),
+                new ItemCatalog(), useCacheControl: false, declarations, positions, reazioni);
+            var turn = new TurnContext { Spoken = "chi passa per primo tiene la porta", FraseDetta = true };
+
+            var messages = builder.Build("matteo", new WorldState(), Array.Empty<LoggedMessage>(), turn);
+            Assert.That(messages[messages.Count - 1].Parts[0].Text,
+                Does.Contain("panico, chiedi cosa ricorda"));
+        }
     }
 }

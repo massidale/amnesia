@@ -136,6 +136,18 @@ public sealed class PositionTable
             ? scala.SelectMany(gradino => gradino.Grants).ToList()
             : (IReadOnlyList<string>)Array.Empty<string>();
 
+    /// Gli id dei gradini gia' saliti, dal primo all'ultimo. Il copione delle
+    /// reazioni li scorre dall'alto per trovare la voce piu' recente.
+    public IReadOnlyList<string> ReachedIds(string npcId, WorldState world)
+    {
+        var ids = new List<string>();
+        foreach (var step in Reached(npcId, world))
+        {
+            ids.Add(step.Id);
+        }
+        return ids;
+    }
+
     public IReadOnlyList<string> Granted(string npcId, WorldState world)
     {
         var granted = new List<string>();

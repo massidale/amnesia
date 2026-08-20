@@ -14,6 +14,7 @@ public sealed class ContextBuilder
     private readonly bool _useCacheControl;
     private readonly DeclarationTable? _declarations;
     private readonly PositionTable? _positions;
+    private readonly ReactionTable _reactions;
 
     /// Il catalogo sta qui insieme alle regole e alle schede perche' e' la stessa
     /// materia: testo d'autore che vale per tutta la partita, non stato che cambia
@@ -27,7 +28,8 @@ public sealed class ContextBuilder
         ItemCatalog items,
         bool useCacheControl,
         DeclarationTable? declarations = null,
-        PositionTable? positions = null)
+        PositionTable? positions = null,
+        ReactionTable? reactions = null)
     {
         _rulesText = rules;
         _characterTexts = characters;
@@ -35,6 +37,7 @@ public sealed class ContextBuilder
         _useCacheControl = useCacheControl;
         _declarations = declarations;
         _positions = positions;
+        _reactions = reactions ?? ReactionTable.Empty();
     }
 
     /// Identico byte per byte a ogni turno: qui dentro non puo' colare niente di
@@ -93,12 +96,35 @@ public sealed class ContextBuilder
             // stringa che entra nel prompt.
             parts.Add($"<accaduto_di_recente>{PlayerInput.Sanitize(note)}</accaduto_di_recente>");
         }
+        var gradini = _positions?.ReachedIds(npcId, world) ?? Array.Empty<string>();
         foreach (var itemId in turn.ShownItemIds)
         {
             // SICUREZZA: le descrizioni degli oggetti sono d'autore, ma restano
             // stringhe del mondo lo stesso — si neutralizzano perche' nessun
             // percorso di dati possa mai forgiare un blocco qui.
-            parts.Add($"<osservazione_motore>Il giocatore mostra: {PlayerInput.Sanitize(_items.VisibleOf(itemId))}</osservazione_motore>");
+            // L'oggetto e' SUO: la demo ha prodotto un personaggio convinto che
+            // la cosa mostrata fosse di sua proprieta', e il motore adesso lo
+            // dice ogni volta.
+            parts.Add("<osservazione_motore>Il giocatore ti mostra una cosa SUA, che tiene in mano lui: "
+                + PlayerInput.Sanitize(_items.VisibleOf(itemId))
+                + " L'oggetto appartiene a lui e se lo riporta via lui.</osservazione_motore>");
+            parts.Add(ComeReagisci(npcId, gradini, itemId));
+        }
+        if (turn.FraseDetta)
+        {
+            var reazione = _reactions.Reazione(npcId, gradini, "frase");
+            if (reazione.Length > 0)
+            {
+                parts.Add($"<come_reagisci>{PlayerInput.Sanitize(reazione)}</come_reagisci>");
+            }
+        }
+        if (turn.Svolta)
+        {
+            // L'unica istruzione di lunghezza che il motore concede: nei momenti
+            // in cui la storia si muove, sei righe sono una tagliola.
+            parts.Add("<istruzione>Quello che hai appena visto o sentito cambia le cose: questo e' un "
+                + "momento importante. Racconta per esteso, con calma, tutto quello che la tua posizione "
+                + "ti permette di dire adesso — stavolta puoi superare le sei righe.</istruzione>");
         }
         // Il motore constata: quelle due righe SONO state dette, e lui lo sa. Non
         // sono parole del giocatore, e un modello che nega un'accusa non puo'
@@ -121,6 +147,20 @@ public sealed class ContextBuilder
         // perche' non possano forgiare blocchi.
         parts.Add($"<parole_giocatore>{PlayerInput.Sanitize(turn.Spoken)}</parole_giocatore>");
         return string.Join("\n", parts);
+    }
+
+    /// Il copione per l'oggetto sul banco. Se nessuno ha scritto una voce, il
+    /// ripiego e' la regola di ferro: questa cosa non la conosci, dillo.
+    private string ComeReagisci(string npcId, IReadOnlyList<string> gradini, string itemId)
+    {
+        var reazione = _reactions.Reazione(npcId, gradini, itemId);
+        if (reazione.Length == 0)
+        {
+            reazione = "Questo oggetto non ti dice niente. Dillo apertamente — «questa non l'ho mai "
+                + "vista», «e che ne so io» — senza inventare, senza dedurre e senza fare nomi.";
+        }
+        // SICUREZZA: testo d'autore, ma passa dal prompt come tutto il resto.
+        return $"<come_reagisci>{PlayerInput.Sanitize(reazione)}</come_reagisci>";
     }
 
     /// Cio' che questo personaggio, oggi, ritiene di poter dire — in prima persona

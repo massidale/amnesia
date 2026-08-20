@@ -80,6 +80,7 @@ public sealed class ConversationSession
         // Da qui in poi si lavora sulla copia. Niente di cio' che segue tocca il
         // mondo del giocatore finche' il turno non e' finito bene.
         var draft = World.Clone();
+        var gradinoPrima = _declarations.PositionOf(npcId, World);
 
         // Mostrare precede il prompt, perche' e' cio' che si ha davanti a decidere
         // quale porzione della propria colonna un personaggio abbia in mano.
@@ -112,6 +113,11 @@ public sealed class ConversationSession
             ShownItemIds = utterance.ShownItemIds,
             Confronto = utterance.Confronto,
             ClockText = WorldClock.Format(draft.Minute),
+            // Se cio' che e' finito sul banco ha fatto salire il personaggio di
+            // gradino, questo e' un momento in cui la storia si muove: il
+            // costruttore del prompt lo dice, e la risposta puo' allungarsi.
+            Svolta = _declarations.PositionOf(npcId, draft) != gradinoPrima,
+            FraseDetta = fraseDetta,
         };
 
         var messages = _context.Build(npcId, draft, Log.Recent(npcId, HistoryWindow), turn).ToWire();

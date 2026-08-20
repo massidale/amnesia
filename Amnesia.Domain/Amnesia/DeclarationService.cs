@@ -24,6 +24,10 @@ public sealed class DeclarationService
     /// non adesso: mai. Serve a ritagliarle addosso il vocabolario chiuso dello
     /// strumento, e per questo non deve dipendere dallo stato: un elenco che
     /// cambia a ogni gradino ricomprerebbe il prefisso del prompt ogni volta.
+    /// Il gradino corrente di un personaggio, per chi deve accorgersi che un
+    /// turno l'ha fatto salire. Vuoto per chi non ha scala.
+    public string PositionOf(string npcId, WorldState world) => _positions.PositionOf(npcId, world);
+
     public IReadOnlyList<string> EverSayable(string npcId)
     {
         if (_positions.HasLadder(npcId))

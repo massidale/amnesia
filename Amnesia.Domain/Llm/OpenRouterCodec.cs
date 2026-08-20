@@ -26,7 +26,10 @@ public sealed record ChatRequest
     /// tanto scrive un tema, e il giocatore aspetta trenta secondi una risposta
     /// che gli arriva lunga il doppio di quanto dovrebbe essere.
     [JsonPropertyName("max_tokens")]
-    public int MaxTokens { get; init; } = 340;
+    /// Abbastanza per le sei righe di un turno normale E per il racconto lungo
+    /// di una svolta: il tetto basso di prima (340) tagliava a meta' proprio i
+    /// momenti in cui il motore autorizza a sforare.
+    public int MaxTokens { get; init; } = 520;
 
     /// Lo stesso modello, su OpenRouter, gira su piu' fornitori, e la
     /// differenza fra il piu' rapido e il piu' lento e' quasi tutta la latenza

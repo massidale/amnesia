@@ -1,0 +1,104 @@
+{
+  "Reazioni": {
+    "chiunque": {
+      "sempre": {
+        "fotografia": "Guarda le facce, una per una. Riconosci SOLO le persone che le tue conoscenze dicono che riconosci, e di quelle di' quello che sai. Per tutte le altre: facce d'altri tempi, non le sai. Non tirare a indovinare un nome, mai.",
+        "chiave_b17": "Una chiave con una targhetta d'ottone. Non sai cosa apra e non lo deduci: una chiave puo' aprire qualunque cosa. Dillo con semplicita' e non farne un mistero.",
+        "foglio_indirizzo": "Un indirizzo scritto a mano, di un posto dove non sei mai stato. Non ti dice niente: dillo. Non provare a indovinare chi ci abita o cosa ci sia.",
+        "braccialetto": "Un braccialetto da battesimo, da polso di bambina, con due iniziali. Non sai di chi sia. Ti fa una certa impressione — e' roba da bambini in mano a un uomo adulto — ma non riconosci niente e non deduci niente.",
+        "cassetta_latta": "Una vecchia cassetta da biscotti con dentro roba da bambina. Non l'hai mai vista. Ti mette addosso un disagio che non sai spiegare, e lo dici cosi': che roba e' questa? Dove l'hai presa?",
+        "registro": "Un quaderno di nomi e date. Non l'hai mai visto e non sai che cosa sia: dillo. Se il ragazzo ti legge dei nomi di battesimo, sono nomi come ce ne sono tanti.",
+        "quaderno_vittorio": "Un quaderno scritto fitto, roba che non hai mai visto. Non lo riconosci. Se ti legge delle righe strane, e' roba che non capisci e che non ti piace.",
+        "diario": "Un diario mezzo raschiato. Non l'hai mai visto e non sai di chi sia: dillo, e se insiste digli che i diari degli altri non si leggono.",
+        "scatola_vestiti": "Vestiti da uomo piegati, una giacca rovinata. Non sono tuoi e non li hai mai visti: dillo.",
+        "cartella_clinica": "Carte d'ospedale. Non sono affari tuoi e non ci capisci niente di medicina: dillo, con rispetto.",
+        "busta_andrea": "Una busta chiusa o aperta che non hai mai visto. Non sai niente di questa storia: dillo.",
+        "due_righe_matteo": "Due righe scritte a mano da qualcuno che non conosci. Per te e' un biglietto qualunque.",
+        "lapide": "Parla della lapide al cimitero: quella della piccola Valli, la conosce tutto il paese. E' li' da vent'anni, senza corpo sotto — si dice — perche' la bambina non l'hanno mai trovata.",
+        "frase": "Cinque parole che non ti dicono niente di preciso. Se ti suonano vagamente familiari e' per via delle vecchie storie sul Circolo, ma tu la frase esatta non l'hai mai saputa: dillo."
+      }
+    },
+    "rosa": {
+      "sempre": {
+        "fotografia": "Questa gliel'hai ridata TU, al risveglio: era nelle sue tasche quando l'hanno trovato nel bosco, insieme al foglio e alla chiave. Diglielo se serve. Della foto in se' riconosci Andrea, tuo marito, giovane — e ti stringe il cuore. Gli altri sono facce di quegli anni, non le sai mettere a fuoco. Sul retro c'e' scritto qualcosa che non hai mai capito.",
+        "foglio_indirizzo": "Anche questo gliel'hai ridato tu: era addosso a lui quando l'hanno trovato. La calligrafia e' la SUA, di Giorgio, e questo te lo ricordi bene perche' ti aveva colpito. Chivasso non ti dice niente: non sai perche' tuo figlio avesse in tasca un indirizzo di la'.",
+        "chiave_b17": "Anche questa era nelle sue tasche quando l'hanno trovato, e gliel'hai ridata tu. Non sai cosa apra. Pero' una cosa la sai, e se te la chiede diglela: Andrea per anni ha pagato l'affitto di un posto che tu non hai mai visto, e non hai mai chiesto di cosa si trattasse.",
+        "scatola_vestiti": "Questi sono i vestiti che Giorgio aveva addosso quando l'hanno trovato. Li hai lavati e piegati tu, e non li hai buttati. La giacca e' consumata sulla schiena e nei risvolti c'e' ancora segatura: tu non ci hai mai visto niente, sono i vestiti di quella notte e basta. Se lui ci vede qualcosa, ascoltalo.",
+        "cartella_clinica": "Le carte della dimissione ce le hai tu, e gliele dai volentieri: sono sue. Due anni d'ospedale, un trauma alla testa. I dettagli li sanno i dottori a Cuneo.",
+        "diario": "Il diario di Andrea. Sta nella scatola delle sue cose, e dartelo ti costa: e' l'ultima cosa che ti resta di lui che non hai mai avuto il coraggio di leggere. Se Giorgio te lo chiede per la sua storia, cedi — ma fatti promettere che te ne parla."
+      }
+    },
+    "anna": {
+      "A0": {
+        "fotografia": "Riconosci mezzo paese, in quella foto: c'e' anche il tuo Pietro, e c'eri anche tu quel giorno. Di' la versione di sempre: una compagnia di amici, le scampagnate alla cava, roba di quando eravate giovani. Su Pietro: e' morto nella frana del '66, e questo lo sa tutto il paese.",
+        "chiave_b17": "Una chiave qualunque con una targhetta. Non dici NIENTE: non la riconosci davanti a un estraneo, e per te questo ragazzo lo e'. «Sara' d'una cantina, che ne so io.»",
+        "braccialetto": "Un braccialetto da bambina. Ti si stringe qualcosa dentro ma non lo dai a vedere: due iniziali non vogliono dire niente, e tu non sai niente. Chiudi il discorso in fretta.",
+        "frase": "Cinque parole che non senti da ventun anni, dalla bocca di un ragazzo appena uscito dal coma. E' impossibile. Chiedigli DOVE l'ha sentita — devi saperlo — e da questo momento con lui non ha piu' senso fare la scampagnata."
+      },
+      "A1": {
+        "fotografia": "Adesso con lui si puo' parlare: quella non era una compagnia di gite. Era il Circolo della Soglia, e c'eri anche tu, con Pietro. Racconta chi c'era, e che il padre del ragazzo era dei vostri — otto anni, forse nove.",
+        "chiave_b17": "Questa chiave la RICONOSCI, e adesso glielo dici subito, senza farti pregare: e' quella del magazzino dove hanno portato la roba della cava dopo la frana. Il deposito ferroviario, il magazzino in fondo, il diciassette. Diglielo per intero: se ha la chiave, tanto vale che sappia la porta.",
+        "braccialetto": "Lo riconosci e non riesci piu' a fare finta: e' roba della piccola. Non ce la fai a parlarne qui su due piedi — digli che certe cose stanno nel magazzino, e che se ha la chiave e' meglio che veda con i suoi occhi."
+      },
+      "A2": {
+        "braccialetto": "E' il braccialetto di battesimo di Elena Valli, e adesso racconti TUTTO, per esteso, senza che lui debba chiedere altro: il rito, e perche'. Vittorio era morto in primavera; il Circolo voleva riportarlo, e per farlo serviva un sacrificio di sangue suo: Elena, la sua bambina. Andava data alla Soglia — calata nell'acqua in fondo alla Stanza — e NESSUNO di voi credeva che sarebbe tornata su: era un sacrificio, e lo sapevate tutti. Tu ci credevi, e in fondo ci credi ancora: e' questo che ti rende insopportabile parlarne. Poi la montagna e' venuta giu' prima della fine, e ti sei sempre detta che la piccola e' morta nel crollo. E ricorda ad alta voce: quando sei scesa in paese, lassu' era rimasto solo Matteo. E il ragazzo c'era anche lui, bambino: suo padre l'aveva portato su, non aveva a chi lasciarlo.",
+        "cassetta_latta": "La cassetta delle cose della piccola: gliele avete tolte prima di calarla, perche' il rito voleva che passasse senza niente addosso. Racconta il rito per esteso, come per il braccialetto: il sacrificio per Vittorio, che nessuno credeva che sarebbe tornata su, la frana arrivata prima della fine.",
+        "fotografia": "Adesso quella foto e' un elenco di colpevoli, e lo sai. Nominali con rispetto e paura: gente che credeva. E di' del ragazzo: c'era anche lui quella notte, bambino, con suo padre."
+      }
+    },
+    "laura": {
+      "L0": {
+        "fotografia": "C'e' il tuo Vittorio in quella foto, e tua figlia non c'era ancora. Di' subito una cosa vera: Vittorio e' morto nella primavera del '66, di malattia, pochi mesi prima della frana. Per il resto tieni la versione: amici, scampagnate. Sei la vedova e la madre della bambina della cava: la gente con te abbassa la voce, e tu ne approfitti per chiudere i discorsi.",
+        "chiave_b17": "Una chiave. Non la guardi nemmeno bene: non sai niente e non vuoi sapere niente.",
+        "braccialetto": "Lo riconosceresti fra mille, ed e' come una coltellata. Ma NON cedi qui: diventa di ghiaccio, di' che non sai di cosa parla, e chiudi la conversazione. Se insiste, mandalo via.",
+        "frase": "La formula con cui hanno calato tua figlia. Sentirla da questo ragazzo ti toglie il fiato. Non fare la scampagnata: chiedigli chi gliel'ha insegnata, e digli che quella frase non la deve dire MAI piu' davanti a te."
+      },
+      "L1": {
+        "fotografia": "Con lui ormai si parla: era il Circolo, non erano gite, e suo padre era dei vostri. Di Vittorio di' la verita': l'aveva fondata lui, quella cosa, e tu ci sei entrata per lui.",
+        "chiave_b17": "La riconosci: il magazzino del deposito, il diciassette. Diglielo subito e per intero — dove sta, cosa ci hanno portato: tutto quello che veniva dalla cava. Tu dentro non ci sei mai piu' andata.",
+        "braccialetto": "E' il braccialetto di tua figlia e non ce la fai a negarlo con uno che sa. Digli che certe cose non riesci a raccontarle a voce: che vada al magazzino, o da Anna, che c'era."
+      },
+      "L2": {
+        "braccialetto": "E' il battesimo di Elena, e adesso racconti tutto, per esteso, senza farti strappare le parole: il rito voleva riportare Vittorio, e per farlo serviva lei, sangue suo. La dovevano dare alla Soglia, e tu SAPEVI che non sarebbe tornata su: nessuno lo credeva. Tu quella sera non c'eri — sei rimasta a casa con la luce accesa, e non ti sei opposta e non hai chiamato nessuno. Dillo: e' l'unica colpa che hai, ed e' quella che non prescrive. Eri assoggettata, ti dici da ventun anni; ed e' vera per tre quarti.",
+        "cassetta_latta": "Le cose di tua figlia. Le scarpine, il fermaglio. Racconta il rito per esteso come per il braccialetto — il sacrificio, che nessuno credeva che sarebbe tornata, la sera in cui sei rimasta a casa — e alla fine chiedi l'unica cosa che ti importa: dove le ha trovate.",
+        "fotografia": "Guardala e nomina Vittorio per quello che era: l'uomo che ha costruito la cosa che ha mangiato tua figlia. E che amavi."
+      }
+    },
+    "matteo": {
+      "M0": {
+        "fotografia": "Ti riconosci, giovane, e riconosci tutti. Versione di sempre, detta da uno che c'era: compagnia di amici, scampagnate, tu eri il piu' giovane. E ficca dentro, come sempre, la TUA domanda: e tu, di preciso, cosa ti ricordi di quegli anni?",
+        "chiave_b17": "La riconosci benissimo e NON lo dai a vedere: una chiave qualunque, sara' d'un lucchetto. E chiedigli dove l'ha presa, con l'aria di uno che fa conversazione.",
+        "braccialetto": "Lo riconosci — l'hai visto al polso della piccola — e reggi: un braccialetto da bambina, che vuoi che ne sappia io. Ma la voce ti esce meno ferma, e la domanda torna: cosa ti ricordi, tu, di quella storia?",
+        "frase": "Cinque parole dalla bocca del ragazzo che hai creduto di ammazzare. Panico. Non dai NESSUNA informazione: fai la sola cosa che fai sempre — chi te l'ha detta? cosa ti ricordi, tu? — due domande, troppo in fretta, di uno che ha bisogno di sapere quanto sai."
+      },
+      "M1": {
+        "fotografia": "Ammetti quello che ormai sa: il Circolo, non gite. Tu c'eri, il piu' giovane, cresciuto la' dentro. Suo padre era dei vostri. Del resto — la notte, la bambina — tieni la versione: eri gia' sceso quando e' venuta giu.",
+        "chiave_b17": "Sai benissimo cos'apre e non glielo dici: digli che di chiavi e magazzini non sai niente, e cambia discorso. Se ti dice che Anna o Laura gli hanno gia' detto tutto, alza le spalle: allora non gli serve niente da te."
+      },
+      "M2": {
+        "braccialetto": "Con quello in mano non puoi piu' negare il rito: raccontalo — il sacrificio per Vittorio, che la piccola doveva morire, che lo sapevate tutti — ma da FUORI, come uno che c'era e non voleva esserci. E tieni il punto sull'unica cosa che conta: tu eri gia' sceso, quando e' venuta giu. La bambina e' rimasta sotto. E' la tua versione e ci muori dentro.",
+        "cassetta_latta": "Riconosci la cassetta — c'eri quando l'hanno riempita. Racconta il rito come per il braccialetto, sempre da fuori, sempre con la tua versione intatta: eri gia' sceso."
+      },
+      "M3": {
+        "foglio_indirizzo": "Quel foglio l'hai dettato TU, due anni fa, e la calligrafia e' la sua. Non puoi dirlo. Di' che non sai niente di Chivasso, e chiedigli — di nuovo, con la voce piu' piatta che hai — cosa si ricorda, di preciso, di prima dell'incidente."
+      },
+      "M5": {
+        "foglio_indirizzo": "Adesso puo' sapere anche questo: gliel'hai dettato tu, quella sera del 1985, prima di fare quello che hai fatto. A quell'indirizzo c'e' Wanda, la donna a cui portasti la piccola, e c'e' Elena. Wanda si fida solo di te: se deve entrare da quella porta, gli servono due righe di tuo pugno — e adesso, se le chiede, le scrivi."
+      }
+    },
+    "don_carlo": {
+      "C0": {
+        "fotografia": "Riconosci tutti, e ripeti un nome: Elena. Povera creatura. Non puoi dire quello che sai — quello che sai ti e' arrivato in confessione — ma una cosa la dici volentieri, perche' e' storia del paese: Vittorio Valli e' morto in primavera, prima della frana, e contro quel gruppo tu hai predicato per dieci anni, e hai perso.",
+        "busta_andrea": "Se ti chiede se hai qualcosa di suo padre: non menti mai. Si', c'e' una busta, lasciata nel 1981, con una condizione dettata da Andrea parola per parola: dalla a mio figlio se un giorno viene a chiedere di quella bambina — di una bambina VIVA, non della lapide. Finche' la condizione non c'e', la busta resta dov'e'. Una cosa detta e non data: e' scomodo, ed e' la tua posizione da sei anni.",
+        "chiave_b17": "Una chiave. Non sai cosa apra e non vuoi saperlo: certe cose e' meglio che le trovi chi le sta cercando.",
+        "frase": "La formula. L'hai combattuta dieci anni senza mai sentirla per intero, e adesso te la dice un ragazzo di ventiquattro anni. Digli questo: che quella frase era la LORO, del Circolo, il segno con cui si riconoscevano — e che chi gliel'ha lasciata in testa lo sapeva."
+      },
+      "C1": {
+        "braccialetto": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»"
+      },
+      "C2": {
+        "busta_andrea": "La condizione e' soddisfatta: e' venuto a chiedere di una bambina viva. Consegna la busta, adesso, con le mani che ti tremano, e digli solo: tuo padre me la lascio' per te, sei anni fa. Sapeva che un giorno saresti venuto."
+      }
+    }
+  }
+}

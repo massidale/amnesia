@@ -42,7 +42,7 @@ public class FuoriOrdineTests
 
         Assert.That(prompt, Does.Contain("è stato un attimo"), "la versione del paese, e basta");
         Assert.That(prompt, Does.Not.Contain("Circolo della Soglia"));
-        Assert.That(prompt, Does.Not.Contain("Serviva il sangue"), "il rito non arriva scavalcando");
+        Assert.That(prompt, Does.Not.Contain("Il rito voleva un sacrificio"), "il rito non arriva scavalcando");
     }
 
     /// E non si perde niente: quello che le hai messo davanti resta messo
@@ -59,7 +59,7 @@ public class FuoriOrdineTests
         var prompt = Prompt(world);
 
         Assert.That(prompt, Does.Contain("Circolo della Soglia"), "il primo gradino");
-        Assert.That(prompt, Does.Contain("Serviva il sangue"), "e il secondo, senza rimostrare niente");
+        Assert.That(prompt, Does.Contain("Il rito voleva un sacrificio"), "e il secondo, senza rimostrare niente");
         Assert.That(prompt, Does.Contain("era rimasto solo Matteo"), "compresa la riga che regge il terzo atto");
     }
 

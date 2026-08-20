@@ -149,8 +149,15 @@ namespace AmnesiaUnity
             _dichiarazioni = dichiarazioni.Value;
             Accoglienza = new Greeter(saluti.Value, posizioni.Value);
 
+            // Il copione delle reazioni e' un file a parte e puo' mancare in una
+            // partita vecchia: senza, il motore usa il ripiego («non lo conosci,
+            // dillo») e il gioco parte lo stesso.
+            var reazioni = ReactionTable.Load(Contenuto("amnesia", "reazioni.json"));
+
             var tabelle = new DeclarationService(dichiarazioni.Value, posizioni.Value);
-            var contesto = new ContextBuilder(regole, schede, Items, true, dichiarazioni.Value, posizioni.Value);
+            var contesto = new ContextBuilder(regole, schede, Items, true,
+                dichiarazioni.Value, posizioni.Value,
+                reazioni.IsOk ? reazioni.Value : ReactionTable.Empty());
             Session = new ConversationSession(
                 World, new ConversationLog(), contesto,
                 new OpenRouterTransport(chiave.Value, 60), tabelle, Items, "deepseek/deepseek-v3.2");

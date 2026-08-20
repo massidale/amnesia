@@ -149,7 +149,7 @@
       "requires_shown": []
     },
     "il_rito": {
-      "text": "Per far tornare qualcuno di là, qualcuno di qua deve passare la soglia e tornare indietro.",
+      "text": "Il rito voleva un sacrificio: qualcuno andava dato alla Soglia, calato nell'acqua in fondo alla Stanza, perché un morto potesse tornare. Chi scendeva non tornava su, e questo lo sapevano tutti.",
       "truth": "true",
       "sources": [
         "quaderno_vittorio",
@@ -159,7 +159,7 @@
       "requires_shown": []
     },
     "sacrificio_per_vittorio": {
-      "text": "Doveva servire per Vittorio. Era morto in primavera, e lui era quello che poteva tornare.",
+      "text": "Il sacrificio era per Vittorio. Era morto in primavera, e loro volevano riportarlo indietro.",
       "truth": "true",
       "sources": [
         "anna"
@@ -169,7 +169,7 @@
       ]
     },
     "elena_prescelta": {
-      "text": "Era lei che doveva passare. Serviva il sangue.",
+      "text": "La prescelta era Elena, la figlia di Vittorio: sangue suo. Doveva morire là sotto, e nessuno di loro credeva altrimenti.",
       "truth": "true",
       "sources": [
         "anna",
@@ -529,6 +529,25 @@
         "marisa": "Quella è la Valli, Laura. La moglie di Vittorio. Viene a fare la spesa il martedì. Sta su in cima, dall'altra parte della strada rispetto alla bottega.",
         "lidia": "La Laura. Vedova Valli. Sta in cima alla strada e non scende quasi mai — dopo quella storia della bambina non è più stata quella di prima."
       }
+    },
+    "vittorio_morto": {
+      "text": "Vittorio Valli è morto in primavera, nel '66, di malattia. Pochi mesi prima della frana.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
+        "anna",
+        "laura",
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa",
+        "beppe",
+        "lidia",
+        "gino"
+      ],
+      "requires_shown": []
     }
   }
 }

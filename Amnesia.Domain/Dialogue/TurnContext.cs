@@ -21,4 +21,12 @@ public sealed record TurnContext
     /// il canale degli eventi ce l'ha lasciato, e il chiamante lo consuma una volta
     /// che questo prompt e' partito.
     public IReadOnlyList<string> NpcNotes { get; init; } = Array.Empty<string>();
+
+    /// Vero quando cio' che il giocatore ha appena messo sul banco ha fatto
+    /// salire il personaggio di gradino. E' il momento in cui la storia si
+    /// muove, e l'unico in cui la risposta puo' superare le sei righe.
+    public bool Svolta { get; init; }
+
+    /// Vero quando in questo turno il giocatore ha pronunciato la frase.
+    public bool FraseDetta { get; init; }
 }
