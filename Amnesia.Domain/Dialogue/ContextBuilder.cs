@@ -126,23 +126,6 @@ public sealed class ContextBuilder
                 + "momento importante. Racconta per esteso, con calma, tutto quello che la tua posizione "
                 + "ti permette di dire adesso — stavolta puoi superare le sei righe.</istruzione>");
         }
-        // Il motore constata: quelle due righe SONO state dette, e lui lo sa. Non
-        // sono parole del giocatore, e un modello che nega un'accusa non puo'
-        // comunque disdirle. Il motore cita, quindi non cita cio' di cui non ha il
-        // testo: senza le tabelle, o senza una delle due righe, il blocco non c'e'.
-        if (turn.Confronto is { } pair && _declarations is not null)
-        {
-            var first = _declarations.TextOf(pair.First);
-            var second = _declarations.TextOf(pair.Second);
-            if (first.Length > 0 && second.Length > 0)
-            {
-                // SICUREZZA: testo autoriale, neutralizzato come ogni altra stringa
-                // che entra nel prompt.
-                parts.Add(
-                    "<osservazione_motore>Il giocatore ti mette davanti due cose che sono state dette: "
-                    + $"«{PlayerInput.Sanitize(first)}» e «{PlayerInput.Sanitize(second)}».</osservazione_motore>");
-            }
-        }
         // SICUREZZA: le parole del giocatore non sono fidate — si neutralizzano
         // perche' non possano forgiare blocchi.
         parts.Add($"<parole_giocatore>{PlayerInput.Sanitize(turn.Spoken)}</parole_giocatore>");

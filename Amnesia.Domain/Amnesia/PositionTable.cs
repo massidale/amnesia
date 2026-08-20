@@ -37,18 +37,6 @@ public sealed class PositionStep
     [JsonPropertyName("requires_declared")]
     public List<string> RequiresDeclared { get; set; } = new();
 
-    /// Due righe che devono essere state accostate DAVANTI A QUESTO PERSONAGGIO.
-    /// L'ordine non conta: e' una coppia, non una sequenza.
-    [JsonPropertyName("requires_confronto")]
-    public List<List<string>> RequiresConfronto { get; set; } = new();
-
-    /// Almeno uno dei confronti elencati, in OR. E' la forma delle serrature a
-    /// piu' chiavi applicata alle parole: la segatura nei risvolti oppure il
-    /// referto dell'ospedale dicono la stessa cosa, e un giocatore che ha trovato
-    /// l'una non deve essere costretto a trovare anche l'altra.
-    [JsonPropertyName("requires_any_confronto")]
-    public List<List<string>> RequiresAnyConfronto { get; set; } = new();
-
     /// SICUREZZA DEI DATI: System.Text.Json ignora in silenzio le chiavi che non
     /// conosce, quindi un autore che scrive "requires_declarated" per errore non
     /// vede niente — nessun errore, e un cancello che semplicemente non c'e'.
@@ -198,21 +186,7 @@ public sealed class PositionTable
         {
             return false;
         }
-        if (step.RequiresDeclared.Any(id => !register.IsEstablished(id)))
-        {
-            return false;
-        }
-        // Un confronto vale per il personaggio a cui e' stato messo davanti, non
-        // per il mondo: convincere Anna non convince Matteo, e farlo cedere e'
-        // proprio il lavoro che il giocatore deve fare in bottega.
-        if (!step.RequiresConfronto.All(pair =>
-                pair.Count == 2 && world.ConfrontoShownTo(npcId, pair[0], pair[1])))
-        {
-            return false;
-        }
-        return step.RequiresAnyConfronto.Count == 0
-            || step.RequiresAnyConfronto.Any(pair =>
-                pair.Count == 2 && world.ConfrontoShownTo(npcId, pair[0], pair[1]));
+        return !step.RequiresDeclared.Any(id => !register.IsEstablished(id));
     }
 
     private sealed class TableDto

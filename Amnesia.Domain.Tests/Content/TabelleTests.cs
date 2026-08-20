@@ -425,11 +425,10 @@ public class TabelleTests
         partita.Dice("matteo", "non_erano_gite");
         partita.Mostra("matteo", "braccialetto");
         partita.Dice("matteo", "il_rito");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M2"),
-            "il braccialetto non basta: lui era la' sotto e sa benissimo che c'era una bambina");
-        partita.Accosta("matteo", "anna_solo_matteo", "matteo_ero_gia_sceso");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M3"),
-            "cede a due frasi che sono in piazza da ventun anni e che nessuno aveva mai messo vicine");
+        // La testimonianza di Anna — era rimasto solo lui — e' gia' agli atti:
+        // col braccialetto sul banco Matteo non ha piu' un gradino dove
+        // fermarsi. Cancello provvisorio, in attesa della prova alla cava.
+        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M3"));
         partita.Dice("matteo", "matteo_la_porto_via");
         partita.Dice("matteo", "elena_viva");
         partita.Dice("matteo", "matteo_non_dice_dove");
@@ -448,8 +447,9 @@ public class TabelleTests
         // Le cose che un oggetto dice le legge il giocatore quando ce l'ha in
         // mano: la segatura sta nei risvolti dei pantaloni, e a vederla e' lui.
         partita.Dice("scatola_vestiti", "segatura");
-        partita.Accosta("matteo", "matteo_mai_parlati", "segatura");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M5"));
+        partita.Mostra("matteo", "scatola_vestiti");
+        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M5"),
+            "la giacca con la segatura nei risvolti, mostrata in faccia, chiude la scala");
         partita.Dice("matteo", "matteo_confessa");
 
         var ultimo = Scale()["matteo"].Last().Id;
@@ -485,21 +485,6 @@ public class TabelleTests
         public IReadOnlyCollection<string> InTasca => _inTasca;
 
         public string Posizione(string npcId) => _positions.PositionOf(npcId, _world);
-
-        /// Accostare due righe che sono state dette. Il motore lo consente solo
-        /// se entrambe sono nel registro — la stessa proprieta' di Mostra,
-        /// applicata alle parole invece che agli oggetti.
-        public void Accosta(string npcId, string first, string second)
-        {
-            var register = new Register(_world);
-            foreach (var id in new[] { first, second })
-            {
-                Assert.That(register.SupportsFor(id), Is.Not.Empty,
-                    $"il giocatore non puo' accostare una riga che non ha raccolto: {id}");
-            }
-            _world.MarkConfrontoShown(npcId, first, second);
-            Raccogli();
-        }
 
         public void Mostra(string npcId, string itemId)
         {

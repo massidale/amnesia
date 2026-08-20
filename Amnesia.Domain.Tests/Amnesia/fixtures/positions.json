@@ -44,11 +44,8 @@
      "elena_viva",
      "matteo_non_dice_dove"
     ],
-    "requires_confronto": [
-     [
-      "anna_solo_matteo",
-      "matteo_ero_gia_sceso"
-     ]
+    "requires_declared": [
+     "anna_solo_matteo"
     ]
    },
    {
@@ -65,15 +62,9 @@
     "grants": [
      "matteo_confessa"
     ],
-    "requires_any_confronto": [
-     [
-      "matteo_mai_parlati",
-      "segatura"
-     ],
-     [
-      "matteo_mai_parlati",
-      "referto"
-     ]
+    "requires_any_shown": [
+     "scatola_vestiti",
+     "cartella_clinica"
     ]
    }
   ],
@@ -97,7 +88,8 @@
      "circolo_esisteva",
      "non_erano_gite",
      "padre_nel_circolo",
-     "magazzino_dove"
+     "magazzino_dove",
+     "vittorio_capo"
     ],
     "requires_shown": [
      "frase"
@@ -138,7 +130,8 @@
      "circolo_esisteva",
      "non_erano_gite",
      "padre_nel_circolo",
-     "magazzino_dove"
+     "magazzino_dove",
+     "vittorio_capo"
     ],
     "requires_shown": [
      "frase"
@@ -169,7 +162,8 @@
      "padre_veniva_da_me",
      "busta_esiste",
      "giovedi_sabato",
-     "vittorio_morto"
+     "vittorio_morto",
+     "vittorio_capo"
     ],
     "requires_shown": []
    },

@@ -208,7 +208,8 @@
       ],
       "requires_shown": [
         "braccialetto"
-      ]
+      ],
+      "counts_alone": true
     },
     "padre_nella_cava": {
       "text": "Tuo padre quella notte c'era.",
@@ -546,6 +547,16 @@
         "beppe",
         "lidia",
         "gino"
+      ],
+      "requires_shown": []
+    },
+    "vittorio_capo": {
+      "text": "Il Circolo era roba di Vittorio Valli: l'aveva messo su lui, e comandava lui.",
+      "truth": "true",
+      "sources": [
+        "anna",
+        "laura",
+        "don_carlo"
       ],
       "requires_shown": []
     }

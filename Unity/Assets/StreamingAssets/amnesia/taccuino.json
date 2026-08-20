@@ -1,0 +1,115 @@
+{
+  "convinzioni": [
+    {
+      "id": "coma",
+      "testo": "Sono stato due anni in coma, per una frattura cranica. Mi hanno trovato nel bosco, e nessuno sa perché fossi lì.",
+      "iniziale": true
+    },
+    {
+      "id": "frase_taccuino",
+      "testo": "Prima del coma ripetevo cinque parole: «chi passa per primo tiene la porta». Le dicevo anche da bambino. E ripetevo un nome: Elena.",
+      "iniziale": true
+    },
+    {
+      "id": "elena_morta",
+      "testo": "Elena Valli è morta a tre anni nella cava, nella frana del 1966. Il corpo non l'hanno mai trovato.",
+      "quando": [
+        "versione_paese",
+        "corpo_mai_trovato",
+        "elena_figlia_vittorio"
+      ]
+    },
+    {
+      "id": "vittorio_morto_taccuino",
+      "testo": "Vittorio Valli, il padre di Elena, è morto di malattia qualche mese prima della tragedia della cava.",
+      "quando": [
+        "vittorio_morto"
+      ]
+    },
+    {
+      "id": "vittorio_capo_taccuino",
+      "testo": "Vittorio Valli era il capo del Circolo della Soglia.",
+      "quando": [
+        "vittorio_capo"
+      ]
+    },
+    {
+      "id": "circolo_scampagnate",
+      "testo": "Il Circolo della Soglia era un gruppo che si riuniva per fare scampagnate alla cava.",
+      "quando": [
+        "scampagnate",
+        "circolo_esisteva"
+      ]
+    },
+    {
+      "id": "codice_porta",
+      "testo": "Quelli del Circolo avevano un codice fra loro, qualcosa riguardo una «porta». Forse dirlo a uno di loro potrebbe fargli rivelare cose che normalmente non direbbe.",
+      "quando": [
+        "avevano_una_frase",
+        "frase_per_riconoscersi"
+      ]
+    },
+    {
+      "id": "circolo_rituali",
+      "testo": "Il Circolo della Soglia non faceva scampagnate: si riuniva per fare rituali.",
+      "quando": [
+        "non_erano_gite",
+        "il_rito"
+      ],
+      "sostituisce": "circolo_scampagnate"
+    },
+    {
+      "id": "elena_sacrificio",
+      "testo": "Elena era la vittima sacrificale: il rito doveva riconnettere il Circolo con suo padre, Vittorio. Sapevano tutti che sarebbe morta.",
+      "quando": [
+        "elena_prescelta",
+        "sacrificio_per_vittorio"
+      ]
+    },
+    {
+      "id": "magazzino_taccuino",
+      "testo": "La roba della cava è nel deposito ferroviario, magazzino diciassette. La mia chiave d'ottone apre lì.",
+      "quando": [
+        "magazzino_dove"
+      ]
+    },
+    {
+      "id": "padre_taccuino",
+      "testo": "Mio padre era nel Circolo. Otto anni, forse nove.",
+      "quando": [
+        "padre_nel_circolo"
+      ]
+    },
+    {
+      "id": "padre_quella_notte",
+      "testo": "Mio padre quella notte era alla cava. E c'ero anch'io: mi aveva portato su, non aveva a chi lasciarmi.",
+      "quando": [
+        "padre_nella_cava",
+        "io_ero_con_lui"
+      ]
+    },
+    {
+      "id": "elena_salvata",
+      "testo": "Elena non è morta nella cava: Matteo Sardi l'ha sentita sotto le pietre, l'ha tirata fuori e l'ha portata in un paese lontano. È viva.",
+      "quando": [
+        "matteo_la_porto_via",
+        "elena_viva"
+      ],
+      "sostituisce": "elena_morta"
+    },
+    {
+      "id": "solo_matteo",
+      "testo": "Quando Anna è scesa in paese, alla cava era rimasto solo Matteo.",
+      "quando": [
+        "anna_solo_matteo"
+      ]
+    },
+    {
+      "id": "busta_taccuino",
+      "testo": "Don Carlo ha una busta che mio padre gli ha lasciato per me nel 1981. Me la darà quando verrò «a chiedere di quella bambina».",
+      "quando": [
+        "busta_esiste"
+      ]
+    }
+  ]
+}

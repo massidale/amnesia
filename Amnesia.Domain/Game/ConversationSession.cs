@@ -100,18 +100,10 @@ public sealed class ConversationSession
             draft.MarkShown(npcId, "frase");
         }
 
-        // Un confronto conta per chi se l'e' visto davanti: convincere Anna non
-        // convince Matteo, ed e' proprio quello il lavoro da fare in bottega.
-        if (utterance.Confronto is { } pair)
-        {
-            draft.MarkConfrontoShown(npcId, pair.First, pair.Second);
-        }
-
         var turn = new TurnContext
         {
             Spoken = utterance.Spoken,
             ShownItemIds = utterance.ShownItemIds,
-            Confronto = utterance.Confronto,
             ClockText = WorldClock.Format(draft.Minute),
             // Se cio' che e' finito sul banco ha fatto salire il personaggio di
             // gradino, questo e' un momento in cui la storia si muove: il

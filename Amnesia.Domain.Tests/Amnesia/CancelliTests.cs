@@ -31,43 +31,38 @@ public class CancelliTests
     }
 
     [Test]
-    public void MatteoCedeAlConfrontoENonAUnOggetto()
+    public void MatteoCedeAllaTestimonianzaDiAnnaENonAUnOggetto()
     {
         var world = new WorldState();
-        foreach (var itemId in new[] { "frase", "braccialetto", "registro", "diario", "foglio_indirizzo" })
+        foreach (var itemId in new[] { "frase", "braccialetto", "registro", "diario" })
         {
             world.MarkShown("matteo", itemId);
         }
         Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"),
             "si puo' arrivare con le mani piene e non ottenere niente");
 
-        world.MarkConfrontoShown("matteo", "anna_solo_matteo", "matteo_ero_gia_sceso");
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"),
-            "cede a due frasi che erano in piazza da ventun anni");
+        // Cancello provvisorio, in attesa della prova alla cava: Anna l'ha
+        // detto davvero, e una testimone unica senza motivo di mentire vale.
+        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
+        world.MarkShown("matteo", "foglio_indirizzo");
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
     }
 
     [Test]
-    public void IlVersoDelConfrontoNonConta()
+    public void LaProvaFisicaInFacciaFaCedereMatteo()
     {
         var world = new WorldState();
-        world.MarkShown("matteo", "frase");
-        world.MarkShown("matteo", "braccialetto");
-        world.MarkConfrontoShown("matteo", "matteo_ero_gia_sceso", "anna_solo_matteo");
+        foreach (var itemId in new[] { "frase", "braccialetto", "foglio_indirizzo" })
+        {
+            world.MarkShown("matteo", itemId);
+        }
+        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
 
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M3"),
-            "accostare A e B e' la stessa mossa che accostare B e A");
-    }
-
-    [Test]
-    public void UnConfrontoValePerChiSeLoEVistoDavanti()
-    {
-        var world = new WorldState();
-        world.MarkShown("matteo", "frase");
-        world.MarkShown("matteo", "braccialetto");
-        world.MarkConfrontoShown("anna", "anna_solo_matteo", "matteo_ero_gia_sceso");
-
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"),
-            "convincere Anna non convince Matteo, ed e' quello il lavoro da fare in bottega");
+        // La giacca con la segatura nei risvolti, o il referto: una delle due.
+        world.MarkShown("matteo", "cartella_clinica");
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M5"),
+            "la prova fisica mostrata in faccia chiude la scala");
     }
 
     [Test]

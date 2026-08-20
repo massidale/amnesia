@@ -65,33 +65,32 @@ namespace AmnesiaUnity
             return scritto.ToString();
         }
 
-        /// Cosa ti hanno detto, attribuito e senza giudizio. Il taccuino non
-        /// segna mai niente come vero: sette righe su trentotto sono false,
-        /// dette da gente che ci crede, e distinguerle e' la partita.
+/// Il taccuino: le cose considerate vere fino a questo momento, e quelle
+        /// che la storia ha smentito — cancellate a penna, non strappate. E' la
+        /// bussola del giocatore, non un archivio.
         public static string Righe(Bootstrap gioco)
         {
             var scritto = new StringBuilder(PrimeDueRighe(gioco));
-            var righe = gioco.Taccuino.Dette();
+            var righe = gioco.Taccuino.Convinzioni();
             if (righe.Count == 0)
             {
-                return scritto.Append("Il resto del taccuino e' bianco. Ci finisce quello che la gente ti dice, con il nome di chi l'ha detto.").ToString();
+                return scritto.Append("Il resto del taccuino e' bianco.").ToString();
             }
-            foreach (var detta in righe)
+            foreach (var riga in righe)
             {
-                scritto.Append("· «").Append(detta.Testo).Append("»\n   ");
-                scritto.Append(string.Join(", ", detta.Bocche.Select(gioco.NomeDi)));
-                if (detta.Volte > detta.Bocche.Count)
+                if (riga.Cancellata)
                 {
-                    scritto.Append("  ·  ").Append(detta.Volte).Append(" volte");
+                    // Niente barrato nei font di UI Text: la penna si rende con
+                    // il colore spento e la parola "cancellato".
+                    scritto.Append("<color=#6E6656>· ").Append(riga.Testo)
+                        .Append("   — cancellato</color>\n");
                 }
-                scritto.Append('\n');
+                else
+                {
+                    scritto.Append("· ").Append(riga.Testo).Append('\n');
+                }
             }
-            if (righe.Count > 1)
-            {
-                scritto.Append("\nDue righe si accostano scrivendo  [confronto: ")
-                    .Append(righe[0].Id).Append(" | ").Append(righe[1].Id).Append("]");
-            }
-            return scritto.ToString();
+            return scritto.ToString().TrimEnd('\n');
         }
 
     }

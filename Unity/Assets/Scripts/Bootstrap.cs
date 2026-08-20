@@ -33,13 +33,14 @@ namespace AmnesiaUnity
         private readonly Dictionary<string, Transform> _corpi = new Dictionary<string, Transform>();
         private readonly Dictionary<string, string> _nomi = new Dictionary<string, string>();
         private DeclarationTable _dichiarazioni;
+        private ConvinzioniTable _convinzioni = ConvinzioniTable.Empty();
         private PlaceTable _luoghi;
         private readonly Dictionary<string, Transform> _porte = new Dictionary<string, Transform>();
 
         /// Il taccuino si costruisce sul mondo di adesso e non si conserva: la
         /// sessione sostituisce il mondo a ogni turno riuscito, e un taccuino
         /// tenuto da parte leggerebbe la partita di due battute fa.
-        public Taccuino Taccuino => new Taccuino(Session.World, _dichiarazioni, Items);
+        public Taccuino Taccuino => new Taccuino(Session.World, _convinzioni, Items);
 
         /// Dove sta il contenuto. Nell'editor si legge direttamente la cartella
         /// `content/` del repository, cosi' una modifica alla mappa o a una
@@ -147,6 +148,13 @@ namespace AmnesiaUnity
                 return false;
             }
             _dichiarazioni = dichiarazioni.Value;
+            // Il taccuino nuovo: la tabella delle convinzioni. Senza il file il
+            // taccuino resta bianco, e la partita parte lo stesso.
+            var convinzioni = ConvinzioniTable.Load(Contenuto("amnesia", "taccuino.json"));
+            if (convinzioni.IsOk)
+            {
+                _convinzioni = convinzioni.Value;
+            }
             Accoglienza = new Greeter(saluti.Value, posizioni.Value);
 
             // Il copione delle reazioni e' un file a parte e puo' mancare in una
