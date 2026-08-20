@@ -75,7 +75,11 @@ namespace AmnesiaUnity
             _occhio.fieldOfView = 62f;
             _occhio.clearFlags = CameraClearFlags.SolidColor;
             _occhio.backgroundColor = Scenografia.ColoreDelCielo;
-            _occhio.farClipPlane = 120f;
+            // Oltre questo non si vede niente comunque — la nebbia mangia tutto
+            // molto prima — ma la cupola del cielo e' geometria, e una geometria
+            // tagliata si vede: dal fondo del paese il cielo dall'altra parte sta
+            // a centotrenta metri.
+            _occhio.farClipPlane = 220f;
 
             // Il corpo di Giorgio esiste sempre e si vede solo di spalle: in
             // prima persona guardarsi addosso vuol dire vedersi il collo da

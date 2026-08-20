@@ -26,6 +26,11 @@ namespace AmnesiaUnity
         private const float ScalaSottobosco = 0.7f;
         private const float ScalaArredo = 1f;
 
+        /// Il raggio della cupola, in diagonali di mappa. Piu' grande e' piu'
+        /// lontano sta l'orizzonte, ma la nebbia lo sbianca: sopra il mezzo
+        /// diventa una tinta unita, sotto il quarto si vede la cupola addosso.
+        private const float ScalaCielo = 0.6f;
+
         /// Quanto e' vestito il paese. Piu' alto, piu' vuoto: e' la frazione di
         /// celle a ridosso di un muro che restano nude.
         private const float SogliaArredo = 0.74f;
@@ -130,7 +135,7 @@ namespace AmnesiaUnity
                 var quanto = Raggio(cupola);
                 if (quanto > 0.001f)
                 {
-                    cupola.transform.localScale = Vector3.one * (largo * 0.75f / quanto);
+                    cupola.transform.localScale = Vector3.one * (largo * ScalaCielo / quanto);
                 }
                 // Una cupola che proietta ombra fa notte in pieno giorno.
                 foreach (var pezzo in cupola.GetComponentsInChildren<Renderer>())
