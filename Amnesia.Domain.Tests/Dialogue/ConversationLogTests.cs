@@ -97,4 +97,28 @@ public class ConversationLogTests
 
         Assert.That(log.Recent("nino", 4).Single().Content, Is.EqualTo("alza le spalle"));
     }
+
+    [Test]
+    public void UnSalvataggioSenzaDidascalieSiRileggeLoStesso()
+    {
+        // I salvataggi fatti prima che la didascalia esistesse non hanno quella
+        // chiave. Una partita in corso non si butta via per una riga di regia.
+        var log = ConversationLog.FromJson(
+            "{\"Histories\":{\"matteo\":[{\"Role\":\"User\",\"Content\":\"buongiorno\"}]}}");
+
+        var battuta = log.Recent("matteo", 1)[0];
+        Assert.That(battuta.Content, Is.EqualTo("buongiorno"));
+        Assert.That(battuta.Didascalia, Is.Empty);
+    }
+
+    [Test]
+    public void LaDidascaliaSopravviveAlSalvataggio()
+    {
+        var log = new ConversationLog();
+        log.Append("matteo", ChatRole.User, "li riconosci?", "mostri: la fotografia");
+
+        var riletto = ConversationLog.FromJson(log.ToJson());
+
+        Assert.That(riletto.Recent("matteo", 1)[0].Didascalia, Is.EqualTo("mostri: la fotografia"));
+    }
 }

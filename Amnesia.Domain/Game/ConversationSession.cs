@@ -48,6 +48,29 @@ public sealed class ConversationSession
         _playerId = playerId;
     }
 
+    /// Cosa hai messo sul banco mentre parlavi, in una riga.
+    ///
+    /// Mostrare e' un gesto e non una parola — il motore legge il tag, mai la
+    /// prosa — e finora quel gesto non lasciava traccia da nessuna parte: uno
+    /// che credeva di aver mostrato il braccialetto e non l'aveva fatto leggeva
+    /// una trascrizione identica a quella di chi l'aveva mostrato davvero.
+    ///
+    /// I nomi escono dal catalogo, non dal testo del giocatore: qui dentro non
+    /// puo' finire una parola che non sia d'autore.
+    private string Didascalia(IReadOnlyList<string> shownItemIds)
+    {
+        if (shownItemIds.Count == 0)
+        {
+            return "";
+        }
+        var nomi = shownItemIds.Select(itemId =>
+        {
+            var oggetto = _items.Find(itemId);
+            return oggetto is null || oggetto.Name.Length == 0 ? itemId : oggetto.Name;
+        });
+        return "mostri: " + string.Join(", ", nomi);
+    }
+
     public async Task<TurnResult> TakeTurnAsync(string npcId, string rawText, CancellationToken cancellationToken = default)
     {
         // Le etichette le legge il motore, mai il modello: e' qui che si decide
@@ -136,7 +159,7 @@ public sealed class ConversationSession
         // giocatore sono ovviamente non fidate; quelle del modello lo sono
         // altrettanto, perche' un turno passato che contenesse un blocco forgiato
         // tornerebbe nel prompt come se il mondo l'avesse scritto.
-        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken));
+        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), Didascalia(utterance.ShownItemIds));
         Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto));
 
         // Uno scambio costa un minuto. L'attesa della rete non costa niente: e'

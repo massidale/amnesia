@@ -7,7 +7,15 @@ namespace Amnesia.Dialogue;
 /// Una battuta gia' detta, come la rilegge il turno dopo. Non e' il messaggio che
 /// va sul filo (quello e' `Amnesia.Llm.ChatMessage`, e sa di strumenti e di
 /// chiamate): qui c'e' solo cio' che una conversazione ricorda di se' stessa.
-public sealed record LoggedMessage(ChatRole Role, string Content);
+///
+/// `Didascalia` e' l'unica riga di tutto il gioco scritta dal motore: cosa hai
+/// messo sul banco mentre parlavi. Sta qui e non nel pannello perche' la
+/// trascrizione si ricompone da capo a ogni turno, e una riga tenuta a parte
+/// sparirebbe appena riavvolgi. **Non entra nel prompt**: `ContextBuilder`
+/// rigioca `Role` e `Content` e nient'altro, quindi il prefisso in cache resta
+/// identico al byte e nessun modello impara a scrivere didascalie leggendo le
+/// proprie — che e' esattamente cio' che le regole gli vietano di fare.
+public sealed record LoggedMessage(ChatRole Role, string Content, string Didascalia = "");
 
 /// La storia di chiacchiere per personaggio, dalla piu' vecchia alla piu' recente.
 ///
@@ -28,14 +36,14 @@ public sealed class ConversationLog
         Converters = { new JsonStringEnumConverter() },
     };
 
-    public void Append(string npcId, ChatRole role, string content)
+    public void Append(string npcId, ChatRole role, string content, string didascalia = "")
     {
         if (!Histories.TryGetValue(npcId, out var history))
         {
             history = new List<LoggedMessage>();
             Histories[npcId] = history;
         }
-        history.Add(new LoggedMessage(role, Compatta(content)));
+        history.Add(new LoggedMessage(role, Compatta(content), didascalia.Trim()));
     }
 
     /// Una riga vuota non e' una cosa detta.

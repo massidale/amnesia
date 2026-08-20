@@ -55,6 +55,54 @@ public class ConversationSessionTests
     }
 
     [Test]
+    public async Task MostrareLasciaUnaDidascaliaSullaTuaBattuta()
+    {
+        var session = Session(FakeAnswers.Replying("..."));
+
+        await session.TakeTurnAsync("matteo", "[mostra: fotografia] li riconosci?");
+
+        var tua = session.Log.Recent("matteo", 2)[0];
+        Assert.That(tua.Role, Is.EqualTo(ChatRole.User));
+        Assert.That(tua.Didascalia, Is.EqualTo("mostri: la fotografia"),
+            "mostrare e' un gesto, e un gesto che non lascia traccia a schermo e' un gesto che non sai se hai fatto");
+        Assert.That(tua.Content, Is.EqualTo("li riconosci?"),
+            "la didascalia sta di fianco alle parole, non dentro");
+    }
+
+    [Test]
+    public async Task UnTurnoSenzaOggettiNonHaDidascalia()
+    {
+        var session = Session(FakeAnswers.Replying("..."));
+
+        await session.TakeTurnAsync("matteo", "buongiorno");
+
+        Assert.That(session.Log.Recent("matteo", 2)[0].Didascalia, Is.Empty);
+    }
+
+    [Test]
+    public async Task LaDidascaliaNonEntraNelPrompt()
+    {
+        var transport = FakeAnswers.Replying("...");
+        var session = Session(transport);
+
+        await session.TakeTurnAsync("matteo", "[mostra: fotografia] li riconosci?");
+        await session.TakeTurnAsync("matteo", "e allora?");
+
+        // Il secondo turno rigioca il primo: se la didascalia finisse nella
+        // storia, il modello leggerebbe una riga di regia scritta dal motore e
+        // imparerebbe a scriverne — che e' esattamente cio' che le regole gli
+        // vietano. E il prefisso in cache smetterebbe di essere identico.
+        foreach (var messaggio in transport.LastMessages)
+        {
+            Assert.That(messaggio.Content ?? "", Does.Not.Contain("mostri:"));
+            foreach (var blocco in messaggio.ContentBlocks ?? Array.Empty<ContentBlock>())
+            {
+                Assert.That(blocco.Text, Does.Not.Contain("mostri:"));
+            }
+        }
+    }
+
+    [Test]
     public async Task UnOggettoCheIlGiocatoreNonHaVieneRifiutatoEDetto()
     {
         var session = Session(FakeAnswers.Replying("..."));

@@ -296,10 +296,25 @@ namespace AmnesiaUnity
             {
                 if (battuta.Role == ChatRole.User)
                 {
+                    // La didascalia del motore, in ottone: e' l'unica voce del
+                    // pannello che non appartiene a nessuno dei due: non l'hai
+                    // detta tu e non l'ha detta lui. Constata cosa hai messo sul
+                    // banco — perche' mostrare e' un gesto, e un gesto che non
+                    // lascia traccia a schermo e' un gesto che il giocatore non
+                    // sa se ha fatto.
+                    if (!string.IsNullOrEmpty(battuta.Didascalia))
+                    {
+                        scritto.Append("<size=17><color=#C0983F>")
+                            .Append(battuta.Didascalia)
+                            .Append("</color></size>\n");
+                    }
                     // Le tue parole in grafite: sul foglio le hai scritte tu.
                     // Il testo e' gia' passato dal sanificatore, quindi non puo'
                     // contenere marcatori suoi.
-                    scritto.Append("<color=#8C8577><i>— ").Append(battuta.Content).Append("</i></color>\n");
+                    if (battuta.Content.Length > 0)
+                    {
+                        scritto.Append("<color=#8C8577><i>— ").Append(battuta.Content).Append("</i></color>\n");
+                    }
                 }
                 else
                 {
