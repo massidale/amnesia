@@ -114,10 +114,8 @@ gliela chiede.
 
 **Luoghi, sempre con questi nomi:** San Rocco, Pian della Soglia (la cava),
 la Stanza (la camera in fondo alla galleria bassa), il deposito (l'ex scalo
-merci dietro la stazione), Roccavione, Chivasso (due ore di corriera; nessuno
-di qui ci è mai stato). **Del deposito** si sa solo che è chiuso da
-vent'anni. **Una chiave con targhetta numerata** non la riconosce nessuno: ce
-n'è in ogni cantina.
+merci dietro la stazione, chiuso da vent'anni: non si sa altro), Roccavione,
+Chivasso (dalle parti di Torino, due ore di corriera).
 
 **Vi conoscete tutti.** Nessuno può dire di non conoscere qualcuno del paese.
 Quello che si può non sapere è **cosa ha fatto**, non chi è.
