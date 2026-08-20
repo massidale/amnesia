@@ -369,38 +369,56 @@ namespace AmnesiaUnity
             bool Pieno(int ax, int ay) =>
                 ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height && mappa.Rows[ay][ax] == '#';
 
-            var lungoX = Pieno(x - 1, y) || Pieno(x + 1, y);
-            var lungoZ = Pieno(x, y - 1) || Pieno(x, y + 1);
-            if (!lungoX && !lungoZ)
-            {
-                lungoX = lungoZ = true;
-            }
+            var sinistra = Pieno(x - 1, y);
+            var destra = Pieno(x + 1, y);
+            var sopra = Pieno(x, y - 1);
+            var sotto = Pieno(x, y + 1);
 
             var tettoia = DentroIlLuogo(mappa, "stazione", x, y);
             var altezza = tettoia ? AltezzaParapetto : AltezzaMuro;
+            var mezzo = cella * 0.5f;
+            var t = SpessoreMuro * 0.5f;
 
-            if (lungoX)
+            if (!sinistra && !destra && !sopra && !sotto)
             {
-                Lastra(genitore, materiale, x, y, cella, new Vector3(cella, altezza, SpessoreMuro));
+                // Un '#' senza vicini di muro e' un pilastro e basta.
+                Lastra(genitore, materiale, x * cella, -y * cella, altezza,
+                    new Vector3(SpessoreMuro, altezza, SpessoreMuro));
+                return;
             }
-            if (lungoZ)
+
+            // Ogni lastra corre SOLO verso i vicini che sono muro, piu' mezzo
+            // spessore per chiudere il giunto: all'angolo la meta' che non
+            // continua nel muro sporgerebbe oltre lo spigolo.
+            if (sinistra || destra)
             {
-                Lastra(genitore, materiale, x, y, cella, new Vector3(SpessoreMuro, altezza, cella));
+                var da = sinistra ? -mezzo : -t;
+                var a = destra ? mezzo : t;
+                Lastra(genitore, materiale, x * cella + (da + a) * 0.5f, -y * cella, altezza,
+                    new Vector3(a - da, altezza, SpessoreMuro));
             }
-            if (tettoia && lungoX && lungoZ)
+            if (sopra || sotto)
+            {
+                // In mappa y cresce verso sud; nel mondo il sud e' -z.
+                var da = sotto ? -mezzo : -t;
+                var a = sopra ? mezzo : t;
+                Lastra(genitore, materiale, x * cella, -y * cella + (da + a) * 0.5f, altezza,
+                    new Vector3(SpessoreMuro, altezza, a - da));
+            }
+            if (tettoia && (sinistra || destra) && (sopra || sotto))
             {
                 // Il palo d'angolo che regge il tetto.
-                Lastra(genitore, materiale, x, y, cella,
+                Lastra(genitore, materiale, x * cella, -y * cella, AltezzaMuro,
                     new Vector3(SpessoreMuro, AltezzaMuro, SpessoreMuro));
             }
         }
 
         private static void Lastra(
-            Transform genitore, Material materiale, int x, int y, float cella, Vector3 misura)
+            Transform genitore, Material materiale, float x, float z, float altezza, Vector3 misura)
         {
             var lastra = GameObject.CreatePrimitive(PrimitiveType.Cube);
             lastra.transform.SetParent(genitore);
-            lastra.transform.position = new Vector3(x * cella, misura.y * 0.5f, -y * cella);
+            lastra.transform.position = new Vector3(x, misura.y * 0.5f, z);
             lastra.transform.localScale = misura;
             lastra.GetComponent<Renderer>().sharedMaterial = materiale;
         }
