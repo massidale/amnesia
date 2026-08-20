@@ -100,6 +100,24 @@ public sealed class ConversationSession
             draft.MarkShown(npcId, "frase");
         }
 
+        // Il rimando a Nino. Quando lo stallo con Matteo e' un fatto — Elena
+        // risulta viva e lui ha detto di no — il paese lo sa prima di te: la
+        // PRIMA persona con cui parli ti manda da Nino, che ha una cosa da
+        // darti. Una volta sola, e mai da Nino o Matteo stessi: e' un passa-
+        // parola, non un coro.
+        var note = new List<string>();
+        var registro = new Register(draft);
+        if (npcId != "nino" && npcId != "matteo" && npcId != "wanda" && npcId != "elena"
+            && !draft.Flags.ContainsKey("nino_indirizzato")
+            && registro.IsEstablished("elena_viva")
+            && registro.IsEstablished("matteo_non_dice_dove"))
+        {
+            note.Add("Nino Bergesio sta facendo dire in giro che cerca il ragazzo dei Lipari: "
+                + "tiene una cosa da dargli, da anni. Diglielo prima che il discorso finisca — "
+                + "che Nino lo cerca, e che e' meglio che ci passi.");
+            draft.Flags["nino_indirizzato"] = true;
+        }
+
         var turn = new TurnContext
         {
             Spoken = utterance.Spoken,
@@ -110,6 +128,7 @@ public sealed class ConversationSession
             // costruttore del prompt lo dice, e la risposta puo' allungarsi.
             Svolta = _declarations.PositionOf(npcId, draft) != gradinoPrima,
             FraseDetta = fraseDetta,
+            NpcNotes = note,
         };
 
         var messages = _context.Build(npcId, draft, Log.Recent(npcId, HistoryWindow), turn).ToWire();
@@ -160,6 +179,20 @@ public sealed class ConversationSession
         Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), Didascalia(utterance.ShownItemIds));
         Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto));
 
+        // La consegna: gli oggetti che i gradini raggiunti hanno da dare
+        // passano di mano ADESSO, decisi dai dati e mai dal modello. Una volta
+        // in tasca al giocatore non tornano indietro: e' una consegna, non un
+        // prestito.
+        var ricevuti = new List<string>();
+        foreach (var itemId in _declarations.ConsegnateFinora(npcId, draft))
+        {
+            if (!draft.ItemOwners.TryGetValue(itemId, out var chi) || chi != _playerId)
+            {
+                draft.ItemOwners[itemId] = _playerId;
+                ricevuti.Add(itemId);
+            }
+        }
+
         // Uno scambio costa un minuto. L'attesa della rete non costa niente: e'
         // latenza dell'infrastruttura, non una scelta del giocatore, e farla
         // pagare renderebbe il gioco piu' difficile quando la linea e' lenta.
@@ -169,6 +202,7 @@ public sealed class ConversationSession
 
         return new TurnResult
         {
+            Received = ricevuti,
             IsOk = true,
             NpcId = npcId,
             Reply = detto,

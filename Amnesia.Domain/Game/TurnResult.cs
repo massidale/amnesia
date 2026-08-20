@@ -23,6 +23,10 @@ public sealed record TurnResult
     /// Le dichiarazioni che il motore ha registrato in questo turno.
     public IReadOnlyList<string> Declared { get; init; } = Array.Empty<string>();
 
+    /// Gli oggetti passati in mano al giocatore in questo turno: la consegna la
+    /// decidono i dati della scala, mai il modello.
+    public IReadOnlyList<string> Received { get; init; } = Array.Empty<string>();
+
     /// Quelle che il personaggio ha provato a fare e che non poteva fare: un
     /// modello puo' sempre scegliere l'identificativo sbagliato, e la decisione
     /// su cosa risulti detto non e' mai sua.

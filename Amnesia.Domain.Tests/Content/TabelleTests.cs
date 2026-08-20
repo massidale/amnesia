@@ -156,8 +156,8 @@ public class TabelleTests
     {
         Assert.That(Declarations().Ids.Count, Is.GreaterThanOrEqualTo(25),
             "meno di venticinque righe non e' un'indagine");
-        Assert.That(Scale().Keys, Is.EquivalentTo(new[] { "matteo", "anna", "laura", "don_carlo" }),
-            "hanno una scala i quattro guardinghi, e nessun altro");
+        Assert.That(Scale().Keys, Is.EquivalentTo(new[] { "matteo", "anna", "laura", "don_carlo", "nino" }),
+            "hanno una scala i quattro guardinghi — e Nino, che tiene la sgorbia");
     }
 
     /// Orfani nella prima direzione: un gradino che concede un id che la tabella
@@ -316,7 +316,7 @@ public class TabelleTests
     {
         var table = Declarations();
         var positions = Positions();
-        foreach (var npcId in new[] { "rosa", "nino", "wanda", "elena" })
+        foreach (var npcId in new[] { "rosa", "wanda", "elena", "teresa" })
         {
             Assert.That(positions.HasLadder(npcId), Is.False, $"{npcId} non e' guardingo e non ha una scala");
             var sue = table.Ids.Where(id => table.SourcesOf(id).Contains(npcId)).ToList();
@@ -512,16 +512,16 @@ public class TabelleTests
             }
         }
 
-        /// Cio' che un personaggio consegna quando e' arrivato in cima.
+        /// Cio' che i gradini raggiunti hanno da consegnare: la stessa riga di
+        /// dati che usa il motore, cosi' il banco di prova non puo' mentire.
         private void Raccogli()
         {
-            if (Posizione("matteo") == "M5")
+            foreach (var npcId in new[] { "matteo", "don_carlo", "nino" })
             {
-                _inTasca.Add("due_righe_matteo");
-            }
-            if (Posizione("don_carlo") == "C2")
-            {
-                _inTasca.Add("busta_andrea");
+                foreach (var itemId in _positions.ConsegnateFinora(npcId, _world))
+                {
+                    _inTasca.Add(itemId);
+                }
             }
         }
     }

@@ -64,7 +64,11 @@
     ],
     "requires_any_shown": [
      "scatola_vestiti",
-     "cartella_clinica"
+     "cartella_clinica",
+     "scalpello"
+    ],
+    "consegna": [
+     "due_righe_matteo"
     ]
    }
   ],
@@ -183,6 +187,38 @@
     ],
     "requires_declared": [
      "elena_viva"
+    ],
+    "consegna": [
+     "busta_andrea"
+    ]
+   }
+  ],
+  "nino": [
+   {
+    "id": "N0",
+    "grants": [
+     "versione_paese",
+     "elena_figlia_vittorio",
+     "corpo_mai_trovato",
+     "nessuno_denuncio",
+     "circolo_esisteva",
+     "avevano_una_frase",
+     "frase_per_riconoscersi",
+     "dove_lo_trovai"
+    ],
+    "requires_shown": []
+   },
+   {
+    "id": "N1",
+    "grants": [
+     "nino_indizio"
+    ],
+    "requires_declared": [
+     "elena_viva",
+     "matteo_non_dice_dove"
+    ],
+    "consegna": [
+     "scalpello"
     ]
    }
   ]

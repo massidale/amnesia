@@ -89,4 +89,37 @@ public class CancelliTests
         Assert.That(register.IsEstablished("corpo_mai_trovato"), Is.False,
             "e l'eccezione resta un'eccezione: tutto il resto vuole due bocche");
     }
+
+    [Test]
+    public void NinoTieneLaSgorbiaFinoAlQuartoAtto()
+    {
+        var world = new WorldState();
+        Assert.That(Reali().PositionOf("nino", world), Is.EqualTo("N0"));
+        Assert.That(Reali().ConsegnateFinora("nino", world), Is.Empty,
+            "prima dello stallo la sgorbia non esiste per il giocatore");
+
+        // L'atto quarto non e' un contatore: e' questo stato.
+        var registro = new Register(world);
+        registro.Record("matteo", "elena_viva", countsAlone: true);
+        registro.Record("matteo", "matteo_non_dice_dove", countsAlone: true);
+
+        Assert.That(Reali().PositionOf("nino", world), Is.EqualTo("N1"));
+        Assert.That(Reali().ConsegnateFinora("nino", world), Does.Contain("scalpello"));
+    }
+
+    [Test]
+    public void LaSgorbiaEUnaChiaveDellUltimoGradinoDiMatteo()
+    {
+        var world = new WorldState();
+        foreach (var itemId in new[] { "frase", "braccialetto", "foglio_indirizzo" })
+        {
+            world.MarkShown("matteo", itemId);
+        }
+        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
+
+        world.MarkShown("matteo", "scalpello");
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M5"),
+            "il suo ferro, raccolto accanto al corpo: la terza chiave della serratura");
+    }
 }

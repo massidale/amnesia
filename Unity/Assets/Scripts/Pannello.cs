@@ -344,7 +344,8 @@ namespace AmnesiaUnity
             var ora = Amnesia.Time.WorldClock.Format(turno.Minute);
             var registrato = turno.Declared.Count > 0 ? "   ·   annotato: " + string.Join(", ", turno.Declared) : "";
             var rifiutato = turno.RefusedTags.Count > 0 ? "   ·   non ce l'hai: " + string.Join(", ", turno.RefusedTags) : "";
-            return ora + registrato + rifiutato;
+            var ricevuto = turno.Received.Count > 0 ? "   ·   ricevuto: " + string.Join(", ", turno.Received) : "";
+            return ora + registrato + rifiutato + ricevuto;
         }
     }
 }

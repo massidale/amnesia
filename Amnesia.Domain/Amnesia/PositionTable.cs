@@ -37,6 +37,14 @@ public sealed class PositionStep
     [JsonPropertyName("requires_declared")]
     public List<string> RequiresDeclared { get; set; } = new();
 
+    /// Gli oggetti che passano di mano quando questo gradino viene raggiunto.
+    /// E' l'unico canale con cui un personaggio DA' qualcosa al giocatore: il
+    /// modello puo' raccontare la consegna come vuole, ma la merce la muove il
+    /// motore, e solo per questa riga di dati. Stessa separazione di sempre fra
+    /// le parole e la roba.
+    [JsonPropertyName("consegna")]
+    public List<string> Consegna { get; set; } = new();
+
     /// SICUREZZA DEI DATI: System.Text.Json ignora in silenzio le chiavi che non
     /// conosce, quindi un autore che scrive "requires_declarated" per errore non
     /// vede niente — nessun errore, e un cancello che semplicemente non c'e'.
@@ -134,6 +142,24 @@ public sealed class PositionTable
             ids.Add(step.Id);
         }
         return ids;
+    }
+
+    /// Gli oggetti che i gradini gia' raggiunti di questo personaggio hanno da
+    /// consegnare. Il chiamante decide se sono gia' passati di mano.
+    public IReadOnlyList<string> ConsegnateFinora(string npcId, WorldState world)
+    {
+        var oggetti = new List<string>();
+        foreach (var step in Reached(npcId, world))
+        {
+            foreach (var itemId in step.Consegna)
+            {
+                if (!oggetti.Contains(itemId))
+                {
+                    oggetti.Add(itemId);
+                }
+            }
+        }
+        return oggetti;
     }
 
     public IReadOnlyList<string> Granted(string npcId, WorldState world)

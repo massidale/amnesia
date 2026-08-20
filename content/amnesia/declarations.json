@@ -261,7 +261,8 @@
       "sources": [
         "matteo"
       ],
-      "requires_shown": []
+      "requires_shown": [],
+      "counts_alone": true
     },
     "matteo_cosa_ti_ricordi": {
       "text": "Senti… ma tu, di preciso, cosa ti ricordi?",
@@ -558,6 +559,15 @@
         "laura",
         "don_carlo"
       ],
+      "requires_shown": []
+    },
+    "nino_indizio": {
+      "text": "Accanto a te, nel castagneto, c'era un ferro da falegname. Una sgorbia, col manico lucido d'uso. L'ho raccolta quella mattina e l'ho tenuta: nessuno me l'ha mai chiesta. Tienila tu.",
+      "truth": "true",
+      "sources": [
+        "nino"
+      ],
+      "counts_alone": true,
       "requires_shown": []
     }
   }

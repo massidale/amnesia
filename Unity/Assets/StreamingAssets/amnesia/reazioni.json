@@ -15,7 +15,8 @@
         "busta_andrea": "Una busta chiusa o aperta che non hai mai visto. Non sai niente di questa storia: dillo.",
         "due_righe_matteo": "Due righe scritte a mano da qualcuno che non conosci. Per te e' un biglietto qualunque.",
         "lapide": "Parla della lapide al cimitero: quella della piccola Valli, la conosce tutto il paese. E' li' da vent'anni, senza corpo sotto — si dice — perche' la bambina non l'hanno mai trovata.",
-        "frase": "Cinque parole che non ti dicono niente di preciso. Se ti suonano vagamente familiari e' per via delle vecchie storie sul Circolo, ma tu la frase esatta non l'hai mai saputa: dillo."
+        "frase": "Cinque parole che non ti dicono niente di preciso. Se ti suonano vagamente familiari e' per via delle vecchie storie sul Circolo, ma tu la frase esatta non l'hai mai saputa: dillo.",
+        "scalpello": "Una sgorbia da falegname, un ferro come tanti. Non sai di chi sia e non lo deduci: in ogni cascina ce n'e' una."
       }
     },
     "rosa": {
@@ -69,7 +70,8 @@
         "fotografia": "Ti riconosci, giovane, e riconosci tutti. Versione di sempre, detta da uno che c'era: compagnia di amici, scampagnate, tu eri il piu' giovane. E ficca dentro, come sempre, la TUA domanda: e tu, di preciso, cosa ti ricordi di quegli anni?",
         "chiave_b17": "La riconosci benissimo e NON lo dai a vedere: una chiave qualunque, sara' d'un lucchetto. E chiedigli dove l'ha presa, con l'aria di uno che fa conversazione.",
         "braccialetto": "Lo riconosci — l'hai visto al polso della piccola — e reggi: un braccialetto da bambina, che vuoi che ne sappia io. Ma la voce ti esce meno ferma, e la domanda torna: cosa ti ricordi, tu, di quella storia?",
-        "frase": "Cinque parole dalla bocca del ragazzo che hai creduto di ammazzare. Panico. Non dai NESSUNA informazione: fai la sola cosa che fai sempre — chi te l'ha detta? cosa ti ricordi, tu? — due domande, troppo in fretta, di uno che ha bisogno di sapere quanto sai."
+        "frase": "Cinque parole dalla bocca del ragazzo che hai creduto di ammazzare. Panico. Non dai NESSUNA informazione: fai la sola cosa che fai sempre — chi te l'ha detta? cosa ti ricordi, tu? — due domande, troppo in fretta, di uno che ha bisogno di sapere quanto sai.",
+        "scalpello": "La riconosci: e' TUA, dalla bottega, e ti manca da due anni. Non lo dai a vedere — un ferro come tanti, dici — ma la voce ti si secca, e la domanda ti esce da sola: dove l'hai presa, questa?"
       },
       "M1": {
         "fotografia": "Ammetti quello che ormai sa: il Circolo, non gite. Tu c'eri, il piu' giovane, cresciuto la' dentro. Suo padre era dei vostri. Del resto — la notte, la bambina — tieni la versione: eri gia' sceso quando e' venuta giu.",
@@ -83,7 +85,8 @@
         "foglio_indirizzo": "Quel foglio l'hai dettato TU, due anni fa, e la calligrafia e' la sua. Non puoi dirlo. Di' che non sai niente di Chivasso, e chiedigli — di nuovo, con la voce piu' piatta che hai — cosa si ricorda, di preciso, di prima dell'incidente."
       },
       "M5": {
-        "foglio_indirizzo": "Adesso puo' sapere anche questo: gliel'hai dettato tu, quella sera del 1985, prima di fare quello che hai fatto. A quell'indirizzo c'e' Wanda, la donna a cui portasti la piccola, e c'e' Elena. Wanda si fida solo di te: se deve entrare da quella porta, gli servono due righe di tuo pugno — e adesso, se le chiede, le scrivi."
+        "foglio_indirizzo": "Adesso puo' sapere anche questo: gliel'hai dettato tu, quella sera del 1985, prima di fare quello che hai fatto. A quell'indirizzo c'e' Wanda, la donna a cui portasti la piccola, e c'e' Elena. Wanda si fida solo di te: se deve entrare da quella porta, gli servono due righe di tuo pugno — e adesso, se le chiede, le scrivi.",
+        "scalpello": "Il tuo ferro, raccolto accanto a lui nel bosco. Non c'e' piu' niente da tenere in piedi: racconta tutto, per esteso — la sera del 1985, l'indirizzo dettato, i due secondi in cui hai visto la tua vita finire, la pietra, il bosco. E alla fine chiedi scusa. E' la seconda volta che glielo dici, con la stessa voce."
       }
     },
     "don_carlo": {
@@ -98,6 +101,11 @@
       },
       "C2": {
         "busta_andrea": "La condizione e' soddisfatta: e' venuto a chiedere di una bambina viva. Consegna la busta, adesso, con le mani che ti tremano, e digli solo: tuo padre me la lascio' per te, sei anni fa. Sapeva che un giorno saresti venuto."
+      }
+    },
+    "nino": {
+      "sempre": {
+        "scalpello": "E' quella che hai raccolto tu, nel castagneto, a un braccio da dove era disteso. Lo dici com'e': l'hai tenuta due anni senza sapere a chi darla."
       }
     }
   }

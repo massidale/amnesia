@@ -105,6 +105,13 @@
       ]
     },
     {
+      "id": "sgorbia_taccuino",
+      "testo": "Nino ha raccolto una sgorbia da falegname accanto a me, nel castagneto, la mattina che mi ha trovato. Un ferro da bottega, in un bosco dove non c'e' nessuna bottega.",
+      "quando": [
+        "nino_indizio"
+      ]
+    },
+    {
       "id": "busta_taccuino",
       "testo": "Don Carlo ha una busta che mio padre gli ha lasciato per me nel 1981. Me la darà quando verrò «a chiedere di quella bambina».",
       "quando": [

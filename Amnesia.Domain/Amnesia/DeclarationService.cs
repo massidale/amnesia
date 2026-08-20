@@ -28,6 +28,10 @@ public sealed class DeclarationService
     /// turno l'ha fatto salire. Vuoto per chi non ha scala.
     public string PositionOf(string npcId, WorldState world) => _positions.PositionOf(npcId, world);
 
+    /// Gli oggetti che i gradini raggiunti hanno da consegnare al giocatore.
+    public IReadOnlyList<string> ConsegnateFinora(string npcId, WorldState world) =>
+        _positions.ConsegnateFinora(npcId, world);
+
     public IReadOnlyList<string> EverSayable(string npcId)
     {
         if (_positions.HasLadder(npcId))

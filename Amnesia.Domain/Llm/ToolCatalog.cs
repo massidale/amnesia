@@ -73,7 +73,7 @@ public static class ToolCatalog
                         "foto_andrea", "foto_vittorio", "foto_laura",
                         // Appesi in coda, mai in mezzo: l'ordine dell'enum e'
                         // parte del prefisso in cache.
-                        "vittorio_morto", "vittorio_capo",
+                        "vittorio_morto", "vittorio_capo", "nino_indizio",
                     },
                 },
             },
