@@ -186,7 +186,7 @@ public class ContextBuilderTests
         Assert.That(Count(text, "<osservazione_motore>"), Is.EqualTo(2));
         Assert.That(text, Does.Contain("<osservazione_motore>Vittorio ti ha avvertito: il forestiero fa domande e ha delle carte</osservazione_motore>"));
         Assert.That(text.IndexOf("<conoscenze>", StringComparison.Ordinal),
-            Is.LessThan(text.IndexOf("<accaduto_di_recente>", StringComparison.Ordinal)),
+            Is.LessThan(text.IndexOf("<osservazione_motore>", StringComparison.Ordinal)),
             "cio' che e' accaduto altrove sta dopo cio' che il personaggio sa");
     }
 
