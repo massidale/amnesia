@@ -33,6 +33,10 @@ namespace AmnesiaUnity
         /// lontano, sempre.
         private const float ScalaCielo = 1.35f;
 
+        /// Il terreno aperto del paese: prato, per terra. Il sentiero sterrato
+        /// ci serpeggia in mezzo ed e' la cosa marrone, non il contrario.
+        private static readonly Color Campo = new Color(0.36f, 0.44f, 0.25f);
+
         private static readonly Color Strada = new Color(0.44f, 0.41f, 0.36f);
         /// La banchina lungo la strada: sterrato battuto, non un nastro verde.
         /// Il verde vero sta fuori dal paese — la prateria e le colline.
@@ -225,7 +229,7 @@ namespace AmnesiaUnity
             {
                 for (var x = 0; x < mappa.Width; x++)
                 {
-                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 59) < 0.85f)
+                    if (mappa.Rows[y][x] != '.' || Caso(x, y, 59) < 0.93f)
                     {
                         continue;
                     }
@@ -247,6 +251,7 @@ namespace AmnesiaUnity
         {
             switch (simbolo)
             {
+                case '.': return Campo;
                 case ',': return Prato;
                 case '~': return Pavimento;
                 case '+': return Soglia;
