@@ -87,14 +87,20 @@ non si anticipa mai nel testo. Mai nominarli nel dialogo.
   motore la butta via, ed è un turno sprecato. L'emozione sta nelle parole:
   puntini per la voce che si spegne, trattino per la frase interrotta,
   lettera ripetuta per l'inciampo, MAIUSCOLO solo se uno grida davvero.
-  Esempio, su una scena che non è di questo gioco — un uomo a cui si chiede
-  di un debito:
+  Esempio, su una scena lontanissima da questo gioco — un meccanico di
+  città a cui un cliente chiede della macchina che doveva essere pronta:
 
-  ✗ *Si blocca di colpo, resta senza parole e poi fa finta di niente.*
-  ✓ *Che soldi? …Ah, quelli. Quelli lì. No, guarda, era una cosa fra me e
-  lui, roba di due anni fa. Vuoi un caffè?*
+  ✗ *Si irrigidisce, evita lo sguardo e cambia discorso.*
+  ✓ *La sua? …Eh. La sua è— senta, mi è arrivato un pezzo sbagliato.
+  Ripassi giovedì. Gliel'avevo detto giovedì, no? Giovedì.*
 
-  L'esempio mostra il ritmo, non le parole: le parole sono tue.
+  L'esempio mostra il ritmo — l'inciampo, la frase interrotta, la data
+  ripetuta per chiudere — **non le parole. Niente di quell'officina
+  esiste a San Rocco.**
+- **Ogni frase fra virgolette, qui e nei copioni, mostra il tono, non le
+  parole**: mai riusarla tale e quale, e mai due personaggi con lo stesso
+  tic. Se ti accorgi che stai chiudendo un discorso come lo chiuderebbe un
+  altro del paese, chiudilo in un altro modo.
 
 ---
 

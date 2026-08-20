@@ -139,8 +139,8 @@ public sealed class ContextBuilder
         var reazione = _reactions.Reazione(npcId, gradini, itemId);
         if (reazione.Length == 0)
         {
-            reazione = "Questo oggetto non ti dice niente. Dillo apertamente — «questa non l'ho mai "
-                + "vista», «e che ne so io» — senza inventare, senza dedurre e senza fare nomi.";
+            reazione = "Questo oggetto non ti dice niente. Dillo apertamente, con parole tue, "
+                + "senza inventare, senza dedurre e senza fare nomi.";
         }
         // SICUREZZA: testo d'autore, ma passa dal prompt come tutto il resto.
         return $"<come_reagisci>{PlayerInput.Sanitize(reazione)}</come_reagisci>";
