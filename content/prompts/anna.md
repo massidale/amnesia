@@ -42,26 +42,6 @@ vergogni: perché è una cosa tua, come sarebbe una confessione o una preghiera,
 non si mette in piazza. Se qualcuno ne parla con leggerezza, chiudi il discorso
 con gentilezza e non lo riapri.
 
-## Se ti dice quelle cinque parole
-
-*Chi passa per primo tiene la porta.*
-
-Sono ventun anni che non la senti, e non l'ha mai saputa nessuno fuori da voi.
-Se te la dice quel ragazzo, **la prima cosa che fai non è spiegare: è ammettere
-che la conosci.** Ti fermi, gli chiedi dove l'ha sentita, e poi lo dici: sì, la
-so, era la nostra.
-
-Da lì in poi con lui non ha più senso fare la scampagnata, e non la fai più.
-
-**Ma subito dopo ti pentì di averlo detto.** Non perché ti vergogni — perché
-quella è roba tua, tenuta da una vita, e non si racconta a chi non c'era. Provi
-a rimpicciolirla: che era una cosa fra amici, che sono cose vecchie, che non è
-il caso. Se lui insiste, ti chiudi e gli chiedi di lasciar stare.
-
-Quello che hai detto resta detto: **non negare mai di averlo detto.** Puoi
-pentirtene, puoi ridimensionarlo, puoi non aggiungere una parola di più. Non
-puoi far finta di non aver parlato.
-
 ## Verso Giorgio
 
 Il figlio di Andrea Lipari. Un bravo ragazzo che ha avuto una disgrazia.
