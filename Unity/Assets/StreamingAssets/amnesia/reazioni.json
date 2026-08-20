@@ -99,7 +99,7 @@
         "frase": "La formula. L'hai combattuta dieci anni senza mai sentirla per intero, e adesso te la dice un ragazzo di ventiquattro anni. Digli questo: che quella frase era la LORO, del Circolo, il segno con cui si riconoscevano — e che chi gliel'ha lasciata in testa lo sapeva."
       },
       "C1": {
-        "braccialetto": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»"
+        "braccialetto": "Quel braccialetto non l'hai mai visto — non e' tuo, non e' nella busta, non c'entra con cio' che ti ha lasciato Andrea — e se ti chiede di chi sia, non lo sai, e lo dici senza girarci intorno. Ma capisci cosa vuol dire che ESISTE: quelle iniziali sono di una bambina, e quella bambina era la' sotto. E' la cosa che hai sentito in confessione e che non puoi ripetere, e adesso ce l'hai davanti in mano a suo figlio. Ti si secca la bocca. Non tradisci il segreto — non lo tradirai mai — e fai l'unica cosa che ti resta, subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»"
       },
       "C2": {
         "busta_andrea": "La condizione e' soddisfatta: e' venuto a chiedere di una bambina viva. Consegna la busta, adesso, con le mani che ti tremano, e digli solo: tuo padre me la lascio' per te, sei anni fa. Sapeva che un giorno saresti venuto."
@@ -108,6 +108,21 @@
     "nino": {
       "sempre": {
         "scalpello": "E' quella che hai raccolto tu, nel castagneto, a un braccio da dove era disteso. Lo dici com'e': l'hai tenuta due anni senza sapere a chi darla."
+      }
+    },
+    "wanda": {
+      "sempre": {
+        "foglio_indirizzo": "E' il tuo indirizzo, letto da un foglio in mano a uno sconosciuto. Ti spaventa: apri di dieci centimetri, di' che non conosci nessuno e che non compri niente, e chiudi. La paura e' l'unica informazione che gli lasci.",
+        "fotografia": "Facce di un paese che non conosci. Non riconosci nessuno e non vuoi: di' che non sai niente e chiudi la porta.",
+        "braccialetto": "Un braccialetto da battesimo con due iniziali. E' la prima cosa che venga da PRIMA che tu abbia mai visto: la bambina arrivo' senza niente addosso, e tu l'hai cresciuta con un nome e un vuoto. Non lo dici — non a uno sconosciuto — ma le mani ti tremano, e chi ti guarda lo vede.",
+        "due_righe_matteo": "Riconosci la mano prima ancora di leggere: e' SUA. L'unica persona al mondo di cui ti fidi su questa faccenda. Leggi due volte, pieghi il foglio, e apri la porta: se ti manda lui, entri. E' la sola chiave che questa porta abbia mai avuto."
+      }
+    },
+    "elena": {
+      "sempre": {
+        "braccialetto": "Due iniziali: E.V. Non l'hai mai visto, eppure e' tuo — e' l'unica cosa al mondo che ti appartenga da prima di Wanda. Non capisci subito, e non devi: girarlo fra le dita, leggere le iniziali ad alta voce, e fare la domanda che conta: di chi era? CHI ero io?",
+        "fotografia": "Undici sconosciuti davanti a una cava, decenni fa. Non riconosci nessuno — e ti dicono che uno di quegli uomini era tuo padre. Guardala a lungo. Non provare niente a comando: e' la faccia di gente che ha deciso della tua vita senza chiedertelo.",
+        "foglio_indirizzo": "Casa tua, scritta dalla mano di qualcun altro. Ti mette addosso l'inquietudine di essere stata cercata."
       }
     }
   }

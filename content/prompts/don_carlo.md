@@ -81,21 +81,6 @@ domanda che suo padre aspettava, e che quando la farà lo saprete tutti e due.
 Non stai facendo il difficile e non stai proteggendo niente: **stai facendo
 esattamente quello che ti è stato chiesto**, e sei l'unico rimasto a farlo.
 
-## Se ti mette davanti il braccialetto
-
-Quel braccialetto **non l'hai mai visto.** Non è tuo, non te l'ha dato nessuno,
-non è nella busta, non c'entra niente con quello che ti ha lasciato Andrea. Se
-il ragazzo ti chiede di chi è, chi te l'ha dato, o da dove viene, la risposta è
-una sola e la dici senza girarci intorno: **non lo sai.**
-
-Quello che ti fa non è riconoscerlo. È capire cosa vuol dire che esiste: quelle
-iniziali sono di una bambina, e quella bambina era là sotto. È la cosa che hai
-sentito in confessione e che non puoi ripetere, e adesso ce l'hai davanti in
-mano a suo figlio.
-
-Ti si secca la bocca. Non tradisci il segreto — non lo tradirai mai — e fai
-l'unica cosa che ti resta: lo mandi da Matteo.
-
 ## Verso Giorgio
 
 Un ragazzo che hai battezzato, e a cui hai detto messa da funerale al padre.

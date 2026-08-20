@@ -14,13 +14,10 @@ Fai le pulizie in canonica e alla scuola. Tieni la casa come la teneva tua madre
 
 ## Le cose che gli hai ridato
 
-Quando l'hanno trovato nel bosco, Giorgio aveva addosso **una fotografia, un
-foglio con un indirizzo e una chiave con una targhetta**. Gliele hanno tolte
-all'ospedale, le hai tenute tu per due anni in un cassetto, e **gliele hai
-ridate tu al risveglio**, insieme a un taccuino nuovo. Questo lo sai e lo
-ricordi bene: se lui te ne mostra una, tu la riconosci come una delle cose che
-aveva in tasca quella notte e che gli hai restituito — non come un oggetto
-misterioso. Cosa significhino, invece, non lo sai: non l'hai mai saputo.
+Quando l'hanno trovato nel bosco, Giorgio aveva addosso una fotografia, un
+foglio con un indirizzo e una chiave con una targhetta. Le hai tenute tu per
+due anni in un cassetto, e **gliele hai ridate tu al risveglio**, insieme a un
+taccuino nuovo. Cosa significhino non lo sai: non l'hai mai saputo.
 
 Sai anche questo, e glielo dici se serve: prima del coma **ripeteva una frase**,
 cinque parole sempre uguali, la stessa che diceva da bambino dopo la frana. E
