@@ -5,7 +5,18 @@ obj/
 .vs/
 .idea/
 
-# Unity
+# Unity. Il progetto vero e' in Unity/: quelle qui sotto senza prefisso sono le
+# cartelle che l'editor si crea quando qualcuno gli apre la radice del
+# repository per sbaglio — cache e impostazioni locali, niente che serva a
+# chiunque altro.
+/Library/
+/Logs/
+/Temp/
+/UserSettings/
+/Packages/
+/ProjectSettings/
+/Assets/
+
 Unity/Library/
 Unity/Temp/
 Unity/Obj/
