@@ -141,4 +141,40 @@ public class ConversationSessionTests
 
         Assert.That(session.World.ShownToNpc("matteo"), Does.Not.Contain("frase"));
     }
+
+    /// Il turno muto.
+    ///
+    /// Un modello che segnala una dichiarazione e non scrive niente lasciava il
+    /// giocatore davanti al silenzio: aveva parlato, aveva aspettato, e sullo
+    /// schermo non compariva nessuno — mentre il taccuino si riempiva. E
+    /// capitava proprio nei momenti che contano, perche' e' li' che qualcosa
+    /// viene dichiarato.
+    [Test]
+    public async Task SeSegnalaSenzaParlareLaBattutaELaRigaCheStavaSegnalando()
+    {
+        var world = new WorldState();
+        world.MarkShown("matteo", "frase");
+        var session = Session(FakeAnswers.Calling("dichiaro", """{"id":"non_erano_gite"}""", text: ""), world);
+
+        var turno = await session.TakeTurnAsync("matteo", "Chi passa per primo tiene la porta.");
+
+        Assert.That(turno.Declared, Is.EqualTo(new[] { "non_erano_gite" }));
+        Assert.That(turno.Reply, Is.Not.Empty, "il giocatore non resta mai senza risposta");
+        Assert.That(turno.Reply, Does.Contain("Non erano gite"));
+        Assert.That(session.Log.Recent("matteo", 4).Last().Content, Does.Contain("Non erano gite"),
+            "e la battuta entra nel registro, o al turno dopo il modello legge un vuoto");
+    }
+
+    [Test]
+    public async Task SeParlaLaBattutaRestaLaSua()
+    {
+        var world = new WorldState();
+        world.MarkShown("matteo", "frase");
+        var session = Session(FakeAnswers.Calling("dichiaro", """{"id":"non_erano_gite"}""",
+            text: "Non erano gite, Giorgio. Ci si trovava per altro."), world);
+
+        var turno = await session.TakeTurnAsync("matteo", "Chi passa per primo tiene la porta.");
+
+        Assert.That(turno.Reply, Is.EqualTo("Non erano gite, Giorgio. Ci si trovava per altro."));
+    }
 }

@@ -20,6 +20,11 @@ public sealed class DeclarationService
         _positions = positions;
     }
 
+    /// Il testo canonico di una dichiarazione, come lo direbbe quella persona.
+    /// Serve al motore quando il modello segnala una cosa e non la scrive.
+    public string TextOf(string declarationId, string speakerId) =>
+        _declarations.TextOf(declarationId, speakerId);
+
     public Result Declare(WorldState world, string speakerId, string declarationId)
     {
         if (!_declarations.Has(declarationId))

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Diagnostics;
 using Amnesia.Core;
 using Amnesia.Dialogue;
@@ -116,13 +117,26 @@ public sealed class ConversationSession
             (outcome.IsOk ? declared : refused).Add(id);
         }
 
+        // Un modello che chiama lo strumento e non scrive niente lascia il
+        // giocatore davanti al silenzio: ha parlato, ha aspettato, e sullo
+        // schermo non compare nessuno — mentre il taccuino, lui, si riempie.
+        // Succede quando il turno finisce con la sola chiamata, ed e' proprio
+        // nei momenti che contano, perche' e' li' che qualcosa viene dichiarato.
+        // Quando capita, la battuta e' quella che il personaggio stava
+        // segnalando: il testo c'e' gia', scritto da noi, e nella sua variante.
+        var detto = reply.Value.Text;
+        if (string.IsNullOrWhiteSpace(detto) && declared.Count > 0)
+        {
+            detto = string.Join(" ", declared.Select(id => _declarations.TextOf(id, npcId)));
+        }
+
         // SICUREZZA: il registro viene rigiocato intatto nei prompt dei turni
         // successivi, quindi ci entra solo testo gia' definitivo. Le parole del
         // giocatore sono ovviamente non fidate; quelle del modello lo sono
         // altrettanto, perche' un turno passato che contenesse un blocco forgiato
         // tornerebbe nel prompt come se il mondo l'avesse scritto.
         Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken));
-        Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(reply.Value.Text));
+        Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto));
 
         // Uno scambio costa un minuto. L'attesa della rete non costa niente: e'
         // latenza dell'infrastruttura, non una scelta del giocatore, e farla
@@ -135,7 +149,7 @@ public sealed class ConversationSession
         {
             IsOk = true,
             NpcId = npcId,
-            Reply = reply.Value.Text,
+            Reply = detto,
             RefusedTags = utterance.InvalidTags,
             Declared = declared,
             RefusedDeclarations = refused,
