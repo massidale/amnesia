@@ -56,6 +56,27 @@ GRUPPI = {
         "rpgpp_lt_hanger_clothes_01", "rpgpp_lt_rake_01", "rpgpp_lt_broom_01",
         "rpgpp_lt_stones_01", "rpgpp_lt_flower_01", "rpgpp_lt_flower_02",
     ],
+    # La montagna e' un muro di cubi grigi finche' non ci si appoggia sopra dei
+    # sassi: sono novecentosessantuno celle, ed e' la prima cosa che il giocatore
+    # vede alzando gli occhi.
+    "roccia": [
+        "rpgpp_lt_rock_01", "rpgpp_lt_rock_02", "rpgpp_lt_rock_03",
+        "rpgpp_lt_rock_small_01", "rpgpp_lt_rock_small_02", "rpgpp_lt_rocks_tiny_01",
+        "rpgpp_lt_hill_small_01", "rpgpp_lt_hill_small_02", "rpgpp_lt_mountain_01",
+    ],
+    # Gli steccati separano l'orto dalla strada. Sono la cosa che fa leggere una
+    # fila di case come un paese invece che come edifici messi vicini.
+    "steccato": [
+        "rpgpp_lt_fence_wood_01a", "rpgpp_lt_fence_wood_01b",
+        "rpgpp_lt_fence_wood_01_corner_a", "rpgpp_lt_fence_wood_02a",
+        "rpgpp_lt_fence_wood_02b", "rpgpp_lt_fence_wood_02c",
+    ],
+    "prato": [
+        "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b", "rpgpp_lt_bush_01",
+        "rpgpp_lt_bush_02", "rpgpp_lt_flower_03", "rpgpp_lt_plant_01", "rpgpp_lt_plant_02",
+        "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",
+    ],
+    "cielo": ["rpgpp_lt_sky_01", "rpgpp_lt_cloud_01", "rpgpp_lt_cloud_02"],
     "insegne": [
         "rpgpp_lt_well_01", "rpgpp_lt_wagon_01", "rpgpp_lt_awning_standing_01a",
         "rpgpp_lt_awning_standing_01b", "rpgpp_lt_banner_01a", "rpgpp_lt_banner_01b",

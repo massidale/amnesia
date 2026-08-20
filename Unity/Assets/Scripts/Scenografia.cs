@@ -28,7 +28,7 @@ namespace AmnesiaUnity
 
         /// Quanto e' vestito il paese. Piu' alto, piu' vuoto: e' la frazione di
         /// celle a ridosso di un muro che restano nude.
-        private const float SogliaArredo = 0.86f;
+        private const float SogliaArredo = 0.74f;
 
         private static readonly Color Strada = new Color(0.44f, 0.41f, 0.36f);
         private static readonly Color Prato = new Color(0.33f, 0.38f, 0.24f);
@@ -48,9 +48,12 @@ namespace AmnesiaUnity
         public static void Costruisci(VillageMap mappa, float cella, Transform radice)
         {
             Cielo1987();
+            Volta(mappa, cella, radice);
+            Prateria(mappa, cella, radice);
             Terreno(mappa, cella, radice);
             Volumi(mappa, cella, radice);
             Vegetazione(mappa, cella, radice);
+            Steccato(mappa, cella, radice);
             Arredo(mappa, cella, radice);
             Bordi(mappa, cella, radice);
         }
@@ -98,7 +101,157 @@ namespace AmnesiaUnity
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.ExponentialSquared;
             RenderSettings.fogColor = Cielo;
-            RenderSettings.fogDensity = 0.018f;
+            RenderSettings.fogDensity = 0.014f;
+        }
+
+        /// La cupola del cielo e qualche nuvola.
+        ///
+        /// La macchina da presa continua a pulire in tinta unita: la cupola e'
+        /// geometria, non uno skybox, e le si stampa davanti. Il colore di fondo
+        /// resta quello che c'era, cosi' se il modello non c'e' il cielo e' come
+        /// prima invece che nero.
+        private static void Volta(VillageMap mappa, float cella, Transform radice)
+        {
+            var largo = Mathf.Sqrt(mappa.Width * mappa.Width + mappa.Height * mappa.Height) * cella;
+            var centro = new Vector3(mappa.Width * cella * 0.5f, 0f, -mappa.Height * cella * 0.5f);
+
+            var cupola = Modello("cielo", "rpgpp_lt_sky_01", radice, 0, 0, cella);
+            if (cupola != null)
+            {
+                cupola.name = "cielo";
+                cupola.transform.position = centro;
+                cupola.transform.rotation = Quaternion.identity;
+                // La cupola si misura, non si indovina: un modello comprato puo'
+                // essere alto un metro o duecento, e in un caso sparisce dentro
+                // il paese, nell'altro finisce oltre il piano di taglio della
+                // macchina da presa. Si guarda quanto e' grande e la si porta al
+                // raggio che serve.
+                cupola.transform.localScale = Vector3.one;
+                var quanto = Raggio(cupola);
+                if (quanto > 0.001f)
+                {
+                    cupola.transform.localScale = Vector3.one * (largo * 0.75f / quanto);
+                }
+                // Una cupola che proietta ombra fa notte in pieno giorno.
+                foreach (var pezzo in cupola.GetComponentsInChildren<Renderer>())
+                {
+                    pezzo.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    pezzo.receiveShadows = false;
+                }
+            }
+
+            var nuvole = new GameObject("nuvole").transform;
+            nuvole.SetParent(radice);
+            for (var i = 0; i < 14; i++)
+            {
+                var nuvola = Modello("cielo", i % 2 == 0 ? "rpgpp_lt_cloud_01" : "rpgpp_lt_cloud_02",
+                    nuvole, i * 7, i * 5, cella);
+                if (nuvola == null)
+                {
+                    break;
+                }
+                nuvola.transform.position = centro + new Vector3(
+                    (Caso(i, 3, 41) - 0.5f) * largo * 1.6f,
+                    28f + Caso(i, 5, 43) * 22f,
+                    (Caso(i, 7, 47) - 0.5f) * largo * 1.6f);
+                nuvola.transform.localScale = Vector3.one * (8f + Caso(i, 11, 53) * 9f);
+                foreach (var pezzo in nuvola.GetComponentsInChildren<Renderer>())
+                {
+                    pezzo.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
+            }
+        }
+
+        /// Il prato che c'e' anche dove la mappa finisce.
+        ///
+        /// Prima il paese galleggiava: oltre il bordo non c'era niente, e a
+        /// salvarlo era solo la nebbia. Un piano d'erba largo il doppio della
+        /// mappa costa un quadrato di quattro vertici e toglie l'impressione che
+        /// il mondo sia un tavolino.
+        private static void Prateria(VillageMap mappa, float cella, Transform radice)
+        {
+            var margine = 70f;
+            var larghezza = mappa.Width * cella;
+            var altezza = mappa.Height * cella;
+
+            var falda = new Falda();
+            falda.Quadrato(larghezza * 0.5f, -0.04f, -altezza * 0.5f,
+                Mathf.Max(larghezza, altezza) + margine * 2f);
+            var piano = new GameObject("prato");
+            piano.transform.SetParent(radice);
+            var mesh = falda.Mesh();
+            piano.AddComponent<MeshFilter>().sharedMesh = mesh;
+            piano.AddComponent<MeshRenderer>().sharedMaterial = Materiale(Prato);
+            piano.AddComponent<MeshCollider>().sharedMesh = mesh;
+
+            var ciuffi = new GameObject("erba").transform;
+            ciuffi.SetParent(radice);
+            // Dentro il paese l'erba va sull'erba: sulla strada no, o si cammina
+            // in mezzo ai cespugli.
+            for (var y = 0; y < mappa.Height; y++)
+            {
+                for (var x = 0; x < mappa.Width; x++)
+                {
+                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 59) < 0.35f)
+                    {
+                        continue;
+                    }
+                    var ciuffo = Modello("prato", Scegli(Erba, x, y, 61), ciuffi, x, y, cella);
+                    if (ciuffo != null)
+                    {
+                        ciuffo.transform.localScale = Vector3.one * (0.8f + Caso(x, y, 67) * 0.7f);
+                    }
+                }
+            }
+            // E fuori dal bordo, dove non si arriva ma si vede.
+            for (var i = 0; i < 700; i++)
+            {
+                var x = (int)((Caso(i, 2, 71) * 2f - 0.5f) * mappa.Width);
+                var y = (int)((Caso(i, 4, 73) * 2f - 0.5f) * mappa.Height);
+                if (x >= 0 && x < mappa.Width && y >= 0 && y < mappa.Height)
+                {
+                    continue;
+                }
+                var fuori = Modello("prato", Scegli(Erba, i, i, 79), ciuffi, x, y, cella);
+                if (fuori == null)
+                {
+                    break;
+                }
+                fuori.transform.localScale = Vector3.one * (1f + Caso(i, 6, 83) * 1.4f);
+            }
+        }
+
+        /// Gli steccati fra l'orto e la strada.
+        private static void Steccato(VillageMap mappa, float cella, Transform radice)
+        {
+            var recinti = new GameObject("steccati").transform;
+            recinti.SetParent(radice);
+
+            for (var y = 1; y < mappa.Height - 1; y++)
+            {
+                for (var x = 1; x < mappa.Width - 1; x++)
+                {
+                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 89) < 0.42f || AccantoAUnaPorta(mappa, x, y))
+                    {
+                        continue;
+                    }
+                    // Lo steccato sta sul confine fra l'erba e la strada, e guarda
+                    // la strada: e' un recinto, e un recinto ha un dentro.
+                    float giro;
+                    if (mappa.Rows[y][x + 1] == '.') { giro = 0f; }
+                    else if (mappa.Rows[y][x - 1] == '.') { giro = 180f; }
+                    else if (mappa.Rows[y + 1][x] == '.') { giro = 90f; }
+                    else if (mappa.Rows[y - 1][x] == '.') { giro = 270f; }
+                    else { continue; }
+
+                    var palo = Modello("steccato", Scegli(Steccati, x, y, 97), recinti, x, y, cella);
+                    if (palo != null)
+                    {
+                        palo.transform.position = new Vector3(x * cella, 0f, -y * cella);
+                        palo.transform.rotation = Quaternion.Euler(0f, giro, 0f);
+                    }
+                }
+            }
         }
 
         public static Color ColoreDelCielo => Cielo;
@@ -185,6 +338,19 @@ namespace AmnesiaUnity
                         // una montagna.
                         var scarto = AltezzaMontagna * (0.75f + 0.5f * Caso(x, y, 7));
                         Blocco(monte, pietra, x, y, cella, scarto);
+                        // Un masso appoggiato sopra, ogni tanto. E' quello che
+                        // trasforma una fila di cubi grigi in una parete di
+                        // roccia, e sono le prime cose che si vedono alzando gli
+                        // occhi da qualunque punto del paese.
+                        if (Caso(x, y, 101) > 0.62f)
+                        {
+                            var masso = Modello("roccia", Scegli(Massi, x, y, 103), monte, x, y, cella);
+                            if (masso != null)
+                            {
+                                masso.transform.position += Vector3.up * scarto;
+                                masso.transform.localScale = Vector3.one * (1.1f + Caso(x, y, 107) * 1.6f);
+                            }
+                        }
                     }
                     else if (simbolo == '=')
                     {
@@ -208,21 +374,46 @@ namespace AmnesiaUnity
         }
 
         /// Il bosco. In alto, dove la valle si stringe, sono pini; piu' giu' il
-        /// castagneto, che a ottobre e' mezzo spoglio — per questo fra i modelli
-        /// verdi ce n'e' uno secco: un bosco tutto verde a ottobre non e' un
-        /// bosco, e' un prato in verticale.
-        private static readonly string[] Pini = { "PT_Pine_Tree_03_green", "PT_Pine_Tree_03_dead" };
+        /// castagneto. Niente alberi secchi: un bosco spoglio si legge come un
+        /// posto morto, e questo paese e' pieno di gente che ci vive.
+        private static readonly string[] Pini = { "PT_Pine_Tree_03_green" };
 
         private static readonly string[] Castagni =
         {
-            "PT_Fruit_Tree_01_green", "PT_Fruit_Tree_01_apples",
-            "PT_Fruit_Tree_01_plums", "PT_Fruit_Tree_01_dead",
+            "PT_Fruit_Tree_01_green", "PT_Fruit_Tree_01_apples", "PT_Fruit_Tree_01_plums",
         };
 
         private static readonly string[] Cespugli =
         {
-            "PT_Generic_Shrub_01_green", "PT_Generic_Shrub_01_dead",
+            "PT_Generic_Shrub_01_green",
             "PT_High_Grass_02_v1", "PT_Grass_02", "PT_Grass_02_v1", "PT_Poppy_02",
+        };
+
+        /// Il prato: ciuffi d'erba, cespugli, qualche fiore. Va sull'erba dentro
+        /// il paese e su tutto quello che sta fuori dalla mappa, che altrimenti e'
+        /// un piano verde e basta.
+        private static readonly string[] Erba =
+        {
+            "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b",
+            "rpgpp_lt_bush_01", "rpgpp_lt_bush_02", "rpgpp_lt_flower_03",
+            "rpgpp_lt_plant_01", "rpgpp_lt_plant_02",
+            "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",
+        };
+
+        /// I sassi che si appoggiano sopra la montagna. Un cubo grigio alto sei
+        /// metri e' un muro; lo stesso cubo con tre massi sopra e' una parete di
+        /// roccia, ed e' l'unica differenza fra le due cose.
+        private static readonly string[] Massi =
+        {
+            "rpgpp_lt_rock_01", "rpgpp_lt_rock_02", "rpgpp_lt_rock_03",
+            "rpgpp_lt_rock_small_01", "rpgpp_lt_rock_small_02", "rpgpp_lt_rocks_tiny_01",
+            "rpgpp_lt_hill_small_01", "rpgpp_lt_hill_small_02",
+        };
+
+        private static readonly string[] Steccati =
+        {
+            "rpgpp_lt_fence_wood_01a", "rpgpp_lt_fence_wood_01b",
+            "rpgpp_lt_fence_wood_02a", "rpgpp_lt_fence_wood_02b", "rpgpp_lt_fence_wood_02c",
         };
 
         /// Roba di gente che lavora, non decorazione: botti, casse, sacchi, una
@@ -371,6 +562,24 @@ namespace AmnesiaUnity
                 }
             }
             return false;
+        }
+
+        /// Quanto e' grande un modello, in metri, cosi' com'e' uscito dal
+        /// pacchetto. Serve al cielo, che e' l'unica cosa della scena la cui
+        /// misura giusta non dipende da noi ma da chi l'ha modellata.
+        private static float Raggio(GameObject cosa)
+        {
+            var pezzi = cosa.GetComponentsInChildren<Renderer>();
+            if (pezzi.Length == 0)
+            {
+                return 0f;
+            }
+            var tutto = pezzi[0].bounds;
+            for (var i = 1; i < pezzi.Length; i++)
+            {
+                tutto.Encapsulate(pezzi[i].bounds);
+            }
+            return Mathf.Max(tutto.extents.x, tutto.extents.z);
         }
 
         private static string Scegli(string[] fra, int x, int y, int seme) =>
