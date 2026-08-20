@@ -28,6 +28,7 @@ namespace AmnesiaUnity
         private Transform _giocatore;
         private GameObject _radice;
         private Text _foglio;
+        private ScrollRect _rullo;
         private Text _coda;
         private GameObject _pianta;
         private RectTransform _vista;
@@ -109,7 +110,7 @@ namespace AmnesiaUnity
 
         private void Mostra()
         {
-            _foglio.transform.parent.gameObject.SetActive(_pagina != Pagina.Paese);
+            _rullo.gameObject.SetActive(_pagina != Pagina.Paese);
             _pianta.SetActive(_pagina == Pagina.Paese);
             if (_pagina == Pagina.Paese)
             {
@@ -128,9 +129,15 @@ namespace AmnesiaUnity
             {
                 _foglio.text = Inventario.Righe(_gioco);
             }
+            if (_pagina != Pagina.Paese)
+            {
+                // Una pagina si apre in cima, sempre.
+                Canvas.ForceUpdateCanvases();
+                _rullo.verticalNormalizedPosition = 1f;
+            }
             _coda.text = _pagina == Pagina.Paese
                 ? "esc riprende   ·   tab cambia pagina   ·   rotella per lo zoom, trascina o WASD per spostarti"
-                : "esc riprende   ·   tab e frecce cambiano pagina";
+                : "esc riprende   ·   tab o ← → cambiano pagina   ·   rotella o ↑ ↓ per scorrere";
             foreach (var linguetta in _linguette)
             {
                 var scelta = linguetta.Key == _pagina;
@@ -141,8 +148,20 @@ namespace AmnesiaUnity
 
         private void Update()
         {
-            if (!Aperto || _pagina != Pagina.Paese)
+            if (!Aperto)
             {
+                return;
+            }
+            if (_pagina != Pagina.Paese)
+            {
+                // La rotella scorre solo dove sta il puntatore; le frecce
+                // funzionano ovunque, e qui su e giu' non servono ad altro.
+                var passo = (Premuto(KeyCode.UpArrow) - Premuto(KeyCode.DownArrow)) * Time.unscaledDeltaTime * 0.9f;
+                if (passo != 0f)
+                {
+                    _rullo.verticalNormalizedPosition =
+                        Mathf.Clamp01(_rullo.verticalNormalizedPosition + passo);
+                }
                 return;
             }
             if (_giocatore != null)
@@ -215,9 +234,11 @@ namespace AmnesiaUnity
 
             Stile.Filo(_radice.transform, new Vector2(0.07f, 0.845f), new Vector2(0.93f, 0.848f), Stile.Incavo);
 
-            var feritoia = Stile.Feritoia(_radice.transform, "foglio",
-                new Vector2(0.07f, 0.09f), new Vector2(0.93f, 0.825f));
-            _foglio = Stile.Scritta(feritoia, Stile.Macchina, 16, Stile.Carta, Vector2.zero, Vector2.one);
+            // Le tasche e il taccuino crescono: sette oggetti e trenta righe di
+            // dichiarazioni non stanno in una schermata, e quello che non ci
+            // sta va potuto scorrere invece che tagliato via.
+            _foglio = Stile.Rullo(_radice.transform, Stile.Macchina, 16, Stile.Carta,
+                new Vector2(0.07f, 0.09f), new Vector2(0.93f, 0.825f), out _rullo);
 
             CostruisciLaPianta();
 
