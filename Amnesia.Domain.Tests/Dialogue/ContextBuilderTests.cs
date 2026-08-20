@@ -66,7 +66,8 @@ public class ContextBuilderTests
             new TurnContext { Spoken = "Ho il medaglione", ClockText = "9:12" });
 
         Assert.That(messages[messages.Count - 1].Role, Is.EqualTo(ChatRole.User));
-        Assert.That(Tail(messages), Does.Contain("<stato_mondo>ora: 9:12</stato_mondo>"));
+        Assert.That(Tail(messages), Does.Contain("<parole_giocatore>"),
+            "la coda dinamica c'e', anche senza orologio: l'ora non viaggia piu' nel prompt");
     }
 
     [Test]
@@ -182,7 +183,7 @@ public class ContextBuilderTests
             },
         }));
 
-        Assert.That(Count(text, "<accaduto_di_recente>"), Is.EqualTo(2));
+        Assert.That(Count(text, "<osservazione_motore>"), Is.EqualTo(2));
         Assert.That(text, Does.Contain("<accaduto_di_recente>Vittorio ti ha avvertito: il forestiero fa domande e ha delle carte</accaduto_di_recente>"));
         Assert.That(text.IndexOf("<conoscenze>", StringComparison.Ordinal),
             Is.LessThan(text.IndexOf("<accaduto_di_recente>", StringComparison.Ordinal)),
@@ -349,7 +350,7 @@ public class ContextBuilderTests
             var builder = ConReazioni();
             var turn = new TurnContext { Spoken = "ecco", Svolta = true };
 
-            Assert.That(Coda(builder, new WorldState(), turn), Does.Contain("superare le sei righe"));
+            Assert.That(Coda(builder, new WorldState(), turn), Does.Contain("superare le sei frasi"));
         }
 
         [Test]

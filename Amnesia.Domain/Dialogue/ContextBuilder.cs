@@ -79,10 +79,7 @@ public sealed class ContextBuilder
     /// Lo stato dinamico vive SOLO qui, dopo il prefisso in cache (design §13).
     private string DynamicTail(string npcId, WorldState world, TurnContext turn)
     {
-        var parts = new List<string>
-        {
-            $"<stato_mondo>ora: {turn.ClockText}</stato_mondo>",
-        };
+        var parts = new List<string>();
         var stance = PositionLines(npcId, world);
         if (stance.Length > 0)
         {
@@ -94,9 +91,14 @@ public sealed class ContextBuilder
             // SICUREZZA: una nota la scrive il motore oggi, ma e' stato del mondo —
             // sopravvive a un salvataggio — quindi si neutralizza come ogni altra
             // stringa che entra nel prompt.
-            parts.Add($"<accaduto_di_recente>{PlayerInput.Sanitize(note)}</accaduto_di_recente>");
+            parts.Add($"<osservazione_motore>{PlayerInput.Sanitize(note)}</osservazione_motore>");
         }
         var gradini = _positions?.ReachedIds(npcId, world) ?? Array.Empty<string>();
+        // L'autorizzazione a sforare non ha un canale suo: si cuce in coda al
+        // primo copione del turno, che e' dove il modello sta gia' guardando.
+        var codaDiSvolta = turn.Svolta
+            ? " Quello che e' appena successo cambia le cose: racconta per esteso, con calma — stavolta puoi superare le sei frasi."
+            : "";
         foreach (var itemId in turn.ShownItemIds)
         {
             // SICUREZZA: le descrizioni degli oggetti sono d'autore, ma restano
@@ -108,23 +110,22 @@ public sealed class ContextBuilder
             parts.Add("<osservazione_motore>Il giocatore ti mostra una cosa SUA, che tiene in mano lui: "
                 + PlayerInput.Sanitize(_items.VisibleOf(itemId))
                 + " L'oggetto appartiene a lui e se lo riporta via lui.</osservazione_motore>");
-            parts.Add(ComeReagisci(npcId, gradini, itemId));
+            parts.Add(ComeReagisci(npcId, gradini, itemId, codaDiSvolta));
+            codaDiSvolta = "";
         }
         if (turn.FraseDetta)
         {
             var reazione = _reactions.Reazione(npcId, gradini, "frase");
             if (reazione.Length > 0)
             {
-                parts.Add($"<come_reagisci>{PlayerInput.Sanitize(reazione)}</come_reagisci>");
+                parts.Add($"<come_reagisci>{PlayerInput.Sanitize(reazione)}{codaDiSvolta}</come_reagisci>");
+                codaDiSvolta = "";
             }
         }
-        if (turn.Svolta)
+        if (codaDiSvolta.Length > 0)
         {
-            // L'unica istruzione di lunghezza che il motore concede: nei momenti
-            // in cui la storia si muove, sei righe sono una tagliola.
-            parts.Add("<istruzione>Quello che hai appena visto o sentito cambia le cose: questo e' un "
-                + "momento importante. Racconta per esteso, con calma, tutto quello che la tua posizione "
-                + "ti permette di dire adesso — stavolta puoi superare le sei righe.</istruzione>");
+            // Svolta senza un copione a cui cucirla: il blocco nasce solo per lei.
+            parts.Add($"<come_reagisci>{codaDiSvolta.TrimStart()}</come_reagisci>");
         }
         // SICUREZZA: le parole del giocatore non sono fidate — si neutralizzano
         // perche' non possano forgiare blocchi.
@@ -134,7 +135,7 @@ public sealed class ContextBuilder
 
     /// Il copione per l'oggetto sul banco. Se nessuno ha scritto una voce, il
     /// ripiego e' la regola di ferro: questa cosa non la conosci, dillo.
-    private string ComeReagisci(string npcId, IReadOnlyList<string> gradini, string itemId)
+    private string ComeReagisci(string npcId, IReadOnlyList<string> gradini, string itemId, string coda = "")
     {
         var reazione = _reactions.Reazione(npcId, gradini, itemId);
         if (reazione.Length == 0)
@@ -143,7 +144,7 @@ public sealed class ContextBuilder
                 + "senza inventare, senza dedurre e senza fare nomi.";
         }
         // SICUREZZA: testo d'autore, ma passa dal prompt come tutto il resto.
-        return $"<come_reagisci>{PlayerInput.Sanitize(reazione)}</come_reagisci>";
+        return $"<come_reagisci>{PlayerInput.Sanitize(reazione)}{coda}</come_reagisci>";
     }
 
     /// Cio' che questo personaggio, oggi, ritiene di poter dire — in prima persona
