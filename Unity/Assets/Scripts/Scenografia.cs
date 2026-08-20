@@ -60,8 +60,13 @@ namespace AmnesiaUnity
         /// vedere il bordo della mappa.
         private static readonly Color Cielo = new Color(0.58f, 0.60f, 0.62f);
 
+        private static VillageMap _mappa;
+        private static float _cella = 1f;
+
         public static void Costruisci(VillageMap mappa, float cella, Transform radice)
         {
+            _mappa = mappa;
+            _cella = cella;
             Cielo1987();
             Volta(mappa, cella, radice);
             Prateria(mappa, cella, radice);
@@ -244,6 +249,34 @@ namespace AmnesiaUnity
 
         public static Color ColoreDelCielo => Cielo;
 
+        /// Il lieve saliscendi del terreno aperto: un prato non e' un pavimento.
+        /// Zero sulle soglie e nei pavimenti, che restano piani.
+        private static float Rilievo(float px, float pz) =>
+            (Mathf.PerlinNoise(px * 0.09f + 5.2f, pz * 0.09f + 2.8f) - 0.5f) * 0.3f;
+
+        /// La quota del suolo in un punto, per chiunque debba appoggiarci
+        /// qualcosa: un ciuffo, una figura, una cassa. Il terreno lo costruisce
+        /// questa classe, quindi solo questa classe sa quanto e' alto.
+        public static float QuotaTerra(float px, float pz)
+        {
+            if (_mappa == null)
+            {
+                return 0f;
+            }
+            var x = Mathf.Clamp(Mathf.RoundToInt(px / _cella), 0, _mappa.Width - 1);
+            var y = Mathf.Clamp(Mathf.RoundToInt(-pz / _cella), 0, _mappa.Height - 1);
+            var simbolo = _mappa.Rows[y][x];
+            if (simbolo == '~' || simbolo == '+')
+            {
+                return 0.02f;
+            }
+            if (simbolo == '.' || simbolo == ',' || simbolo == '"')
+            {
+                return Rilievo(px, pz);
+            }
+            return 0f;
+        }
+
         /// Il colore di un simbolo della mappa. Lo chiedono in due — il paese in
         /// tre dimensioni e la pianta nel menu — e devono rispondere uguale, o
         /// la carta che il giocatore guarda non e' del posto in cui cammina.
@@ -272,6 +305,10 @@ namespace AmnesiaUnity
             };
             var falde = new Dictionary<char, Falda>();
 
+            bool Interno(int ax, int ay) =>
+                ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height
+                && (mappa.Rows[ay][ax] == '~' || mappa.Rows[ay][ax] == '+');
+
             for (var y = 0; y < mappa.Height; y++)
             {
                 for (var x = 0; x < mappa.Width; x++)
@@ -280,49 +317,53 @@ namespace AmnesiaUnity
                     // Sotto i muri e la montagna il terreno c'e' lo stesso: senza,
                     // ogni porta si aprirebbe sul vuoto.
                     var chiave = quote.ContainsKey(simbolo) ? simbolo : '.';
+                    // Sotto un muro che tocca una stanza — di lato O d'angolo — il
+                    // suolo e' pavimento, non prato: la lastra sta al centro della
+                    // cella, e mezza cella resta in vista da dentro. Era il verde
+                    // che spuntava negli angoli delle case e ai lati dell'ingresso.
+                    if (simbolo == '#')
+                    {
+                        for (var dy = -1; dy <= 1 && chiave != '~'; dy++)
+                        {
+                            for (var dx = -1; dx <= 1; dx++)
+                            {
+                                if ((dx != 0 || dy != 0) && Interno(x + dx, y + dy))
+                                {
+                                    chiave = '~';
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    // Il sentiero e' fatto di mattonelle appoggiate sull'erba: il
+                    // suolo sotto e' prato come tutto il resto.
+                    if (simbolo == ',')
+                    {
+                        chiave = '.';
+                    }
                     if (!falde.TryGetValue(chiave, out var falda))
                     {
                         falda = new Falda();
                         falde[chiave] = falda;
                     }
-                    falda.Quadrato(x * cella, quote[chiave], -y * cella, cella);
-                }
-            }
-
-            // Il pavimento continua fino allo spigolo. La lastra del muro sta al
-            // CENTRO della cella '#': senza queste strisce, fra il bordo della
-            // stanza e il muro si vedrebbe il prato spuntare in casa.
-            if (falde.TryGetValue('~', out var legno))
-            {
-                const float quotaLegno = 0.02f;
-                for (var y = 0; y < mappa.Height; y++)
-                {
-                    for (var x = 0; x < mappa.Width; x++)
+                    if (chiave == '.' || chiave == '"')
                     {
-                        if (mappa.Rows[y][x] != '#')
-                        {
-                            continue;
-                        }
-                        bool Legno(int ax, int ay) =>
-                            ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height
-                            && (mappa.Rows[ay][ax] == '~' || mappa.Rows[ay][ax] == '+');
-                        foreach (var (dx, dy) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
-                        {
-                            if (!Legno(x + dx, y + dy))
-                            {
-                                continue;
-                            }
-                            // Mezza cella, dal bordo condiviso al centro del muro.
-                            var xa = (x + (dx < 0 ? -0.5f : 0f)) * cella;
-                            var xb = (x + (dx > 0 ? 0.5f : 0f)) * cella;
-                            var za = -(y + (dy > 0 ? 0.5f : 0f)) * cella;
-                            var zb = -(y + (dy < 0 ? -0.5f : 0f)) * cella;
-                            if (dx == 0) { xa = (x - 0.5f) * cella; xb = (x + 0.5f) * cella; }
-                            if (dy == 0) { za = (y + 0.5f) * -cella; zb = (y - 0.5f) * -cella; }
-                            legno.Quadrilatero(
-                                new Vector3(xa, quotaLegno, za), new Vector3(xa, quotaLegno, zb),
-                                new Vector3(xb, quotaLegno, zb), new Vector3(xb, quotaLegno, za));
-                        }
+                        // Un prato non e' un pavimento: gli angoli di ogni cella
+                        // seguono lo stesso rumore, quindi le celle si cuciono e
+                        // il suolo ondeggia appena.
+                        var xa = x * cella - cella * 0.5f;
+                        var xb = x * cella + cella * 0.5f;
+                        var za = -y * cella - cella * 0.5f;
+                        var zb = -y * cella + cella * 0.5f;
+                        falda.Quadrilatero(
+                            new Vector3(xa, Rilievo(xa, za), za),
+                            new Vector3(xa, Rilievo(xa, zb), zb),
+                            new Vector3(xb, Rilievo(xb, zb), zb),
+                            new Vector3(xb, Rilievo(xb, za), za));
+                    }
+                    else
+                    {
+                        falda.Quadrato(x * cella, quote.TryGetValue(chiave, out var q) ? q : 0f, -y * cella, cella);
                     }
                 }
             }
@@ -337,6 +378,46 @@ namespace AmnesiaUnity
                 // Il terreno si vede *e* si calpesta. Senza questo il giocatore
                 // parte, la gravita' lo prende, e precipita attraverso il paese.
                 go.AddComponent<MeshCollider>().sharedMesh = mesh;
+            }
+
+            Sentiero(mappa, cella, radice);
+        }
+
+        /// Il sentiero come mattonelle appoggiate sull'erba, una per cella ','.
+        /// Il bordo lo fa la sagoma della mattonella, non lo spigolo della
+        /// griglia: e' quello che lo toglie dall'aria squadrata.
+        private static void Sentiero(VillageMap mappa, float cella, Transform radice)
+        {
+            var sentiero = new GameObject("sentiero").transform;
+            sentiero.SetParent(radice);
+            for (var y = 0; y < mappa.Height; y++)
+            {
+                for (var x = 0; x < mappa.Width; x++)
+                {
+                    if (mappa.Rows[y][x] != ',')
+                    {
+                        continue;
+                    }
+                    var nome = Caso(x, y, 149) > 0.5f ? "rpgpp_lt_terrain_path_01a" : "rpgpp_lt_terrain_path_01b";
+                    var mattonella = Modello("prato", nome, sentiero, x, y, cella);
+                    if (mattonella == null)
+                    {
+                        return;
+                    }
+                    // Alla misura della cella, misurata e non stimata, e girata
+                    // solo di quarti: una mattonella storta di 37 gradi lascia
+                    // buchi ai lati.
+                    var mezzaMisura = Raggio(mattonella);
+                    if (mezzaMisura > 0.001f)
+                    {
+                        var fattore = cella / (mezzaMisura * 2f);
+                        mattonella.transform.localScale = Vector3.one * fattore;
+                    }
+                    mattonella.transform.position = new Vector3(
+                        x * cella, 0.015f + Rilievo(x * cella, -y * cella), -y * cella);
+                    mattonella.transform.rotation =
+                        Quaternion.Euler(0f, 90f * (int)(Caso(x, y, 151) * 4f), 0f);
+                }
             }
         }
 
@@ -524,14 +605,14 @@ namespace AmnesiaUnity
         /// panetteria e uno stendardo addosso a Lidia, e in mezzo alla stanza un
         /// telo bianco e' esattamente cio' che il giocatore attraversa senza
         /// capire cos'era.
+        /// Tre oggetti in tutto il paese, dove hanno un senso fisico: il pozzo
+        /// nella piazza, il carro al deposito, la casetta nel giardino. Tende,
+        /// stendardi e capannoni davanti alle porte sono stati tolti: messi dal
+        /// codice sembravano messi a caso, perche' lo erano.
         private static readonly Dictionary<string, string> Insegne = new Dictionary<string, string>
         {
             ["piazza"] = "rpgpp_lt_well_01",
             ["deposito"] = "rpgpp_lt_wagon_01",
-            ["panetteria"] = "rpgpp_lt_awning_standing_01a",
-            ["negozio"] = "rpgpp_lt_awning_standing_01b",
-            ["bar"] = "rpgpp_lt_banner_01a",
-            ["bottega"] = "rpgpp_lt_shed_wood_01",
             ["giardino"] = "rpgpp_lt_bird_house_01",
         };
 
@@ -967,8 +1048,11 @@ namespace AmnesiaUnity
                 return null;
             }
             var istanza = Object.Instantiate(prefab, genitore);
-            istanza.transform.position = new Vector3(
-                (x + Caso(x, y, 19) * 0.4f - 0.2f) * cella, 0f, -(y + Caso(x, y, 23) * 0.4f - 0.2f) * cella);
+            var px = (x + Caso(x, y, 19) * 0.4f - 0.2f) * cella;
+            var pz = -(y + Caso(x, y, 23) * 0.4f - 0.2f) * cella;
+            // Al suolo vero, non a quota zero: da quando il prato ondeggia, un
+            // oggetto a zero su un avvallamento galleggia.
+            istanza.transform.position = new Vector3(px, QuotaTerra(px, pz), pz);
             istanza.transform.rotation = Quaternion.Euler(0f, Caso(x, y, 29) * 360f, 0f);
             return istanza;
         }

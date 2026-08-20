@@ -78,6 +78,7 @@ GRUPPI = {
         "rpgpp_lt_fence_wood_02b", "rpgpp_lt_fence_wood_02c",
     ],
     "prato": [
+        "rpgpp_lt_terrain_path_01a", "rpgpp_lt_terrain_path_01b",
         "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b", "rpgpp_lt_bush_01",
         "rpgpp_lt_bush_02", "rpgpp_lt_flower_03", "rpgpp_lt_plant_01", "rpgpp_lt_plant_02",
         "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",

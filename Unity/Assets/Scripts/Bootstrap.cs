@@ -355,7 +355,11 @@ namespace AmnesiaUnity
                 var figura = Figura(pair.Key, pair.Value);
                 figura.name = pair.Key;
                 figura.transform.SetParent(gente);
-                figura.transform.position = InScena(posizione.Value);
+                var dove = InScena(posizione.Value);
+                // I piedi sul suolo vero: il prato ondeggia, e una figura a quota
+                // zero su un dosso affonda fino al ginocchio.
+                dove.y = Scenografia.QuotaTerra(dove.x, dove.z);
+                figura.transform.position = dove;
                 _corpi[pair.Key] = figura.transform;
             }
         }
