@@ -173,53 +173,53 @@ namespace AmnesiaUnity
         /// il mondo sia un tavolino.
         private static void Prateria(VillageMap mappa, float cella, Transform radice)
         {
-            var margine = 70f;
             var larghezza = mappa.Width * cella;
             var altezza = mappa.Height * cella;
+            const float margine = 90f;
+            const int passi = 30;
+
+            // Il prato oltre i bordi non e' un tavolo: e' campagna che ondeggia.
+            // La quota parte da zero al confine — deve cucirsi col terreno del
+            // paese, che resta piatto perche' la gente ci cammina e le figure ci
+            // stanno appoggiate — e cresce allontanandosi, fino a qualche metro
+            // di dosso. Il rumore e' Perlin: continuo, deterministico, niente
+            // cupole appoggiate.
+            float Quota(float px, float pz)
+            {
+                var fuoriX = Mathf.Max(0f, Mathf.Max(-0.5f * cella - px, px - (larghezza - 0.5f * cella)));
+                var fuoriZ = Mathf.Max(0f, Mathf.Max(pz - 0.5f * cella, (0.5f * cella - altezza) - pz));
+                var lontananza = fuoriX + fuoriZ;
+                var ampiezza = Mathf.Min(lontananza / 22f, 1f) * 5f;
+                var onda = Mathf.PerlinNoise(px * 0.025f + 31.7f, pz * 0.025f + 11.3f) - 0.3f;
+                return onda * ampiezza - 0.04f;
+            }
 
             var falda = new Falda();
-            falda.Quadrato(larghezza * 0.5f, -0.04f, -altezza * 0.5f,
-                Mathf.Max(larghezza, altezza) + margine * 2f);
+            var lato = Mathf.Max(larghezza, altezza) + margine * 2f;
+            var passo = lato / passi;
+            var x0 = larghezza * 0.5f - lato * 0.5f;
+            var z0 = -altezza * 0.5f - lato * 0.5f;
+            for (var i = 0; i < passi; i++)
+            {
+                for (var j = 0; j < passi; j++)
+                {
+                    var xa = x0 + i * passo;
+                    var xb = xa + passo;
+                    var za = z0 + j * passo;
+                    var zb = za + passo;
+                    falda.Quadrilatero(
+                        new Vector3(xa, Quota(xa, za), za),
+                        new Vector3(xa, Quota(xa, zb), zb),
+                        new Vector3(xb, Quota(xb, zb), zb),
+                        new Vector3(xb, Quota(xb, za), za));
+                }
+            }
             var piano = new GameObject("prato");
             piano.transform.SetParent(radice);
             var mesh = falda.Mesh();
             piano.AddComponent<MeshFilter>().sharedMesh = mesh;
             piano.AddComponent<MeshRenderer>().sharedMaterial = Materiale(VerdeLontano);
             piano.AddComponent<MeshCollider>().sharedMesh = mesh;
-
-            // Le colline all'orizzonte. Sono le cupole verdi di prima, ma al loro
-            // posto: A TERRA, in un anello fuori dai bordi, e misurate — si porta
-            // ognuna a un'altezza voluta invece di scalarla alla cieca. Spuntano
-            // sopra il profilo della montagna e chiudono la valle di verde.
-            var colline = new GameObject("colline").transform;
-            colline.SetParent(radice);
-            for (var i = 0; i < 24; i++)
-            {
-                var poggio = Modello("roccia",
-                    i % 2 == 0 ? "rpgpp_lt_hill_small_01" : "rpgpp_lt_hill_small_02",
-                    colline, i * 11, i * 7, cella);
-                if (poggio == null)
-                {
-                    break;
-                }
-                var voluta = 9f + Caso(i, 21, 139) * 16f;
-                var misurata = AltezzaDi(poggio);
-                var fattore = misurata > 0.01f ? voluta / misurata : 1f;
-                poggio.transform.localScale = Vector3.one * fattore;
-
-                // Una collina alta venti metri e' larga magari sessanta: se il
-                // centro sta a dodici metri dal bordo, la falda entra in paese e
-                // sbuca dentro le case. Si misura il raggio e la si spinge fuori
-                // di ALMENO quel raggio: il piede resta sempre oltre il confine.
-                var piede = Raggio(poggio) * fattore;
-                var giro = i / 24f * Mathf.PI * 2f;
-                var fuoriX = larghezza * 0.5f + piede + 6f + Caso(i, 9, 131) * 30f;
-                var fuoriZ = altezza * 0.5f + piede + 6f + Caso(i, 15, 137) * 30f;
-                poggio.transform.position = new Vector3(
-                    larghezza * 0.5f + Mathf.Cos(giro) * fuoriX,
-                    0f,
-                    -altezza * 0.5f + Mathf.Sin(giro) * fuoriZ);
-            }
 
             var ciuffi = new GameObject("erba").transform;
             ciuffi.SetParent(radice);
@@ -286,6 +286,44 @@ namespace AmnesiaUnity
                         falde[chiave] = falda;
                     }
                     falda.Quadrato(x * cella, quote[chiave], -y * cella, cella);
+                }
+            }
+
+            // Il pavimento continua fino allo spigolo. La lastra del muro sta al
+            // CENTRO della cella '#': senza queste strisce, fra il bordo della
+            // stanza e il muro si vedrebbe il prato spuntare in casa.
+            if (falde.TryGetValue('~', out var legno))
+            {
+                const float quotaLegno = 0.02f;
+                for (var y = 0; y < mappa.Height; y++)
+                {
+                    for (var x = 0; x < mappa.Width; x++)
+                    {
+                        if (mappa.Rows[y][x] != '#')
+                        {
+                            continue;
+                        }
+                        bool Legno(int ax, int ay) =>
+                            ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height
+                            && (mappa.Rows[ay][ax] == '~' || mappa.Rows[ay][ax] == '+');
+                        foreach (var (dx, dy) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+                        {
+                            if (!Legno(x + dx, y + dy))
+                            {
+                                continue;
+                            }
+                            // Mezza cella, dal bordo condiviso al centro del muro.
+                            var xa = (x + (dx < 0 ? -0.5f : 0f)) * cella;
+                            var xb = (x + (dx > 0 ? 0.5f : 0f)) * cella;
+                            var za = -(y + (dy > 0 ? 0.5f : 0f)) * cella;
+                            var zb = -(y + (dy < 0 ? -0.5f : 0f)) * cella;
+                            if (dx == 0) { xa = (x - 0.5f) * cella; xb = (x + 0.5f) * cella; }
+                            if (dy == 0) { za = (y + 0.5f) * -cella; zb = (y - 0.5f) * -cella; }
+                            legno.Quadrilatero(
+                                new Vector3(xa, quotaLegno, za), new Vector3(xa, quotaLegno, zb),
+                                new Vector3(xb, quotaLegno, zb), new Vector3(xb, quotaLegno, za));
+                        }
+                    }
                 }
             }
 
