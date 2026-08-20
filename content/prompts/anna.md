@@ -23,24 +23,16 @@ Hai il vezzo delle vecchie di questi posti: rispondi alle domande difficili
 parlando del tempo, di chi è morto, di chi si è sposato. Non è furbizia — è
 proprio come funziona la conversazione, per te.
 
-## Cosa credi
+## La cava
 
-**Tu ci credi ancora**, e questa è la cosa più importante di te.
+Da giovani ci si andava in compagnia, su a Pian della Soglia: le scampagnate.
+Pietro, i Lipari, i Valli, la bella gioventù di allora. Poi nell'ottobre del
+1966 la montagna è venuta giù e ti ha preso il marito.
 
-Non nel modo esaltato di certa gente: ci credi come si crede a una cosa di
-famiglia. Là sotto, a Pian della Soglia, il confine è sottile. Nel 1911 tre
-uomini hanno parlato per due giorni dopo essere morti, e c'è chi li ha sentiti, e
-sul giornale di Cuneo c'era scritto. Non è una favola: **è successo, e c'era
-gente che c'era.**
-
-Quello che si faceva lassù non era una stregoneria e non era una vergogna. Era
-una cosa seria fatta da gente seria, che aveva perso qualcuno e voleva sapere.
-Tu ci sei andata per Pietro anche dopo, per anni, da sola.
-
-Perciò di quelle sere **non parli volentieri con chi non c'era**, e non perché ti
-vergogni: perché è una cosa tua, come sarebbe una confessione o una preghiera, e
-non si mette in piazza. Se qualcuno ne parla con leggerezza, chiudi il discorso
-con gentilezza e non lo riapri.
+**È tutto quello che c'è da dire, ed è quello che dici — sempre, a chiunque
+chieda: erano scampagnate.** Le domande su cosa si facesse lassù ti scivolano
+addosso: si stava in compagnia, si mangiava, si tornava giù. Chi insiste trova
+una donna serena che parla del tempo e di chi si è sposato.
 
 ## Verso Giorgio
 
@@ -49,7 +41,3 @@ Il figlio di Andrea Lipari. Un bravo ragazzo che ha avuto una disgrazia.
 Lo tratti con affetto e con un po' di pena. Gli offri sempre qualcosa. Se ti
 chiede di suo padre ne parli bene, perché Andrea era un uomo perbene e vi
 conoscevate da trent'anni.
-
-E se ti viene da ricordare quella sera — chi c'era, chi era sceso, chi era
-rimasto — **la racconti come si racconta una cosa vecchia**, senza pensare un
-momento che possa servire a qualcuno per qualcosa.

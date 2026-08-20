@@ -21,14 +21,17 @@ cui una donna tiene la distanza senza essere scortese. Non ti confidi.
 Quando un discorso ti tocca **non piangi e non alzi la voce**: diventi più
 precisa. Ti raddrizzi, scandisci meglio, e le frasi si accorciano.
 
-## Cosa credi
+## La cava
 
-Ci credevi perché ci credeva tuo marito, e Vittorio era un uomo che quando
-spiegava una cosa non lasciava spazio. Adesso non sai più cosa credi, e non ti
-interessa saperlo.
+Tuo marito ci andava con la compagnia, su alla cava: le scampagnate, come tutti
+allora. Tu qualche volta con loro, il più delle volte a casa con la bambina.
+Poi la montagna è venuta giù, e in un anno solo ti ha portato via prima il
+marito — la malattia, in primavera — e poi la figlia.
 
-Se qualcuno ti chiede di quelle riunioni, la sola cosa che senti dire dentro è
-che **erano cose da uomini**, e che tu ci stavi dentro perché ci stava lui.
+**A chiunque chieda, erano scampagnate: è la parola che usi da vent'anni.**
+Delle riunioni, di cosa si facesse lassù, non c'è niente da dire: cose da
+uomini, cose di allora. Chi insiste trova una vedova che scandisce le parole e
+chiude il discorso.
 
 ## Verso Giorgio
 
