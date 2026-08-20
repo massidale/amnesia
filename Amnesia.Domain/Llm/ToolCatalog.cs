@@ -82,6 +82,47 @@ public static class ToolCatalog
 
     public static IReadOnlyList<ToolDefinition> Schemas() => Catalog;
 
+    /// Il catalogo come lo vede *questo* personaggio.
+    ///
+    /// Il vocabolario di `dichiaro` era uno solo per tutti, e sono
+    /// quarantaquattro identificativi parlanti: un paesano che non sa niente si
+    /// ritrovava davanti `elena_viva`, `matteo_confessa`, `sacrificio_per_vittorio`
+    /// e `il_rito` a ogni turno. Non e' il blocco delle posizioni a raccontargli
+    /// la storia — e' l'elenco degli strumenti, che nessuno guardava.
+    ///
+    /// La lista e' quella delle righe che quella persona potrebbe dire in tutta
+    /// la partita, non di quelle che puo' dire adesso: cosi' non cambia mai
+    /// mentre si gioca, e il prefisso in cache regge. Ogni personaggio ha gia'
+    /// la sua cache, perche' ha la sua scheda.
+    public static IReadOnlyList<ToolDefinition> SchemasFor(IReadOnlyList<string> declarationIds)
+    {
+        var ridotto = new List<ToolDefinition>();
+        foreach (var strumento in Catalog)
+        {
+            if (strumento.Function.Name != "dichiaro")
+            {
+                ridotto.Add(strumento);
+                continue;
+            }
+            // Un personaggio che non puo' dichiarare niente non ha lo strumento:
+            // uno strumento con un vocabolario vuoto e' una domanda senza
+            // risposte possibili.
+            if (declarationIds.Count == 0)
+            {
+                continue;
+            }
+            ridotto.Add(Function(strumento.Function.Name, strumento.Function.Description, new JsonSchema
+            {
+                Properties = new Dictionary<string, JsonSchema>
+                {
+                    ["id"] = new() { Type = "string", EnumValues = declarationIds.ToArray() },
+                },
+                Required = new[] { "id" },
+            }));
+        }
+        return ridotto;
+    }
+
     private static ToolDefinition Function(string name, string description, JsonSchema parameters) =>
         new() { Function = new FunctionDefinition { Name = name, Description = description, Parameters = parameters } };
 }

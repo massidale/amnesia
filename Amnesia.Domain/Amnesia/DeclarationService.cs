@@ -20,6 +20,27 @@ public sealed class DeclarationService
         _positions = positions;
     }
 
+    /// Tutto cio' che questa persona potrebbe dire nell'arco della partita —
+    /// non adesso: mai. Serve a ritagliarle addosso il vocabolario chiuso dello
+    /// strumento, e per questo non deve dipendere dallo stato: un elenco che
+    /// cambia a ogni gradino ricomprerebbe il prefisso del prompt ogni volta.
+    public IReadOnlyList<string> EverSayable(string npcId)
+    {
+        if (_positions.HasLadder(npcId))
+        {
+            var tutte = new List<string>();
+            foreach (var id in _positions.AllGrants(npcId))
+            {
+                if (!tutte.Contains(id))
+                {
+                    tutte.Add(id);
+                }
+            }
+            return tutte;
+        }
+        return _declarations.Ids.Where(id => _declarations.Find(id)!.Sources.Contains(npcId)).ToList();
+    }
+
     /// Il testo canonico di una dichiarazione, come lo direbbe quella persona.
     /// Serve al motore quando il modello segnala una cosa e non la scrive.
     public string TextOf(string declarationId, string speakerId) =>

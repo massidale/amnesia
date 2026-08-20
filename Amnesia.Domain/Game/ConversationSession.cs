@@ -94,7 +94,8 @@ public sealed class ConversationSession
         var messages = _context.Build(npcId, draft, Log.Recent(npcId, HistoryWindow), turn).ToWire();
 
         var stopwatch = Stopwatch.StartNew();
-        var reply = await _transport.ChatAsync(_model, messages, ToolCatalog.Schemas(), cancellationToken)
+        var reply = await _transport
+            .ChatAsync(_model, messages, ToolCatalog.SchemasFor(_declarations.EverSayable(npcId)), cancellationToken)
             .ConfigureAwait(false);
         stopwatch.Stop();
 

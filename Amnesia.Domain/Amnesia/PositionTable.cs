@@ -129,6 +129,13 @@ public sealed class PositionTable
     }
 
     /// Gli id delle dichiarazioni che questo personaggio POSSIEDE adesso.
+    /// Tutto quello che la scala concede, dal primo gradino all'ultimo,
+    /// indipendentemente da dove si e' arrivati.
+    public IReadOnlyList<string> AllGrants(string npcId) =>
+        _ladders.TryGetValue(npcId, out var scala)
+            ? scala.SelectMany(gradino => gradino.Grants).ToList()
+            : (IReadOnlyList<string>)Array.Empty<string>();
+
     public IReadOnlyList<string> Granted(string npcId, WorldState world)
     {
         var granted = new List<string>();
