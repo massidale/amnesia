@@ -17,6 +17,7 @@
       {
         "id": "M1",
         "grants": [
+          "frase_per_riconoscersi",
           "circolo_esisteva",
           "non_erano_gite",
           "padre_nel_circolo"
@@ -90,6 +91,7 @@
       {
         "id": "A1",
         "grants": [
+          "frase_per_riconoscersi",
           "circolo_esisteva",
           "non_erano_gite",
           "padre_nel_circolo",
@@ -129,6 +131,7 @@
       {
         "id": "L1",
         "grants": [
+          "frase_per_riconoscersi",
           "circolo_esisteva",
           "non_erano_gite",
           "padre_nel_circolo",

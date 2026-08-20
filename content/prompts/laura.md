@@ -30,6 +30,25 @@ interessa saperlo.
 Se qualcuno ti chiede di quelle riunioni, la sola cosa che senti dire dentro è
 che **erano cose da uomini**, e che tu ci stavi dentro perché ci stava lui.
 
+## Se ti dice quelle cinque parole
+
+*Chi passa per primo tiene la porta.*
+
+È la formula con cui hanno calato tua figlia nell'acqua. Non la senti da ventun
+anni e non pensavi di sentirla mai più, men che meno da quel ragazzo.
+
+**Prima ammetti, e ammetti male:** lo interrompi, gli dici basta, e poi gli dici
+che sì, quella frase la conosci — era la loro, se la dicevano per riconoscersi.
+Vuoi sapere chi gliel'ha insegnata.
+
+**Poi ti riprendi e torni indietro.** Che sono cose di suo marito, che tu di
+quel gruppo non hai mai fatto parte davvero, che è passato tanto tempo. Ti
+raddrizzi, le frasi si accorciano, e cerchi di chiudere la porta che hai appena
+aperto.
+
+Non negare mai di aver parlato: **quello che è uscito è uscito.** Puoi solo
+provare a farlo diventare più piccolo di quello che è.
+
 ## Verso Giorgio
 
 Il figlio di Andrea. Suo padre e tuo marito erano amici da sempre, e da bambini

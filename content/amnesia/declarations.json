@@ -414,7 +414,10 @@
         "nino",
         "don_carlo",
         "teresa",
-        "lidia"
+        "lidia",
+        "anna",
+        "laura",
+        "matteo"
       ],
       "requires_shown": [
         "frase"
@@ -424,7 +427,10 @@
         "nino": "Ah, adesso sì. Era quella. Se la dicevano fra loro per farsi riconoscere, come una parola d'ordine.",
         "don_carlo": "…Sì. Era quella. Se la dicevano per riconoscersi, figliolo. Non chiedermi altro.",
         "teresa": "Oh! Ma sì, era quella lì! Se la dicevano fra loro, per farsi capire che erano dei loro.",
-        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata."
+        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata.",
+        "anna": "…Dove l'hai sentita, quella. …Sì. Sì, la so. Era la nostra: se la dicevamo fra noi, per riconoscerci.",
+        "laura": "…Basta. Basta così. …Sì, la conosco. Era quella che si dicevano fra loro, per riconoscersi. Chi te l'ha insegnata?",
+        "matteo": "C-come fai a saperla, tu? …Chi te l'ha detta? …Sì, va bene, la so. Era una cosa che ci si diceva fra noi, per riconoscersi. Roba di ragazzi, Giorgio. Roba vecchia."
       }
     },
     "foto_anna_e_pietro": {
