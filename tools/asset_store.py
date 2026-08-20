@@ -45,6 +45,7 @@ PACCHETTI = [
 # invece di spostare romperebbe tutto — due file con lo stesso GUID.
 GRUPPI = {
     "natura": [
+        "rpgpp_lt_tree_01", "rpgpp_lt_tree_02", "rpgpp_lt_tree_pine_01",
         "PT_Fruit_Tree_01_green", "PT_Fruit_Tree_01_apples", "PT_Fruit_Tree_01_dead",
         "PT_Fruit_Tree_01_plums", "PT_Fruit_Tree_01_stump", "PT_Pine_Tree_03_green",
         "PT_Pine_Tree_03_dead", "PT_Pine_Tree_03_logs", "PT_Generic_Shrub_01_green",

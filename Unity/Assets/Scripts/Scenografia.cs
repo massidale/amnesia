@@ -17,13 +17,12 @@ namespace AmnesiaUnity
         private const float AltezzaMuro = 2.8f;
         private const float AltezzaMontagna = 5.5f;
 
-        /// Le mesh comprate sono modellate in metri veri e la cella e' un metro,
-        /// quindi la scala di partenza e' 1. Un castagno vero pero' e' alto tre
-        /// volte una casa, e un paese di alberi giusti si guarda solo dall'alto:
-        /// qui si rimpiccioliscono finche' le case restano la cosa piu' grande
-        /// che si vede. Se una proporzione non convince, sono questi tre numeri.
-        private const float ScalaAlberi = 0.55f;
-        private const float ScalaSottobosco = 0.7f;
+        /// Le altezze a cui portare gli alberi, in metri. Il modello non si
+        /// scala mai alla cieca: si misura quanto e' alto com'e' uscito dal
+        /// pacchetto e lo si porta qui. Un castagno sovrasta una casa di poco;
+        /// un pino di piu'.
+        private const float AltezzaCastagno = 4.5f;
+        private const float AltezzaPino = 6.5f;
         /// Il raggio della cupola, in diagonali di mappa.
         ///
         /// DEVE stare sopra 1, e il motivo e' costato una sera: a 0.6 la cupola
@@ -275,7 +274,7 @@ namespace AmnesiaUnity
                     var simbolo = mappa.Rows[y][x];
                     if (simbolo == '#')
                     {
-                        Blocco(muri, intonaco, x, y, cella, AltezzaMuro);
+                        Muro(mappa, muri, intonaco, x, y, cella);
                     }
                     else if (simbolo == '^')
                     {
@@ -310,6 +309,50 @@ namespace AmnesiaUnity
             }
         }
 
+        /// Un muro sottile invece di un cubo pieno.
+        ///
+        /// La cella '#' resta larga un metro — e' la griglia, non si tocca — ma
+        /// il muro che si vede e' una lastra di venti centimetri per ogni faccia
+        /// che da' su una cella aperta. Da fuori le case smettono di sembrare
+        /// bunker; da dentro le stanze guadagnano oltre mezzo metro per lato.
+        ///
+        /// Le lastre accanto a una soglia '+' diventano gli stipiti della porta
+        /// da sole: la soglia non e' '#', quindi nessuna lastra la copre.
+        /// Un '#' murato da ogni lato resta un cubo pieno: non lo vede nessuno,
+        /// ma tiene chiuso il volume.
+        private const float SpessoreMuro = 0.2f;
+
+        private static void Muro(VillageMap mappa, Transform genitore, Material materiale, int x, int y, float cella)
+        {
+            var mezzo = cella * 0.5f;
+            var rientro = mezzo - SpessoreMuro * 0.5f;
+            var lastre = 0;
+            foreach (var (dx, dy) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+            {
+                var ax = x + dx;
+                var ay = y + dy;
+                var chiuso = ax < 0 || ay < 0 || ax >= mappa.Width || ay >= mappa.Height
+                             || mappa.Rows[ay][ax] == '#';
+                if (chiuso)
+                {
+                    continue;
+                }
+                lastre++;
+                var lastra = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                lastra.transform.SetParent(genitore);
+                lastra.transform.position = new Vector3(
+                    x * cella + dx * rientro, AltezzaMuro * 0.5f, -y * cella - dy * rientro);
+                lastra.transform.localScale = dx != 0
+                    ? new Vector3(SpessoreMuro, AltezzaMuro, cella)
+                    : new Vector3(cella, AltezzaMuro, SpessoreMuro);
+                lastra.GetComponent<Renderer>().sharedMaterial = materiale;
+            }
+            if (lastre == 0)
+            {
+                Blocco(genitore, materiale, x, y, cella, AltezzaMuro);
+            }
+        }
+
         private static void Blocco(Transform genitore, Material materiale, int x, int y, float cella, float altezza)
         {
             var blocco = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -320,33 +363,24 @@ namespace AmnesiaUnity
         }
 
         /// Il bosco. In alto, dove la valle si stringe, sono pini; piu' giu' il
-        /// castagneto. Niente alberi secchi: un bosco spoglio si legge come un
-        /// posto morto, e questo paese e' pieno di gente che ci vive.
-        private static readonly string[] Pini = { "PT_Pine_Tree_03_green" };
+        /// castagneto. Un pacchetto solo — RPG Poly Pack, lo stesso di case e
+        /// arredi — perche' due stili di albero nello stesso bosco si vedono; e
+        /// gli alberi stanno SOLO sulle celle 'T' della mappa, che sono i posti
+        /// che l'autore ha scelto. Niente riempitivi sparsi.
+        private static readonly string[] Pini = { "rpgpp_lt_tree_pine_01" };
 
-        private static readonly string[] Castagni =
-        {
-            "PT_Fruit_Tree_01_green", "PT_Fruit_Tree_01_apples", "PT_Fruit_Tree_01_plums",
-        };
+        private static readonly string[] Castagni = { "rpgpp_lt_tree_01", "rpgpp_lt_tree_02" };
 
-        private static readonly string[] Cespugli =
-        {
-            "PT_Generic_Shrub_01_green",
-            "PT_High_Grass_02_v1", "PT_Grass_02", "PT_Grass_02_v1", "PT_Poppy_02",
-        };
+        private static readonly string[] Cespugli = { "rpgpp_lt_bush_01", "rpgpp_lt_bush_02" };
 
         /// Il prato: ciuffi d'erba, cespugli, qualche fiore. Va sull'erba dentro
         /// il paese e su tutto quello che sta fuori dalla mappa, che altrimenti e'
         /// un piano verde e basta.
+        /// Ciuffi bassi e basta. I cespugli che c'erano prima, sparsi sull'erba
+        /// del paese, da lontano sembravano alberelli piantati a caso.
         private static readonly string[] Erba =
         {
-            "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b",
-            "rpgpp_lt_bush_01", "rpgpp_lt_bush_02", "rpgpp_lt_flower_03",
-            "rpgpp_lt_plant_01", "rpgpp_lt_plant_02",
-            // Niente `terrain_*` qui: quelle sono mattonelle di terreno, piani
-            // larghi da posare a scacchiera, non ciuffi da piantare su una cella.
-            // Sparse una per casella finivano a filo del prato e sfarfallavano —
-            // due superfici alla stessa quota che si contendono lo stesso pixel.
+            "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b", "rpgpp_lt_flower_03",
         };
 
         /// I sassi che si appoggiano sopra la montagna. Un cubo grigio alto sei
@@ -456,12 +490,16 @@ namespace AmnesiaUnity
                     var simbolo = mappa.Rows[y][x];
                     if (simbolo == 'T')
                     {
-                        var specie = y < quota ? Pini : Castagni;
-                        var albero = Modello("natura", Scegli(specie, x, y, 3), bosco, x, y, cella);
+                        var pino = y < quota;
+                        var albero = Modello("natura", Scegli(pino ? Pini : Castagni, x, y, 3), bosco, x, y, cella);
                         if (albero != null)
                         {
-                            albero.transform.localScale =
-                                Vector3.one * ScalaAlberi * (0.85f + Caso(x, y, 11) * 0.45f);
+                            var voluta = (pino ? AltezzaPino : AltezzaCastagno) * (0.85f + Caso(x, y, 11) * 0.3f);
+                            var misurata = AltezzaDi(albero);
+                            if (misurata > 0.01f)
+                            {
+                                albero.transform.localScale = Vector3.one * (voluta / misurata);
+                            }
                             // Il tronco si scontra, la chioma no: un bosco che si
                             // attraversa non chiude niente, e la cava deve essere
                             // difficile da raggiungere.
@@ -471,14 +509,15 @@ namespace AmnesiaUnity
                             tronco.center = new Vector3(0f, 1.5f, 0f);
                         }
                     }
-                    else if (simbolo == '"' && Caso(x, y, 5) > 0.45f)
+                    else if (simbolo == '"' && Caso(x, y, 5) > 0.72f)
                     {
-                        // Il sottobosco non si scontra: ci si cammina dentro.
+                        // Il sottobosco non si scontra: ci si cammina dentro. Ed
+                        // e' rado: erano i cespugli fitti a sembrare alberelli
+                        // sparsi a caso.
                         var cespuglio = Modello("natura", Scegli(Cespugli, x, y, 13), bosco, x, y, cella);
                         if (cespuglio != null)
                         {
-                            cespuglio.transform.localScale =
-                                Vector3.one * ScalaSottobosco * (0.8f + Caso(x, y, 17) * 0.6f);
+                            cespuglio.transform.localScale = Vector3.one * (0.8f + Caso(x, y, 17) * 0.5f);
                         }
                     }
                 }
@@ -756,6 +795,22 @@ namespace AmnesiaUnity
                 tutto.Encapsulate(pezzi[i].bounds);
             }
             return Mathf.Max(tutto.extents.x, tutto.extents.z);
+        }
+
+        /// Quanto e' alto un modello, in metri, com'e' uscito dal pacchetto.
+        private static float AltezzaDi(GameObject cosa)
+        {
+            var pezzi = cosa.GetComponentsInChildren<Renderer>();
+            if (pezzi.Length == 0)
+            {
+                return 0f;
+            }
+            var tutto = pezzi[0].bounds;
+            for (var i = 1; i < pezzi.Length; i++)
+            {
+                tutto.Encapsulate(pezzi[i].bounds);
+            }
+            return tutto.size.y;
         }
 
         private static string Scegli(string[] fra, int x, int y, int seme) =>
