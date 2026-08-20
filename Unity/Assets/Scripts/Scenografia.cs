@@ -34,7 +34,12 @@ namespace AmnesiaUnity
         private const float ScalaCielo = 1.35f;
 
         private static readonly Color Strada = new Color(0.44f, 0.41f, 0.36f);
-        private static readonly Color Prato = new Color(0.33f, 0.38f, 0.24f);
+        /// La banchina lungo la strada: sterrato battuto, non un nastro verde.
+        /// Il verde vero sta fuori dal paese — la prateria e le colline.
+        private static readonly Color Prato = new Color(0.47f, 0.41f, 0.31f);
+
+        /// Il piano d'erba oltre i bordi e le colline all'orizzonte.
+        private static readonly Color VerdeLontano = new Color(0.38f, 0.46f, 0.26f);
         private static readonly Color Pavimento = new Color(0.36f, 0.29f, 0.22f);
         private static readonly Color Soglia = new Color(0.30f, 0.23f, 0.17f);
         private static readonly Color Sottobosco = new Color(0.25f, 0.28f, 0.19f);
@@ -175,8 +180,42 @@ namespace AmnesiaUnity
             piano.transform.SetParent(radice);
             var mesh = falda.Mesh();
             piano.AddComponent<MeshFilter>().sharedMesh = mesh;
-            piano.AddComponent<MeshRenderer>().sharedMaterial = Materiale(Prato);
+            piano.AddComponent<MeshRenderer>().sharedMaterial = Materiale(VerdeLontano);
             piano.AddComponent<MeshCollider>().sharedMesh = mesh;
+
+            // Le colline all'orizzonte. Sono le cupole verdi di prima, ma al loro
+            // posto: A TERRA, in un anello fuori dai bordi, e misurate — si porta
+            // ognuna a un'altezza voluta invece di scalarla alla cieca. Spuntano
+            // sopra il profilo della montagna e chiudono la valle di verde.
+            var colline = new GameObject("colline").transform;
+            colline.SetParent(radice);
+            for (var i = 0; i < 24; i++)
+            {
+                var poggio = Modello("roccia",
+                    i % 2 == 0 ? "rpgpp_lt_hill_small_01" : "rpgpp_lt_hill_small_02",
+                    colline, i * 11, i * 7, cella);
+                if (poggio == null)
+                {
+                    break;
+                }
+                var voluta = 9f + Caso(i, 21, 139) * 16f;
+                var misurata = AltezzaDi(poggio);
+                var fattore = misurata > 0.01f ? voluta / misurata : 1f;
+                poggio.transform.localScale = Vector3.one * fattore;
+
+                // Una collina alta venti metri e' larga magari sessanta: se il
+                // centro sta a dodici metri dal bordo, la falda entra in paese e
+                // sbuca dentro le case. Si misura il raggio e la si spinge fuori
+                // di ALMENO quel raggio: il piede resta sempre oltre il confine.
+                var piede = Raggio(poggio) * fattore;
+                var giro = i / 24f * Mathf.PI * 2f;
+                var fuoriX = larghezza * 0.5f + piede + 6f + Caso(i, 9, 131) * 30f;
+                var fuoriZ = altezza * 0.5f + piede + 6f + Caso(i, 15, 137) * 30f;
+                poggio.transform.position = new Vector3(
+                    larghezza * 0.5f + Mathf.Cos(giro) * fuoriX,
+                    0f,
+                    -altezza * 0.5f + Mathf.Sin(giro) * fuoriZ);
+            }
 
             var ciuffi = new GameObject("erba").transform;
             ciuffi.SetParent(radice);
@@ -186,7 +225,7 @@ namespace AmnesiaUnity
             {
                 for (var x = 0; x < mappa.Width; x++)
                 {
-                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 59) < 0.35f)
+                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 59) < 0.85f)
                     {
                         continue;
                     }
@@ -309,48 +348,71 @@ namespace AmnesiaUnity
             }
         }
 
-        /// Un muro sottile invece di un cubo pieno.
+        /// Un muro sottile: una lastra sola, al centro della cella.
         ///
-        /// La cella '#' resta larga un metro — e' la griglia, non si tocca — ma
-        /// il muro che si vede e' una lastra di venti centimetri per ogni faccia
-        /// che da' su una cella aperta. Da fuori le case smettono di sembrare
-        /// bunker; da dentro le stanze guadagnano oltre mezzo metro per lato.
+        /// La prima versione metteva una lastra su OGNI faccia aperta — una fuori
+        /// e una dentro — e il muro continuava a sembrare spesso un metro, perche'
+        /// alla porta restava un tunnel profondo quanto la cella. La lastra e' una
+        /// e sta in mezzo: il muro e' spesso venti centimetri davvero, anche
+        /// attraversandolo.
         ///
-        /// Le lastre accanto a una soglia '+' diventano gli stipiti della porta
-        /// da sole: la soglia non e' '#', quindi nessuna lastra la copre.
-        /// Un '#' murato da ogni lato resta un cubo pieno: non lo vede nessuno,
-        /// ma tiene chiuso il volume.
+        /// L'orientamento lo dettano i vicini: '#' a destra o sinistra, il muro
+        /// corre lungo x; sopra o sotto, lungo z; a un angolo corre in tutte e
+        /// due e fa la croce. Dentro la stazione il muro si ferma all'anca e agli
+        /// angoli sale un palo: e' una tettoia, non una casa — un posto dove si
+        /// aspetta la corriera guardando la strada.
         private const float SpessoreMuro = 0.2f;
+        private const float AltezzaParapetto = 1.1f;
 
         private static void Muro(VillageMap mappa, Transform genitore, Material materiale, int x, int y, float cella)
         {
-            var mezzo = cella * 0.5f;
-            var rientro = mezzo - SpessoreMuro * 0.5f;
-            var lastre = 0;
-            foreach (var (dx, dy) in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+            bool Pieno(int ax, int ay) =>
+                ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height && mappa.Rows[ay][ax] == '#';
+
+            var lungoX = Pieno(x - 1, y) || Pieno(x + 1, y);
+            var lungoZ = Pieno(x, y - 1) || Pieno(x, y + 1);
+            if (!lungoX && !lungoZ)
             {
-                var ax = x + dx;
-                var ay = y + dy;
-                var chiuso = ax < 0 || ay < 0 || ax >= mappa.Width || ay >= mappa.Height
-                             || mappa.Rows[ay][ax] == '#';
-                if (chiuso)
-                {
-                    continue;
-                }
-                lastre++;
-                var lastra = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                lastra.transform.SetParent(genitore);
-                lastra.transform.position = new Vector3(
-                    x * cella + dx * rientro, AltezzaMuro * 0.5f, -y * cella - dy * rientro);
-                lastra.transform.localScale = dx != 0
-                    ? new Vector3(SpessoreMuro, AltezzaMuro, cella)
-                    : new Vector3(cella, AltezzaMuro, SpessoreMuro);
-                lastra.GetComponent<Renderer>().sharedMaterial = materiale;
+                lungoX = lungoZ = true;
             }
-            if (lastre == 0)
+
+            var tettoia = DentroIlLuogo(mappa, "stazione", x, y);
+            var altezza = tettoia ? AltezzaParapetto : AltezzaMuro;
+
+            if (lungoX)
             {
-                Blocco(genitore, materiale, x, y, cella, AltezzaMuro);
+                Lastra(genitore, materiale, x, y, cella, new Vector3(cella, altezza, SpessoreMuro));
             }
+            if (lungoZ)
+            {
+                Lastra(genitore, materiale, x, y, cella, new Vector3(SpessoreMuro, altezza, cella));
+            }
+            if (tettoia && lungoX && lungoZ)
+            {
+                // Il palo d'angolo che regge il tetto.
+                Lastra(genitore, materiale, x, y, cella,
+                    new Vector3(SpessoreMuro, AltezzaMuro, SpessoreMuro));
+            }
+        }
+
+        private static void Lastra(
+            Transform genitore, Material materiale, int x, int y, float cella, Vector3 misura)
+        {
+            var lastra = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            lastra.transform.SetParent(genitore);
+            lastra.transform.position = new Vector3(x * cella, misura.y * 0.5f, -y * cella);
+            lastra.transform.localScale = misura;
+            lastra.GetComponent<Renderer>().sharedMaterial = materiale;
+        }
+
+        private static bool DentroIlLuogo(VillageMap mappa, string nome, int x, int y)
+        {
+            if (!mappa.HasPlace(nome))
+            {
+                return false;
+            }
+            var luogo = mappa.Places[nome];
+            return x >= luogo.X && x < luogo.X + luogo.W && y >= luogo.Y && y < luogo.Y + luogo.H;
         }
 
         private static void Blocco(Transform genitore, Material materiale, int x, int y, float cella, float altezza)
@@ -552,17 +614,33 @@ namespace AmnesiaUnity
                 var luogo = mappa.Places[pair.Key];
                 // Fuori dalla porta se il luogo e' una stanza; al centro se e' uno
                 // spiazzo, che e' il caso del pozzo e del giardino.
-                var dove = SullUscio(mappa, luogo) ?? mappa.CenterOf(pair.Key);
+                var uscio = SullUscio(mappa, luogo);
+                var dove = uscio?.Fuori ?? mappa.CenterOf(pair.Key);
                 if (dove is { } cella2)
                 {
-                    Modello("insegne", pair.Value, arredo, cella2.X, cella2.Y, cella);
+                    var cosa = Modello("insegne", pair.Value, arredo, cella2.X, cella2.Y, cella);
+                    if (cosa != null && uscio is { } sulla)
+                    {
+                        // Niente rotazione a caso per una tettoia o una tenda:
+                        // guardano la strada, spalle alla casa, come le insegne.
+                        cosa.transform.rotation = Quaternion.LookRotation(
+                            new Vector3(sulla.Verso.x, 0f, -sulla.Verso.y));
+                    }
                 }
             }
         }
 
-        /// La cella calpestabile subito fuori dalla porta di un luogo, se ne ha
-        /// una. Nullo per gli spiazzi, che porta non ce l'hanno.
-        private static Cell? SullUscio(VillageMap mappa, PlaceRect luogo)
+        private readonly struct Uscio
+        {
+            public Uscio(Cell fuori, Vector2 verso) { Fuori = fuori; Verso = verso; }
+            public Cell Fuori { get; }
+            /// In coordinate di mappa: y positivo va verso sud.
+            public Vector2 Verso { get; }
+        }
+
+        /// La cella calpestabile subito fuori dalla porta di un luogo, e da che
+        /// parte guarda. Nullo per gli spiazzi, che porta non ce l'hanno.
+        private static Uscio? SullUscio(VillageMap mappa, PlaceRect luogo)
         {
             for (var y = luogo.Y - 1; y <= luogo.Y + luogo.H; y++)
             {
@@ -583,7 +661,7 @@ namespace AmnesiaUnity
                                     || ay < luogo.Y || ay >= luogo.Y + luogo.H;
                         if (fuori && (mappa.Rows[ay][ax] == '.' || mappa.Rows[ay][ax] == ','))
                         {
-                            return new Cell(ax, ay);
+                            return new Uscio(new Cell(ax, ay), new Vector2(passo.Item1, passo.Item2));
                         }
                     }
                 }
