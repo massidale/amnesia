@@ -30,3 +30,22 @@ Unity/*.sln
 
 # La chiave dell'API non entra mai in git.
 .env
+
+# Le mesh comprate sull'Asset Store non entrano in git.
+#
+# Due ragioni, e la prima basta: la licenza non permette di ridistribuirle, e un
+# repository pubblico e' ridistribuzione — chiunque puo' estrarle. La seconda e'
+# che sono centoquaranta mega di binari, e dalla storia di git non si tolgono
+# piu'.
+#
+# Quello che sta in git e' la ricetta: `tools/asset_store.py` rimonta tutto dai
+# pacchetti scaricati, e senza di loro il paese si costruisce lo stesso, solo
+# spoglio — `Scenografia.Modello` restituisce null e nessuno se ne lamenta.
+Unity/Assets/RPGPP_LT/
+Unity/Assets/RPGPP_LT.meta
+Unity/Assets/Polytope Studio/
+Unity/Assets/Polytope Studio.meta
+Unity/Assets/Church 3D/
+Unity/Assets/Church 3D.meta
+Unity/Assets/Resources/paese/
+Unity/Assets/Resources/paese.meta

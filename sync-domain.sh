@@ -15,6 +15,8 @@ cp Amnesia.Domain/bin/Release/netstandard2.1/Amnesia.Domain.dll Unity/Assets/Plu
 # legge da StreamingAssets, che e' l'unica cartella che sopravvive intatta a una
 # build senza passare per l'importatore.
 mkdir -p Unity/Assets/StreamingAssets
-rsync -a --delete content/ Unity/Assets/StreamingAssets/
+# I .meta li scrive Unity, non noi: senza l'esclusione ogni sync li cancella,
+# l'editor li rigenera con GUID nuovi, e git vede una modifica a ogni giro.
+rsync -a --delete --exclude='*.meta' content/ Unity/Assets/StreamingAssets/
 echo "Amnesia.Domain.dll -> Unity/Assets/Plugins/"
 echo "content/           -> Unity/Assets/StreamingAssets/"

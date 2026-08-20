@@ -17,6 +17,19 @@ namespace AmnesiaUnity
         private const float AltezzaMuro = 2.8f;
         private const float AltezzaMontagna = 5.5f;
 
+        /// Le mesh comprate sono modellate in metri veri e la cella e' un metro,
+        /// quindi la scala di partenza e' 1. Un castagno vero pero' e' alto tre
+        /// volte una casa, e un paese di alberi giusti si guarda solo dall'alto:
+        /// qui si rimpiccioliscono finche' le case restano la cosa piu' grande
+        /// che si vede. Se una proporzione non convince, sono questi tre numeri.
+        private const float ScalaAlberi = 0.55f;
+        private const float ScalaSottobosco = 0.7f;
+        private const float ScalaArredo = 1f;
+
+        /// Quanto e' vestito il paese. Piu' alto, piu' vuoto: e' la frazione di
+        /// celle a ridosso di un muro che restano nude.
+        private const float SogliaArredo = 0.86f;
+
         private static readonly Color Strada = new Color(0.44f, 0.41f, 0.36f);
         private static readonly Color Prato = new Color(0.33f, 0.38f, 0.24f);
         private static readonly Color Pavimento = new Color(0.36f, 0.29f, 0.22f);
@@ -38,6 +51,7 @@ namespace AmnesiaUnity
             Terreno(mappa, cella, radice);
             Volumi(mappa, cella, radice);
             Vegetazione(mappa, cella, radice);
+            Arredo(mappa, cella, radice);
             Bordi(mappa, cella, radice);
         }
 
@@ -193,12 +207,62 @@ namespace AmnesiaUnity
             blocco.GetComponent<Renderer>().sharedMaterial = materiale;
         }
 
+        /// Il bosco. In alto, dove la valle si stringe, sono pini; piu' giu' il
+        /// castagneto, che a ottobre e' mezzo spoglio — per questo fra i modelli
+        /// verdi ce n'e' uno secco: un bosco tutto verde a ottobre non e' un
+        /// bosco, e' un prato in verticale.
+        private static readonly string[] Pini = { "PT_Pine_Tree_03_green", "PT_Pine_Tree_03_dead" };
+
+        private static readonly string[] Castagni =
+        {
+            "PT_Fruit_Tree_01_green", "PT_Fruit_Tree_01_apples",
+            "PT_Fruit_Tree_01_plums", "PT_Fruit_Tree_01_dead",
+        };
+
+        private static readonly string[] Cespugli =
+        {
+            "PT_Generic_Shrub_01_green", "PT_Generic_Shrub_01_dead",
+            "PT_High_Grass_02_v1", "PT_Grass_02", "PT_Grass_02_v1", "PT_Poppy_02",
+        };
+
+        /// Roba di gente che lavora, non decorazione: botti, casse, sacchi, una
+        /// scala appoggiata al muro. Serve a una cosa sola e non estetica — un
+        /// paese in cui ogni casa e' un cubo liscio non ha punti di riferimento,
+        /// e senza punti di riferimento «il castagneto sopra la curva» non vuol
+        /// dire niente. La geografia del quarto atto vive di questo.
+        private static readonly string[] Arredi =
+        {
+            "rpgpp_lt_barrel_01", "rpgpp_lt_barrel_02", "rpgpp_lt_crate_01", "rpgpp_lt_crate_02",
+            "rpgpp_lt_crate_03", "rpgpp_lt_sack_01", "rpgpp_lt_sack_02", "rpgpp_lt_sack_02_set",
+            "rpgpp_lt_basket_01", "rpgpp_lt_basket_02", "rpgpp_lt_bench_wood_01",
+            "rpgpp_lt_bench_wood_02", "rpgpp_lt_box_wood_01", "rpgpp_lt_log_wood_01",
+            "rpgpp_lt_log_wood_02a", "rpgpp_lt_bucket_01", "rpgpp_lt_vase_01", "rpgpp_lt_vase_02",
+            "rpgpp_lt_jug_01", "rpgpp_lt_trough_01", "rpgpp_lt_ladder_01", "rpgpp_lt_package_01",
+            "rpgpp_lt_hanger_clothes_01", "rpgpp_lt_rake_01", "rpgpp_lt_broom_01",
+            "rpgpp_lt_stones_01", "rpgpp_lt_flower_01", "rpgpp_lt_flower_02",
+        };
+
+        /// Un oggetto solo per luogo, e ognuno dice che mestiere ci si fa. Il
+        /// pozzo in piazza e' anche l'unica cosa del paese che si vede da lontano
+        /// e che non e' una casa: e' li' che uno si orienta.
+        private static readonly Dictionary<string, string> Insegne = new Dictionary<string, string>
+        {
+            ["piazza"] = "rpgpp_lt_well_01",
+            ["deposito"] = "rpgpp_lt_wagon_01",
+            ["panetteria"] = "rpgpp_lt_awning_standing_01a",
+            ["negozio"] = "rpgpp_lt_awning_standing_01b",
+            ["bar"] = "rpgpp_lt_banner_01a",
+            ["bottega"] = "rpgpp_lt_shed_wood_01",
+            ["giardino"] = "rpgpp_lt_bird_house_01",
+        };
+
         private static void Vegetazione(VillageMap mappa, float cella, Transform radice)
         {
             var bosco = new GameObject("bosco").transform;
             bosco.SetParent(radice);
-            var castagni = new[] { "tree_default", "tree_detailed", "tree_blocks" };
-            var cespugli = new[] { "grass", "grass_large", "stump_round" };
+            // La cava sta in cima alla mappa: sopra il primo terzo e' quota, e a
+            // quella quota crescono conifere.
+            var quota = mappa.Height / 3;
 
             for (var y = 0; y < mappa.Height; y++)
             {
@@ -207,32 +271,118 @@ namespace AmnesiaUnity
                     var simbolo = mappa.Rows[y][x];
                     if (simbolo == 'T')
                     {
-                        var albero = Pianta(castagni[(int)(Caso(x, y, 3) * castagni.Length) % castagni.Length], bosco, x, y, cella);
+                        var specie = y < quota ? Pini : Castagni;
+                        var albero = Modello("natura", Scegli(specie, x, y, 3), bosco, x, y, cella);
                         if (albero != null)
                         {
-                            albero.transform.localScale = Vector3.one * (2.4f + Caso(x, y, 11) * 0.9f);
+                            albero.transform.localScale =
+                                Vector3.one * ScalaAlberi * (0.85f + Caso(x, y, 11) * 0.45f);
+                            // Il tronco si scontra, la chioma no: un bosco che si
+                            // attraversa non chiude niente, e la cava deve essere
+                            // difficile da raggiungere.
                             var tronco = albero.AddComponent<CapsuleCollider>();
-                            tronco.radius = 0.16f;
+                            tronco.radius = 0.18f;
                             tronco.height = 3f;
                             tronco.center = new Vector3(0f, 1.5f, 0f);
                         }
                     }
-                    else if (simbolo == '"' && Caso(x, y, 5) > 0.55f)
+                    else if (simbolo == '"' && Caso(x, y, 5) > 0.45f)
                     {
                         // Il sottobosco non si scontra: ci si cammina dentro.
-                        var cespuglio = Pianta(cespugli[(int)(Caso(x, y, 13) * cespugli.Length) % cespugli.Length], bosco, x, y, cella);
+                        var cespuglio = Modello("natura", Scegli(Cespugli, x, y, 13), bosco, x, y, cella);
                         if (cespuglio != null)
                         {
-                            cespuglio.transform.localScale = Vector3.one * (1.2f + Caso(x, y, 17) * 0.6f);
+                            cespuglio.transform.localScale =
+                                Vector3.one * ScalaSottobosco * (0.8f + Caso(x, y, 17) * 0.6f);
                         }
                     }
                 }
             }
         }
 
-        private static GameObject Pianta(string modello, Transform genitore, int x, int y, float cella)
+        /// Le cose appoggiate ai muri, e un oggetto per luogo che ne dica il
+        /// mestiere.
+        private static void Arredo(VillageMap mappa, float cella, Transform radice)
         {
-            var prefab = Resources.Load<GameObject>("kenney/natura/" + modello);
+            var arredo = new GameObject("arredo").transform;
+            arredo.SetParent(radice);
+
+            for (var y = 1; y < mappa.Height - 1; y++)
+            {
+                for (var x = 1; x < mappa.Width - 1; x++)
+                {
+                    if (!Calpestabile(mappa, x, y) || Caso(x, y, 31) < SogliaArredo)
+                    {
+                        continue;
+                    }
+                    // Solo a ridosso di una parete, e mai davanti a una porta:
+                    // una cassa su una soglia e' un dettaglio grazioso il giorno
+                    // che lo metti e un ostacolo per tutta la partita.
+                    if (!ControIlMuro(mappa, x, y, out var verso) || AccantoAUnaPorta(mappa, x, y))
+                    {
+                        continue;
+                    }
+                    var cosa = Modello("arredo", Scegli(Arredi, x, y, 37), arredo, x, y, cella);
+                    if (cosa != null)
+                    {
+                        cosa.transform.position += new Vector3(verso.x, 0f, verso.y) * cella * 0.33f;
+                        cosa.transform.localScale = Vector3.one * ScalaArredo;
+                    }
+                }
+            }
+
+            foreach (var pair in Insegne)
+            {
+                var centro = mappa.CenterOf(pair.Key);
+                if (centro is { } dove)
+                {
+                    Modello("insegne", pair.Value, arredo, dove.X, dove.Y, cella);
+                }
+            }
+        }
+
+        private static bool Calpestabile(VillageMap mappa, int x, int y)
+        {
+            var simbolo = mappa.Rows[y][x];
+            return simbolo == '.' || simbolo == ',';
+        }
+
+        /// La direzione del muro piu' vicino, se ce n'e' uno di fianco.
+        private static bool ControIlMuro(VillageMap mappa, int x, int y, out Vector2 verso)
+        {
+            if (mappa.Rows[y][x - 1] == '#') { verso = new Vector2(-1f, 0f); return true; }
+            if (mappa.Rows[y][x + 1] == '#') { verso = new Vector2(1f, 0f); return true; }
+            if (mappa.Rows[y - 1][x] == '#') { verso = new Vector2(0f, 1f); return true; }
+            if (mappa.Rows[y + 1][x] == '#') { verso = new Vector2(0f, -1f); return true; }
+            verso = Vector2.zero;
+            return false;
+        }
+
+        private static bool AccantoAUnaPorta(VillageMap mappa, int x, int y)
+        {
+            for (var dy = -1; dy <= 1; dy++)
+            {
+                for (var dx = -1; dx <= 1; dx++)
+                {
+                    if (mappa.Rows[y + dy][x + dx] == '+')
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static string Scegli(string[] fra, int x, int y, int seme) =>
+            fra[(int)(Caso(x, y, seme) * fra.Length) % fra.Length];
+
+        /// Un prefab da `Resources/paese/<cartella>`, piantato sulla sua cella con
+        /// un filo di scarto e una rotazione qualunque — sempre gli stessi, pero':
+        /// «l'albero davanti alla bottega» deve voler dire qualcosa anche domani.
+        private static GameObject Modello(
+            string cartella, string nome, Transform genitore, int x, int y, float cella)
+        {
+            var prefab = Resources.Load<GameObject>("paese/" + cartella + "/" + nome);
             if (prefab == null)
             {
                 return null;
