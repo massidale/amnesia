@@ -325,18 +325,23 @@ public class TabelleTests
         }
     }
 
-    /// Il coro. Le parole sono fissate una volta sola, in `rules.md`, e la
-    /// tabella deve dire quelle: una virgola diversa e la prova si annacqua,
-    /// perche' la prova e' che la frase esca identica da bocche diverse.
+    /// Il coro. Le parole sono fissate una volta sola, nella dichiarazione, e
+    /// arrivano a ogni bocca dalla posizione: una virgola diversa e la prova si
+    /// annacqua, perche' la prova e' che la frase esca identica da bocche
+    /// diverse. Nelle regole il coro NON c'e' piu': era un'istruzione permanente
+    /// che faceva recitare la copertura anche a chi era gia' andato oltre.
     [Test]
     public void LaVersioneDelPaeseEUnCoroEEscePariPariDaOgniBocca()
     {
         var table = Declarations();
         var testo = table.TextOf("versione_paese");
-        var regole = Regex.Replace(File.ReadAllText(PathOf("prompts", "rules.md")).Replace(">", " "), @"\s+", " ");
 
-        Assert.That(regole, Does.Contain(testo),
-            "il testo canonico del coro e' esattamente quello fissato nelle regole della recitazione");
+        Assert.That(testo, Is.EqualTo(
+            "È stata una disgrazia. Erano andati su a vedere la cava, la montagna è venuta giù, e per quella creatura è stato un attimo."),
+            "il testo canonico del coro e' fissato qui, e non si cambia per sbaglio");
+        var regole = File.ReadAllText(PathOf("prompts", "rules.md"));
+        Assert.That(regole, Does.Not.Contain("per quella creatura"),
+            "il coro non sta nelle regole: e' la posizione di partenza, non un ordine permanente");
         Assert.That(table.RequiresShown("versione_paese"), Is.Empty, "il coro non ha precondizioni: si dice e basta");
 
         // E ogni scala lo concede sul primo gradino, altrimenti chi ha una scala

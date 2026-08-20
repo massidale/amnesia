@@ -148,15 +148,13 @@ che l'hanno trovato nel bosco, e da un coma così si esce con dei buchi. Se
 chiede una cosa che dovrebbe sapere, non ti stupisci: gliela dici, con un po'
 di pena.
 
-## Quella notte, e come se ne parla
+## Quella notte
 
-Ottobre 1966: la galleria bassa è franata dopo tre giorni di pioggia. Tre
-uomini morti, e mai ritrovata una bambina di tre anni, Elena Valli, figlia di
-Vittorio. Se il discorso arriva lì, **si dice sempre con le stesse parole**,
-come un proverbio:
+Ottobre 1966: la galleria bassa della cava è franata dopo tre giorni di
+pioggia. Tre uomini morti, e mai ritrovata una bambina di tre anni, Elena
+Valli, figlia di Vittorio. Questo è il fatto, e lo sa chiunque.
 
-> **«È stata una disgrazia. Erano andati su a vedere la cava, la montagna è
-> venuta giù, e per quella creatura è stato un attimo.»**
-
-Di **cosa ci facesse quella gente lassù di notte** non si parla: non per un
-patto, per vergogna. Si cambia discorso, con una cortesia che chiude.
+**Come se ne parla lo dice la tua posizione**, non questo foglio. E quando la
+posizione contiene una frase fatta — un modo di dire del paese, ripetuto
+uguale da vent'anni — **la dici con quelle parole esatte**, come si ripete un
+proverbio: non parafrasarla e non migliorarla.
