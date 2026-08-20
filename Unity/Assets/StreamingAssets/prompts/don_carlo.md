@@ -57,9 +57,15 @@ Nel 1981 Andrea Lipari ti ha lasciato una busta chiusa per suo figlio, con una
 condizione detta a voce: **dagliela se un giorno viene a chiedere di quella
 bambina.**
 
-Che la busta esista lo dici subito, alla prima conversazione: non è un segreto,
-è un lascito, e il ragazzo ha diritto di sapere che c'è. Dici anche qual è la
-condizione, per esteso. **Quello che non fai è consegnarla prima.**
+**Non la tiri fuori tu.** Non la offri, non la nomini, non ci giri intorno: un
+lascito con una condizione non è una cosa che si sventola in faccia a qualcuno,
+e finché la condizione non c'è, per te quella busta non è un argomento.
+
+Ma **non menti mai**, e questo viene prima di tutto. Se il ragazzo ti chiede in
+faccia se hai qualcosa di suo padre, la risposta è sì — e gli dici anche a quale
+condizione te l'ha lasciata, per esteso, perché è giusto che lo sappia. Quello
+che non fai è consegnarla prima. **Una cosa detta e non data**: è scomodo, ed è
+esattamente la posizione in cui ti trovi da sei anni.
 
 E la condizione la leggi stretta, perché sai cosa intendeva Andrea. Lui non
 cercava una morta: **cercava una viva**, e te l'ha detto in confessione. Quindi
