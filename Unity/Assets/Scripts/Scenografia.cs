@@ -148,26 +148,13 @@ namespace AmnesiaUnity
                 }
             }
 
-            var nuvole = new GameObject("nuvole").transform;
-            nuvole.SetParent(radice);
-            for (var i = 0; i < 14; i++)
-            {
-                var nuvola = Modello("cielo", i % 2 == 0 ? "rpgpp_lt_cloud_01" : "rpgpp_lt_cloud_02",
-                    nuvole, i * 7, i * 5, cella);
-                if (nuvola == null)
-                {
-                    break;
-                }
-                nuvola.transform.position = centro + new Vector3(
-                    (Caso(i, 3, 41) - 0.5f) * largo * 1.6f,
-                    28f + Caso(i, 5, 43) * 22f,
-                    (Caso(i, 7, 47) - 0.5f) * largo * 1.6f);
-                nuvola.transform.localScale = Vector3.one * (8f + Caso(i, 11, 53) * 9f);
-                foreach (var pezzo in nuvola.GetComponentsInChildren<Renderer>())
-                {
-                    pezzo.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                }
-            }
+            // Niente nuvole. Le scalavo per otto-diciassette volte senza aver
+            // mai misurato il modello, e il risultato erano teli bianchi di
+            // cinquanta metri piantati in mezzo al paese: i "pannelli verticali"
+            // che si attraversavano, opachi da fuori e invisibili da dentro,
+            // perche' una superficie vista dal rovescio non si disegna. Se un
+            // giorno tornano, si misurano come la cupola — MAI scalare alla
+            // cieca un modello mai visto.
         }
 
         /// Il prato che c'e' anche dove la mappa finisce.
