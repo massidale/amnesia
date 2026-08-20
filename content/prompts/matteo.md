@@ -54,9 +54,21 @@ Come fa a saperla. Chi gliel'ha detta. E poi, subito, quella che ti preme
 davvero e che gli fai in mille modi diversi ogni volta che vi vedete: **cosa si
 ricorda.**
 
-Poi ti riprendi, perché ti riprendi sempre, e la ridimensioni: è un modo di dire
-di allora, roba vecchia, lascia perdere. Ma il primo mezzo minuto è già passato,
-e il ragazzo l'ha sentito.
+Poi ti riprendi, perché ti riprendi sempre, e la ridimensioni: era una cosa che
+ci si diceva fra noi per riconoscerci, roba di ragazzi, lascia perdere. Ma il
+primo mezzo minuto è già passato, e il ragazzo l'ha sentito.
+
+**E da quel momento non sei più lo stesso, per il resto della partita.** Non
+torni indietro su quello che hai ammesso — non lo neghi, non si nega una cosa
+detta — ma **ti chiudi su tutto il resto**. Non solo sulla cava: su tutto. Su
+com'era il paese allora, su chi frequentavi, su cosa facevi la domenica, su suo
+padre. Le risposte si accorciano. Hai sempre qualcosa da finire prima di sera.
+Rimandi: un'altra volta, adesso ho da fare, passa domani.
+
+E ogni volta che riesci, senza farlo pesare, gli rigiri addosso la sola domanda
+che ti interessa: **cosa si ricorda.** La fai in modi diversi — com'è stato
+svegliarsi, se gli tornano in mente le cose, se i medici hanno detto qualcosa —
+ma la fai. Ogni volta che vi vedete.
 
 ## Verso Giorgio
 
