@@ -61,6 +61,7 @@ namespace AmnesiaUnity
             Volumi(mappa, cella, radice);
             Vegetazione(mappa, cella, radice);
             Tetti(mappa, cella, radice);
+            Stanze(mappa, cella, radice);
             Arredo(mappa, cella, radice);
             Bordi(mappa, cella, radice);
         }
@@ -355,7 +356,10 @@ namespace AmnesiaUnity
             "rpgpp_lt_grass_small_01a", "rpgpp_lt_grass_small_01b",
             "rpgpp_lt_bush_01", "rpgpp_lt_bush_02", "rpgpp_lt_flower_03",
             "rpgpp_lt_plant_01", "rpgpp_lt_plant_02",
-            "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",
+            // Niente `terrain_*` qui: quelle sono mattonelle di terreno, piani
+            // larghi da posare a scacchiera, non ciuffi da piantare su una cella.
+            // Sparse una per casella finivano a filo del prato e sfarfallavano —
+            // due superfici alla stessa quota che si contendono lo stesso pixel.
         };
 
         /// I sassi che si appoggiano sopra la montagna. Un cubo grigio alto sei
@@ -368,9 +372,12 @@ namespace AmnesiaUnity
             "rpgpp_lt_hill_small_01", "rpgpp_lt_hill_small_02",
         };
 
-        /// Un oggetto solo per luogo, e ognuno dice che mestiere ci si fa. Il
-        /// pozzo in piazza e' anche l'unica cosa del paese che si vede da lontano
-        /// e che non e' una casa: e' li' che uno si orienta.
+        /// Un oggetto per luogo, che ne dica il mestiere. Sta FUORI, di fianco
+        /// alla porta, come stanno le insegne: metterlo al centro del luogo — che
+        /// e' quello che facevo — voleva dire piantare una tenda dentro la
+        /// panetteria e uno stendardo addosso a Lidia, e in mezzo alla stanza un
+        /// telo bianco e' esattamente cio' che il giocatore attraversa senza
+        /// capire cos'era.
         private static readonly Dictionary<string, string> Insegne = new Dictionary<string, string>
         {
             ["piazza"] = "rpgpp_lt_well_01",
@@ -382,6 +389,69 @@ namespace AmnesiaUnity
             ["giardino"] = "rpgpp_lt_bird_house_01",
         };
 
+        /// Cosa c'e' dentro ciascuna stanza. Non e' decorazione: e' l'unico modo
+        /// che ha una stanza di dire che mestiere ci si fa, e il giocatore ci
+        /// entra per parlare con qualcuno — quello che vede intorno alla persona
+        /// e' meta' di quello che sa di lei prima che apra bocca.
+        private static readonly Dictionary<string, string[]> Mobilia =
+            new Dictionary<string, string[]>
+        {
+            ["bottega"] = new[]
+            {
+                "rpgpp_lt_table_01", "rpgpp_lt_log_wood_02b", "rpgpp_lt_crate_01",
+                "rpgpp_lt_ladder_01", "rpgpp_lt_box_wood_01", "rpgpp_lt_bucket_01",
+            },
+            ["panetteria"] = new[]
+            {
+                "rpgpp_lt_table_01", "rpgpp_lt_sack_open_01", "rpgpp_lt_sack_02",
+                "rpgpp_lt_basket_01", "rpgpp_lt_basket_02", "rpgpp_lt_bowl_metal_01",
+            },
+            ["negozio"] = new[]
+            {
+                "rpgpp_lt_crate_02", "rpgpp_lt_crate_03", "rpgpp_lt_sack_01",
+                "rpgpp_lt_basket_02", "rpgpp_lt_vase_03", "rpgpp_lt_jug_01",
+            },
+            ["bar"] = new[]
+            {
+                "rpgpp_lt_table_01", "rpgpp_lt_chair_01a", "rpgpp_lt_chair_01b",
+                "rpgpp_lt_bench_wood_03", "rpgpp_lt_jug_01", "rpgpp_lt_bowl_metal_01",
+            },
+            ["chiesa"] = new[]
+            {
+                "rpgpp_lt_bench_wood_03", "rpgpp_lt_bench_wood_01", "rpgpp_lt_bench_wood_02",
+            },
+            ["canonica"] = new[]
+            {
+                "rpgpp_lt_table_01", "rpgpp_lt_chair_01a", "rpgpp_lt_bench_wood_01",
+                "rpgpp_lt_vase_03",
+            },
+            ["stazione"] = new[]
+            {
+                "rpgpp_lt_bench_wood_01", "rpgpp_lt_bench_wood_02", "rpgpp_lt_crate_01",
+                "rpgpp_lt_package_01",
+            },
+            ["deposito"] = new[]
+            {
+                "rpgpp_lt_crate_01", "rpgpp_lt_crate_02", "rpgpp_lt_barrel_01",
+                "rpgpp_lt_barrel_02", "rpgpp_lt_sack_02_set", "rpgpp_lt_package_01",
+            },
+        };
+
+        /// Le case in cui si abita. Stessa roba per tutte e tre, e va bene cosi':
+        /// in un paese di montagna nel 1987 le cucine si somigliavano.
+        private static readonly string[] Casa =
+        {
+            "rpgpp_lt_table_01", "rpgpp_lt_chair_01a", "rpgpp_lt_chair_01b",
+            "rpgpp_lt_hanger_wood_01", "rpgpp_lt_hanger_wood_02", "rpgpp_lt_vase_03",
+            "rpgpp_lt_plant_01", "rpgpp_lt_plant_02", "rpgpp_lt_bowl_metal_01",
+        };
+
+        /// Un oggetto per luogo, e nient'altro.
+        ///
+        /// Prima ne spargeva una sessantina lungo tutti i muri del paese, e il
+        /// risultato era che non si vedeva piu' niente: quando ogni angolo ha una
+        /// cassa, nessuna cassa vuol dire piu' niente. Un pozzo in piazza e un
+        /// carro al deposito si ricordano; sessanta botti sono rumore.
         private static void Vegetazione(VillageMap mappa, float cella, Transform radice)
         {
             var bosco = new GameObject("bosco").transform;
@@ -426,24 +496,151 @@ namespace AmnesiaUnity
             }
         }
 
-        /// Un oggetto per luogo, e nient'altro.
-        ///
-        /// Prima ne spargeva una sessantina lungo tutti i muri del paese, e il
-        /// risultato era che non si vedeva piu' niente: quando ogni angolo ha una
-        /// cassa, nessuna cassa vuol dire piu' niente. Un pozzo in piazza e un
-        /// carro al deposito si ricordano; sessanta botti sono rumore.
+        private static bool AccantoAUnaPorta(VillageMap mappa, int x, int y)
+        {
+            for (var dy = -1; dy <= 1; dy++)
+            {
+                for (var dx = -1; dx <= 1; dx++)
+                {
+                    if (mappa.Rows[y + dy][x + dx] == '+')
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         private static void Arredo(VillageMap mappa, float cella, Transform radice)
         {
             var arredo = new GameObject("arredo").transform;
             arredo.SetParent(radice);
             foreach (var pair in Insegne)
             {
-                var centro = mappa.CenterOf(pair.Key);
-                if (centro is { } dove)
+                if (!mappa.HasPlace(pair.Key))
                 {
-                    Modello("insegne", pair.Value, arredo, dove.X, dove.Y, cella);
+                    continue;
+                }
+                var luogo = mappa.Places[pair.Key];
+                // Fuori dalla porta se il luogo e' una stanza; al centro se e' uno
+                // spiazzo, che e' il caso del pozzo e del giardino.
+                var dove = SullUscio(mappa, luogo) ?? mappa.CenterOf(pair.Key);
+                if (dove is { } cella2)
+                {
+                    Modello("insegne", pair.Value, arredo, cella2.X, cella2.Y, cella);
                 }
             }
+        }
+
+        /// La cella calpestabile subito fuori dalla porta di un luogo, se ne ha
+        /// una. Nullo per gli spiazzi, che porta non ce l'hanno.
+        private static Cell? SullUscio(VillageMap mappa, PlaceRect luogo)
+        {
+            for (var y = luogo.Y - 1; y <= luogo.Y + luogo.H; y++)
+            {
+                for (var x = luogo.X - 1; x <= luogo.X + luogo.W; x++)
+                {
+                    if (x < 1 || y < 1 || x >= mappa.Width - 1 || y >= mappa.Height - 1
+                        || mappa.Rows[y][x] != '+')
+                    {
+                        continue;
+                    }
+                    // Il lato di fuori: dei due vicini calpestabili della soglia,
+                    // quello che non sta dentro il rettangolo.
+                    foreach (var passo in new[] { (1, 0), (-1, 0), (0, 1), (0, -1) })
+                    {
+                        var ax = x + passo.Item1;
+                        var ay = y + passo.Item2;
+                        var fuori = ax < luogo.X || ax >= luogo.X + luogo.W
+                                    || ay < luogo.Y || ay >= luogo.Y + luogo.H;
+                        if (fuori && (mappa.Rows[ay][ax] == '.' || mappa.Rows[ay][ax] == ','))
+                        {
+                            return new Cell(ax, ay);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// Le stanze: una luce accesa e quattro mobili contro le pareti.
+        ///
+        /// E' quello che mancava perche' una casa fosse una casa e non una scatola
+        /// col tetto. La luce viene prima dei mobili: da quando c'e' un tetto,
+        /// dentro non entra piu' niente, e una stanza buia con dentro una persona
+        /// e' peggio di una stanza vuota.
+        ///
+        /// I mobili stanno contro il muro, mai in mezzo, mai sulla soglia e mai
+        /// addosso a chi ci abita: il centro della stanza e' dove si cammina e
+        /// dove si parla, e va lasciato libero. E' l'errore che ho appena fatto
+        /// con le insegne.
+        private static void Stanze(VillageMap mappa, float cella, Transform radice)
+        {
+            var dentro = new GameObject("stanze").transform;
+            dentro.SetParent(radice);
+            var occupate = new HashSet<int>();
+            foreach (var pair in mappa.Spawns)
+            {
+                occupate.Add(pair.Value.Y * mappa.Width + pair.Value.X);
+            }
+
+            foreach (var pair in mappa.Places)
+            {
+                var luogo = pair.Value;
+                if (!HaUnInterno(mappa, luogo) || DentroUnAltro(mappa, pair.Key, luogo))
+                {
+                    continue;
+                }
+
+                var centro = mappa.CenterOf(pair.Key);
+                if (centro is { } fuoco)
+                {
+                    var lampada = new GameObject("luce " + pair.Key).AddComponent<Light>();
+                    lampada.transform.SetParent(dentro);
+                    lampada.transform.position =
+                        new Vector3(fuoco.X * cella, AltezzaMuro - 0.55f, -fuoco.Y * cella);
+                    lampada.type = LightType.Point;
+                    // Una lampadina del 1987, non un faretto: gialla e bassa.
+                    lampada.color = new Color(1f, 0.86f, 0.66f);
+                    lampada.intensity = 1.35f;
+                    lampada.range = Mathf.Max(luogo.W, luogo.H) * cella * 1.4f;
+                    lampada.shadows = LightShadows.None;
+                }
+
+                var roba = Mobilia.TryGetValue(pair.Key, out var suoi) ? suoi : Casa;
+                for (var y = luogo.Y; y < luogo.Y + luogo.H && y < mappa.Height - 1; y++)
+                {
+                    for (var x = luogo.X; x < luogo.X + luogo.W && x < mappa.Width - 1; x++)
+                    {
+                        if (mappa.Rows[y][x] != '~' || Caso(x, y, 109) < 0.62f
+                            || occupate.Contains(y * mappa.Width + x)
+                            || AccantoAUnaPorta(mappa, x, y))
+                        {
+                            continue;
+                        }
+                        if (!ControIlMuro(mappa, x, y, out var verso))
+                        {
+                            continue;
+                        }
+                        var mobile = Modello("casa", Scegli(roba, x, y, 113), dentro, x, y, cella);
+                        if (mobile != null)
+                        {
+                            mobile.transform.position += new Vector3(verso.x, 0f, verso.y) * cella * 0.3f;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// La direzione del muro piu' vicino, se ce n'e' uno di fianco.
+        private static bool ControIlMuro(VillageMap mappa, int x, int y, out Vector2 verso)
+        {
+            if (mappa.Rows[y][x - 1] == '#') { verso = new Vector2(-1f, 0f); return true; }
+            if (mappa.Rows[y][x + 1] == '#') { verso = new Vector2(1f, 0f); return true; }
+            if (mappa.Rows[y - 1][x] == '#') { verso = new Vector2(0f, 1f); return true; }
+            if (mappa.Rows[y + 1][x] == '#') { verso = new Vector2(0f, -1f); return true; }
+            verso = Vector2.zero;
+            return false;
         }
 
         /// I tetti.

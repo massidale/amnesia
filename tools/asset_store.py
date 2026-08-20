@@ -82,6 +82,15 @@ GRUPPI = {
         "rpgpp_lt_terrain_grass_01", "rpgpp_lt_terrain_grass_02",
     ],
     "cielo": ["rpgpp_lt_sky_01", "rpgpp_lt_cloud_01", "rpgpp_lt_cloud_02"],
+    # I mobili. Vanno DENTRO le stanze, appoggiati alle pareti interne: e' la
+    # differenza fra una casa e una scatola con un tetto sopra.
+    "casa": [
+        "rpgpp_lt_table_01", "rpgpp_lt_chair_01a", "rpgpp_lt_chair_01b",
+        "rpgpp_lt_bench_wood_03", "rpgpp_lt_hanger_wood_01", "rpgpp_lt_hanger_wood_02",
+        "rpgpp_lt_bowl_metal_01", "rpgpp_lt_vase_03", "rpgpp_lt_plant_01",
+        "rpgpp_lt_plant_02", "rpgpp_lt_sack_open_01", "rpgpp_lt_log_wood_02b",
+        "rpgpp_lt_shield_wall_01a", "rpgpp_lt_bathtub_wood_01",
+    ],
     # La gente. Il pacchetto gratuito ha quattro vestiti in tutto, e i
     # personaggi sono quattordici: a distinguerli non e' il modello, e' il
     # colore che il codice da' alla camicia di ciascuno.
