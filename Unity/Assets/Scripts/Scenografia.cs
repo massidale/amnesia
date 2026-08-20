@@ -24,16 +24,15 @@ namespace AmnesiaUnity
         /// che si vede. Se una proporzione non convince, sono questi tre numeri.
         private const float ScalaAlberi = 0.55f;
         private const float ScalaSottobosco = 0.7f;
-        private const float ScalaArredo = 1f;
-
-        /// Il raggio della cupola, in diagonali di mappa. Piu' grande e' piu'
-        /// lontano sta l'orizzonte, ma la nebbia lo sbianca: sopra il mezzo
-        /// diventa una tinta unita, sotto il quarto si vede la cupola addosso.
-        private const float ScalaCielo = 0.6f;
-
-        /// Quanto e' vestito il paese. Piu' alto, piu' vuoto: e' la frazione di
-        /// celle a ridosso di un muro che restano nude.
-        private const float SogliaArredo = 0.74f;
+        /// Il raggio della cupola, in diagonali di mappa.
+        ///
+        /// DEVE stare sopra 1, e il motivo e' costato una sera: a 0.6 la cupola
+        /// aveva un raggio di sessantaquattro metri su una mappa che ne misura
+        /// centosei di diagonale, quindi tagliava dentro il paese. Da un capo si
+        /// vedeva un muro bianco al posto dell'altro capo, e attraversandolo le
+        /// case comparivano. Il cielo va tenuto piu' lontano del punto piu'
+        /// lontano, sempre.
+        private const float ScalaCielo = 1.35f;
 
         private static readonly Color Strada = new Color(0.44f, 0.41f, 0.36f);
         private static readonly Color Prato = new Color(0.33f, 0.38f, 0.24f);
@@ -44,6 +43,9 @@ namespace AmnesiaUnity
         private static readonly Color Intonaco = new Color(0.62f, 0.56f, 0.47f);
         private static readonly Color Roccia = new Color(0.31f, 0.31f, 0.30f);
         private static readonly Color Bosco = new Color(0.22f, 0.30f, 0.20f);
+
+        /// Le lose: in queste valli i tetti sono di pietra grigia, non di coppi.
+        private static readonly Color Lose = new Color(0.29f, 0.28f, 0.27f);
 
         /// Ottobre in montagna: cielo chiuso, luce bassa, foschia che mangia il
         /// fondo valle. La nebbia non e' atmosfera, e' quello che impedisce di
@@ -58,7 +60,7 @@ namespace AmnesiaUnity
             Terreno(mappa, cella, radice);
             Volumi(mappa, cella, radice);
             Vegetazione(mappa, cella, radice);
-            Steccato(mappa, cella, radice);
+            Tetti(mappa, cella, radice);
             Arredo(mappa, cella, radice);
             Bordi(mappa, cella, radice);
         }
@@ -106,7 +108,7 @@ namespace AmnesiaUnity
             RenderSettings.fog = true;
             RenderSettings.fogMode = FogMode.ExponentialSquared;
             RenderSettings.fogColor = Cielo;
-            RenderSettings.fogDensity = 0.014f;
+            RenderSettings.fogDensity = 0.006f;
         }
 
         /// La cupola del cielo e qualche nuvola.
@@ -208,55 +210,6 @@ namespace AmnesiaUnity
                     }
                 }
             }
-            // E fuori dal bordo, dove non si arriva ma si vede.
-            for (var i = 0; i < 700; i++)
-            {
-                var x = (int)((Caso(i, 2, 71) * 2f - 0.5f) * mappa.Width);
-                var y = (int)((Caso(i, 4, 73) * 2f - 0.5f) * mappa.Height);
-                if (x >= 0 && x < mappa.Width && y >= 0 && y < mappa.Height)
-                {
-                    continue;
-                }
-                var fuori = Modello("prato", Scegli(Erba, i, i, 79), ciuffi, x, y, cella);
-                if (fuori == null)
-                {
-                    break;
-                }
-                fuori.transform.localScale = Vector3.one * (1f + Caso(i, 6, 83) * 1.4f);
-            }
-        }
-
-        /// Gli steccati fra l'orto e la strada.
-        private static void Steccato(VillageMap mappa, float cella, Transform radice)
-        {
-            var recinti = new GameObject("steccati").transform;
-            recinti.SetParent(radice);
-
-            for (var y = 1; y < mappa.Height - 1; y++)
-            {
-                for (var x = 1; x < mappa.Width - 1; x++)
-                {
-                    if (mappa.Rows[y][x] != ',' || Caso(x, y, 89) < 0.42f || AccantoAUnaPorta(mappa, x, y))
-                    {
-                        continue;
-                    }
-                    // Lo steccato sta sul confine fra l'erba e la strada, e guarda
-                    // la strada: e' un recinto, e un recinto ha un dentro.
-                    float giro;
-                    if (mappa.Rows[y][x + 1] == '.') { giro = 0f; }
-                    else if (mappa.Rows[y][x - 1] == '.') { giro = 180f; }
-                    else if (mappa.Rows[y + 1][x] == '.') { giro = 90f; }
-                    else if (mappa.Rows[y - 1][x] == '.') { giro = 270f; }
-                    else { continue; }
-
-                    var palo = Modello("steccato", Scegli(Steccati, x, y, 97), recinti, x, y, cella);
-                    if (palo != null)
-                    {
-                        palo.transform.position = new Vector3(x * cella, 0f, -y * cella);
-                        palo.transform.rotation = Quaternion.Euler(0f, giro, 0f);
-                    }
-                }
-            }
         }
 
         public static Color ColoreDelCielo => Cielo;
@@ -347,7 +300,7 @@ namespace AmnesiaUnity
                         // trasforma una fila di cubi grigi in una parete di
                         // roccia, e sono le prime cose che si vedono alzando gli
                         // occhi da qualunque punto del paese.
-                        if (Caso(x, y, 101) > 0.62f)
+                        if (Caso(x, y, 101) > 0.84f)
                         {
                             var masso = Modello("roccia", Scegli(Massi, x, y, 103), monte, x, y, cella);
                             if (masso != null)
@@ -415,29 +368,6 @@ namespace AmnesiaUnity
             "rpgpp_lt_hill_small_01", "rpgpp_lt_hill_small_02",
         };
 
-        private static readonly string[] Steccati =
-        {
-            "rpgpp_lt_fence_wood_01a", "rpgpp_lt_fence_wood_01b",
-            "rpgpp_lt_fence_wood_02a", "rpgpp_lt_fence_wood_02b", "rpgpp_lt_fence_wood_02c",
-        };
-
-        /// Roba di gente che lavora, non decorazione: botti, casse, sacchi, una
-        /// scala appoggiata al muro. Serve a una cosa sola e non estetica — un
-        /// paese in cui ogni casa e' un cubo liscio non ha punti di riferimento,
-        /// e senza punti di riferimento «il castagneto sopra la curva» non vuol
-        /// dire niente. La geografia del quarto atto vive di questo.
-        private static readonly string[] Arredi =
-        {
-            "rpgpp_lt_barrel_01", "rpgpp_lt_barrel_02", "rpgpp_lt_crate_01", "rpgpp_lt_crate_02",
-            "rpgpp_lt_crate_03", "rpgpp_lt_sack_01", "rpgpp_lt_sack_02", "rpgpp_lt_sack_02_set",
-            "rpgpp_lt_basket_01", "rpgpp_lt_basket_02", "rpgpp_lt_bench_wood_01",
-            "rpgpp_lt_bench_wood_02", "rpgpp_lt_box_wood_01", "rpgpp_lt_log_wood_01",
-            "rpgpp_lt_log_wood_02a", "rpgpp_lt_bucket_01", "rpgpp_lt_vase_01", "rpgpp_lt_vase_02",
-            "rpgpp_lt_jug_01", "rpgpp_lt_trough_01", "rpgpp_lt_ladder_01", "rpgpp_lt_package_01",
-            "rpgpp_lt_hanger_clothes_01", "rpgpp_lt_rake_01", "rpgpp_lt_broom_01",
-            "rpgpp_lt_stones_01", "rpgpp_lt_flower_01", "rpgpp_lt_flower_02",
-        };
-
         /// Un oggetto solo per luogo, e ognuno dice che mestiere ci si fa. Il
         /// pozzo in piazza e' anche l'unica cosa del paese che si vede da lontano
         /// e che non e' una casa: e' li' che uno si orienta.
@@ -496,37 +426,16 @@ namespace AmnesiaUnity
             }
         }
 
-        /// Le cose appoggiate ai muri, e un oggetto per luogo che ne dica il
-        /// mestiere.
+        /// Un oggetto per luogo, e nient'altro.
+        ///
+        /// Prima ne spargeva una sessantina lungo tutti i muri del paese, e il
+        /// risultato era che non si vedeva piu' niente: quando ogni angolo ha una
+        /// cassa, nessuna cassa vuol dire piu' niente. Un pozzo in piazza e un
+        /// carro al deposito si ricordano; sessanta botti sono rumore.
         private static void Arredo(VillageMap mappa, float cella, Transform radice)
         {
             var arredo = new GameObject("arredo").transform;
             arredo.SetParent(radice);
-
-            for (var y = 1; y < mappa.Height - 1; y++)
-            {
-                for (var x = 1; x < mappa.Width - 1; x++)
-                {
-                    if (!Calpestabile(mappa, x, y) || Caso(x, y, 31) < SogliaArredo)
-                    {
-                        continue;
-                    }
-                    // Solo a ridosso di una parete, e mai davanti a una porta:
-                    // una cassa su una soglia e' un dettaglio grazioso il giorno
-                    // che lo metti e un ostacolo per tutta la partita.
-                    if (!ControIlMuro(mappa, x, y, out var verso) || AccantoAUnaPorta(mappa, x, y))
-                    {
-                        continue;
-                    }
-                    var cosa = Modello("arredo", Scegli(Arredi, x, y, 37), arredo, x, y, cella);
-                    if (cosa != null)
-                    {
-                        cosa.transform.position += new Vector3(verso.x, 0f, verso.y) * cella * 0.33f;
-                        cosa.transform.localScale = Vector3.one * ScalaArredo;
-                    }
-                }
-            }
-
             foreach (var pair in Insegne)
             {
                 var centro = mappa.CenterOf(pair.Key);
@@ -537,36 +446,112 @@ namespace AmnesiaUnity
             }
         }
 
-        private static bool Calpestabile(VillageMap mappa, int x, int y)
+        /// I tetti.
+        ///
+        /// E' la cosa che trasforma una scatola di cubi in una casa, e non si puo'
+        /// fare con gli edifici comprati: ogni luogo di questa mappa e' una stanza
+        /// in cui si entra — dentro la bottega c'e' Matteo — e un edificio chiuso
+        /// appoggiato sopra sigillerebbe la stanza col personaggio dentro. Il
+        /// tetto invece sta sopra i muri che ci sono gia', a due falde, con la
+        /// gronda che sporge: dall'esterno e' una casa, dall'interno non e'
+        /// cambiato niente.
+        private static void Tetti(VillageMap mappa, float cella, Transform radice)
         {
-            var simbolo = mappa.Rows[y][x];
-            return simbolo == '.' || simbolo == ',';
-        }
-
-        /// La direzione del muro piu' vicino, se ce n'e' uno di fianco.
-        private static bool ControIlMuro(VillageMap mappa, int x, int y, out Vector2 verso)
-        {
-            if (mappa.Rows[y][x - 1] == '#') { verso = new Vector2(-1f, 0f); return true; }
-            if (mappa.Rows[y][x + 1] == '#') { verso = new Vector2(1f, 0f); return true; }
-            if (mappa.Rows[y - 1][x] == '#') { verso = new Vector2(0f, 1f); return true; }
-            if (mappa.Rows[y + 1][x] == '#') { verso = new Vector2(0f, -1f); return true; }
-            verso = Vector2.zero;
-            return false;
-        }
-
-        private static bool AccantoAUnaPorta(VillageMap mappa, int x, int y)
-        {
-            for (var dy = -1; dy <= 1; dy++)
+            var falda = new Falda();
+            foreach (var pair in mappa.Places)
             {
-                for (var dx = -1; dx <= 1; dx++)
+                var luogo = pair.Value;
+                if (!HaUnInterno(mappa, luogo) || DentroUnAltro(mappa, pair.Key, luogo))
                 {
-                    if (mappa.Rows[y + dy][x + dx] == '+')
+                    continue;
+                }
+                Tetto(falda, luogo, cella);
+            }
+
+            var tetti = new GameObject("tetti");
+            tetti.transform.SetParent(radice);
+            var mesh = falda.Mesh();
+            tetti.AddComponent<MeshFilter>().sharedMesh = mesh;
+            tetti.AddComponent<MeshRenderer>().sharedMaterial = Materiale(Lose);
+        }
+
+        private static bool HaUnInterno(VillageMap mappa, PlaceRect luogo)
+        {
+            for (var y = luogo.Y; y < luogo.Y + luogo.H && y < mappa.Height; y++)
+            {
+                for (var x = luogo.X; x < luogo.X + luogo.W && x < mappa.Width; x++)
+                {
+                    if (mappa.Rows[y][x] == '~')
                     {
                         return true;
                     }
                 }
             }
             return false;
+        }
+
+        /// Il magazzino e il seminterrato stanno dentro il deposito: sono tre
+        /// nomi e un edificio solo, e tre tetti sovrapposti si vedono.
+        private static bool DentroUnAltro(VillageMap mappa, string nome, PlaceRect luogo)
+        {
+            foreach (var pair in mappa.Places)
+            {
+                var altro = pair.Value;
+                if (pair.Key == nome || altro.W * altro.H <= luogo.W * luogo.H)
+                {
+                    continue;
+                }
+                if (luogo.X >= altro.X && luogo.Y >= altro.Y
+                    && luogo.X + luogo.W <= altro.X + altro.W
+                    && luogo.Y + luogo.H <= altro.Y + altro.H)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void Tetto(Falda falda, PlaceRect luogo, float cella)
+        {
+            const float gronda = 0.45f;
+            const float colmo = 1.3f;
+            var x0 = (luogo.X - 0.5f - gronda) * cella;
+            var x1 = (luogo.X + luogo.W - 0.5f + gronda) * cella;
+            var z0 = -(luogo.Y - 0.5f - gronda) * cella;
+            var z1 = -(luogo.Y + luogo.H - 0.5f + gronda) * cella;
+            var basso = AltezzaMuro - 0.1f;
+            var alto = AltezzaMuro + colmo;
+
+            if (luogo.W >= luogo.H)
+            {
+                // Il colmo corre per il lungo, che e' come si copre una casa
+                // stretta: l'acqua deve scendere dal lato corto.
+                var zc = (z0 + z1) * 0.5f;
+                falda.Quadrilatero(
+                    new Vector3(x0, basso, z0), new Vector3(x1, basso, z0),
+                    new Vector3(x1, alto, zc), new Vector3(x0, alto, zc));
+                falda.Quadrilatero(
+                    new Vector3(x0, alto, zc), new Vector3(x1, alto, zc),
+                    new Vector3(x1, basso, z1), new Vector3(x0, basso, z1));
+                falda.Triangolo(
+                    new Vector3(x0, basso, z0), new Vector3(x0, alto, zc), new Vector3(x0, basso, z1));
+                falda.Triangolo(
+                    new Vector3(x1, basso, z0), new Vector3(x1, alto, zc), new Vector3(x1, basso, z1));
+            }
+            else
+            {
+                var xc = (x0 + x1) * 0.5f;
+                falda.Quadrilatero(
+                    new Vector3(x0, basso, z0), new Vector3(xc, alto, z0),
+                    new Vector3(xc, alto, z1), new Vector3(x0, basso, z1));
+                falda.Quadrilatero(
+                    new Vector3(xc, alto, z0), new Vector3(x1, basso, z0),
+                    new Vector3(x1, basso, z1), new Vector3(xc, alto, z1));
+                falda.Triangolo(
+                    new Vector3(x0, basso, z0), new Vector3(xc, alto, z0), new Vector3(x1, basso, z0));
+                falda.Triangolo(
+                    new Vector3(x0, basso, z1), new Vector3(xc, alto, z1), new Vector3(x1, basso, z1));
+            }
         }
 
         /// Quanto e' grande un modello, in metri, cosi' com'e' uscito dal
@@ -641,6 +626,28 @@ namespace AmnesiaUnity
                 _punti.Add(new Vector3(x + m, y, z + m));
                 _punti.Add(new Vector3(x + m, y, z - m));
                 _triangoli.AddRange(new[] { b, b + 1, b + 2, b, b + 2, b + 3 });
+            }
+
+            /// Quattro punti in ordine di giro. Ogni faccia si emette anche
+            /// rovesciata: senza vedere il risultato non si indovina da che parte
+            /// guarda una falda, e un tetto invisibile e' peggio di un tetto
+            /// illuminato male.
+            public void Quadrilatero(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+            {
+                var i = _punti.Count;
+                _punti.Add(a); _punti.Add(b); _punti.Add(c); _punti.Add(d);
+                _triangoli.AddRange(new[] { i, i + 1, i + 2, i, i + 2, i + 3 });
+                _punti.Add(a); _punti.Add(b); _punti.Add(c); _punti.Add(d);
+                _triangoli.AddRange(new[] { i + 6, i + 5, i + 4, i + 7, i + 6, i + 4 });
+            }
+
+            public void Triangolo(Vector3 a, Vector3 b, Vector3 c)
+            {
+                var i = _punti.Count;
+                _punti.Add(a); _punti.Add(b); _punti.Add(c);
+                _triangoli.AddRange(new[] { i, i + 1, i + 2 });
+                _punti.Add(a); _punti.Add(b); _punti.Add(c);
+                _triangoli.AddRange(new[] { i + 5, i + 4, i + 3 });
             }
 
             public Mesh Mesh()
