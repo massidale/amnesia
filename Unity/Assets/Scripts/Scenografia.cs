@@ -352,11 +352,13 @@ namespace AmnesiaUnity
         /// I sassi che si appoggiano sopra la montagna. Un cubo grigio alto sei
         /// metri e' un muro; lo stesso cubo con tre massi sopra e' una parete di
         /// roccia, ed e' l'unica differenza fra le due cose.
+        // Solo sassi. Le hill_small che c'erano prima non sono sassi: sono
+        // collinette erbose a forma di cupola, e appoggiate in cima ai blocchi
+        // della montagna erano i "cupoloni verdi in cielo".
         private static readonly string[] Massi =
         {
             "rpgpp_lt_rock_01", "rpgpp_lt_rock_02", "rpgpp_lt_rock_03",
             "rpgpp_lt_rock_small_01", "rpgpp_lt_rock_small_02", "rpgpp_lt_rocks_tiny_01",
-            "rpgpp_lt_hill_small_01", "rpgpp_lt_hill_small_02",
         };
 
         /// Un oggetto per luogo, che ne dica il mestiere. Sta FUORI, di fianco
