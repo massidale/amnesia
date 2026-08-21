@@ -63,20 +63,33 @@ namespace AmnesiaUnity
         private static VillageMap _mappa;
         private static float _cella = 1f;
 
-        public static void Costruisci(VillageMap mappa, float cella, Transform radice)
+        /// `completo`: true rifa il villaggio intero di prima (case, tetti,
+        /// interni, arredo, colline, confini); false (default) tiene solo il
+        /// terreno calpestabile, gli alberi e il cielo, per montare il paese a
+        /// mano. Cosi' la versione piena non e' persa: e' un interruttore.
+        public static void Costruisci(VillageMap mappa, float cella, Transform radice, bool completo = false)
         {
             _mappa = mappa;
             _cella = cella;
             Cielo1987();
             Volta(mappa, cella, radice);
-            Prateria(mappa, cella, radice);
-            Terreno(mappa, cella, radice);
-            Volumi(mappa, cella, radice);
+            if (completo)
+            {
+                Prateria(mappa, cella, radice);
+            }
+            Terreno(mappa, cella, radice, completo);
+            if (completo)
+            {
+                Volumi(mappa, cella, radice);
+            }
             Vegetazione(mappa, cella, radice);
-            Tetti(mappa, cella, radice);
-            Stanze(mappa, cella, radice);
-            Arredo(mappa, cella, radice);
-            Bordi(mappa, cella, radice);
+            if (completo)
+            {
+                Tetti(mappa, cella, radice);
+                Stanze(mappa, cella, radice);
+                Arredo(mappa, cella, radice);
+                Bordi(mappa, cella, radice);
+            }
         }
 
         /// Quattro pareti invisibili intorno al paese. Il terreno finisce dove
@@ -297,17 +310,16 @@ namespace AmnesiaUnity
             }
         }
 
-        private static void Terreno(VillageMap mappa, float cella, Transform radice)
+        private static void Terreno(VillageMap mappa, float cella, Transform radice, bool completo = false)
         {
+            bool Interno(int ax, int ay) =>
+                ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height
+                && (mappa.Rows[ay][ax] == '~' || mappa.Rows[ay][ax] == '+');
             var quote = new Dictionary<char, float>
             {
                 ['.'] = 0f, [','] = 0f, ['~'] = 0.02f, ['+'] = 0.02f, ['"'] = 0f, ['='] = -0.25f,
             };
             var falde = new Dictionary<char, Falda>();
-
-            bool Interno(int ax, int ay) =>
-                ax >= 0 && ay >= 0 && ax < mappa.Width && ay < mappa.Height
-                && (mappa.Rows[ay][ax] == '~' || mappa.Rows[ay][ax] == '+');
 
             for (var y = 0; y < mappa.Height; y++)
             {
@@ -317,23 +329,30 @@ namespace AmnesiaUnity
                     // Sotto i muri e la montagna il terreno c'e' lo stesso: senza,
                     // ogni porta si aprirebbe sul vuoto.
                     var chiave = quote.ContainsKey(simbolo) ? simbolo : '.';
-                    // Sotto un muro che tocca una stanza — di lato O d'angolo — il
-                    // suolo e' pavimento, non prato: la lastra sta al centro della
-                    // cella, e mezza cella resta in vista da dentro. Era il verde
-                    // che spuntava negli angoli delle case e ai lati dell'ingresso.
-                    if (simbolo == '#')
+                    if (completo)
                     {
-                        for (var dy = -1; dy <= 1 && chiave != '~'; dy++)
+                        // Villaggio pieno: sotto un muro che tocca una stanza il
+                        // suolo diventa pavimento, non prato.
+                        if (simbolo == '#')
                         {
-                            for (var dx = -1; dx <= 1; dx++)
+                            for (var dy = -1; dy <= 1 && chiave != '~'; dy++)
                             {
-                                if ((dx != 0 || dy != 0) && Interno(x + dx, y + dy))
+                                for (var dx = -1; dx <= 1; dx++)
                                 {
-                                    chiave = '~';
-                                    break;
+                                    if ((dx != 0 || dy != 0) && Interno(x + dx, y + dy))
+                                    {
+                                        chiave = '~';
+                                        break;
+                                    }
                                 }
                             }
                         }
+                    }
+                    else if (chiave == '~' || chiave == '+')
+                    {
+                        // Minimo: niente pavimenti di casa, le celle interne
+                        // tornano suolo calpestabile.
+                        chiave = '.';
                     }
                     // Il sentiero e' fatto di mattonelle appoggiate sull'erba: il
                     // suolo sotto e' prato come tutto il resto.

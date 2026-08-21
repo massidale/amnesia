@@ -54,6 +54,12 @@ public sealed class DeclarationService
     public string TextOf(string declarationId, string speakerId) =>
         _declarations.TextOf(declarationId, speakerId);
 
+    /// Cosa questo personaggio puo' dire ADESSO, al suo gradino corrente. E'
+    /// il sottoinsieme dell'enum che il glossario dello strumento puo' spiegare
+    /// per esteso senza svelare i gradini che non ha ancora raggiunto.
+    public IReadOnlyList<string> SayableNow(string npcId, WorldState world) =>
+        Sayable(_declarations, _positions, npcId, world);
+
     public Result Declare(WorldState world, string speakerId, string declarationId)
     {
         if (!_declarations.Has(declarationId))

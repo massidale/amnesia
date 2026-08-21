@@ -1,4 +1,5 @@
 using Amnesia.Core;
+using System.Linq;
 using Amnesia.Dialogue;
 using NUnit.Framework;
 
@@ -25,7 +26,7 @@ public class FuoriOrdineTests
     {
         var messaggi = Costruttore().Build("anna", world, System.Array.Empty<LoggedMessage>(),
             new TurnContext { Spoken = "guarda qui", ClockText = "9:00" });
-        return messaggi[messaggi.Count - 1].Parts.Single().Text;
+        return string.Join("\n", messaggi.SelectMany(m => m.Parts).Select(x => x.Text));
     }
 
     /// Il braccialetto da solo non apre niente: senza la frase, Anna resta la

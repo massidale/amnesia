@@ -97,7 +97,10 @@ public static class ToolCatalog
     /// la partita, non di quelle che puo' dire adesso: cosi' non cambia mai
     /// mentre si gioca, e il prefisso in cache regge. Ogni personaggio ha gia'
     /// la sua cache, perche' ha la sua scheda.
-    public static IReadOnlyList<ToolDefinition> SchemasFor(IReadOnlyList<string> declarationIds)
+    public static IReadOnlyList<ToolDefinition> SchemasFor(
+        IReadOnlyList<string> declarationIds,
+        IReadOnlyList<string>? glossaIds = null,
+        Func<string, string>? testoDi = null)
     {
         var ridotto = new List<ToolDefinition>();
         foreach (var strumento in Catalog)
@@ -118,12 +121,52 @@ public static class ToolCatalog
             {
                 Properties = new Dictionary<string, JsonSchema>
                 {
-                    ["id"] = new() { Type = "string", EnumValues = declarationIds.ToArray() },
+                    ["id"] = new()
+                    {
+                        Type = "string",
+                        // L'id da solo e' uno slug: il modello deve indovinare a
+                        // cosa corrisponde. Qui gli si mette accanto il testo di
+                        // quella dichiarazione — nella variante di QUESTO
+                        // personaggio — cosi' sceglie l'id per cio' che ha detto,
+                        // non per come suona il nome. Stabile per personaggio:
+                        // il blocco resta un prefisso in cache.
+                        // Il glossario spiega SOLO cio' che il personaggio puo'
+                        // dire adesso: l'enum resta "tutta la partita" per la
+                        // cache, ma i testi dei gradini non ancora raggiunti non
+                        // entrano nel prompt — o il personaggio racconterebbe il
+                        // sacrificio prima che gli si mostri il braccialetto.
+                        Description = GlossarioDegliId(glossaIds ?? declarationIds, testoDi),
+                        EnumValues = declarationIds.ToArray(),
+                    },
                 },
                 Required = new[] { "id" },
             }));
         }
         return ridotto;
+    }
+
+    /// La riga di descrizione del parametro `id`: ogni identificativo con
+    /// accanto la cosa che vuol dire. Senza una funzione che dia i testi, resta
+    /// nulla e lo schema e' quello di prima (solo enum).
+    private static string? GlossarioDegliId(IReadOnlyList<string> declarationIds, Func<string, string>? testoDi)
+    {
+        if (testoDi is null)
+        {
+            return null;
+        }
+        var righe = new List<string>
+        {
+            "Ogni id qui sotto e' una cosa che potresti dire, scritta per esteso solo "
+                + "perche' tu la riconosca — non sono le parole da usare: quelle le scegli "
+                + "tu. Quando dici una di queste cose, anche con parole tue, chiama il suo "
+                + "id. Una cosa che non hai detto affatto, il suo id non si chiama:",
+        };
+        foreach (var id in declarationIds)
+        {
+            var testo = testoDi(id);
+            righe.Add(testo.Length > 0 ? $"- {id}: «{testo}»" : $"- {id}");
+        }
+        return string.Join("\n", righe);
     }
 
     private static ToolDefinition Function(string name, string description, JsonSchema parameters) =>

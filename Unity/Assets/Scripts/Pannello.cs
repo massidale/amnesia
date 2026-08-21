@@ -215,13 +215,34 @@ namespace AmnesiaUnity
 
             if (turno.IsOk)
             {
+                // DIAGNOSTICA: perche' ogni tanto lo schermo resta muto. Un turno
+                // riuscito con Reply vuota e FinishReason "length" + reasoning
+                // lungo = il modello ha finito il budget ragionando e il testo
+                // non e' mai uscito.
+                var vuota = string.IsNullOrWhiteSpace(turno.Reply);
+                var diag = $"[turno] npc={_con} ok=1 reply.len={turno.Reply.Length} " +
+                    $"finish={turno.FinishReason} compTokens={turno.CompletionTokens} " +
+                    $"reasoning.len={turno.ReasoningLength} " +
+                    $"dichiara=[{string.Join(",", turno.Declared)}] " +
+                    $"rifiuta=[{string.Join(",", turno.RefusedDeclarations)}]";
+                if (vuota)
+                {
+                    UnityEngine.Debug.LogWarning("RISPOSTA VUOTA — " + diag);
+                }
+                else
+                {
+                    UnityEngine.Debug.Log(diag);
+                }
                 Trascrivi();
                 Targhette();
                 _stato.color = Stile.Grafite;
-                _stato.text = Coda(turno);
+                _stato.text = vuota
+                    ? $"(muto) finish={turno.FinishReason}, reasoning={turno.ReasoningLength}, token={turno.CompletionTokens}"
+                    : Coda(turno);
             }
             else
             {
+                UnityEngine.Debug.LogWarning($"[turno] npc={_con} ok=0 code={turno.Code} msg={turno.Message}");
                 _stato.color = Stile.Ruggine;
                 _stato.text = $"non ha risposto — {turno.Message}";
             }

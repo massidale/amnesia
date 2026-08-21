@@ -135,7 +135,7 @@ public sealed class ConversationSession
 
         var stopwatch = Stopwatch.StartNew();
         var reply = await _transport
-            .ChatAsync(_model, messages, ToolCatalog.SchemasFor(_declarations.EverSayable(npcId)), cancellationToken)
+            .ChatAsync(_model, messages, ToolCatalog.SchemasFor(_declarations.EverSayable(npcId), _declarations.SayableNow(npcId, draft), id => _declarations.TextOf(id, npcId)), cancellationToken)
             .ConfigureAwait(false);
         stopwatch.Stop();
 
@@ -169,6 +169,19 @@ public sealed class ConversationSession
         if (string.IsNullOrWhiteSpace(detto) && declared.Count > 0)
         {
             detto = string.Join(" ", declared.Select(id => _declarations.TextOf(id, npcId)));
+        }
+
+        // Niente testo e niente da sostituire: la risposta e' vuota — di solito
+        // troncata (finish=length, il budget speso a ragionare). Il turno
+        // fallisce, e come ogni fallimento e' ATOMICO: si lavora sulla copia,
+        // quindi il mondo non si muove, non si logga una riga vuota, e il
+        // giocatore riprova senza aver perso niente (tranne la chiamata gia'
+        // pagata, che almeno non lascia lo schermo muto).
+        if (string.IsNullOrWhiteSpace(detto))
+        {
+            return TurnResult.Fail(
+                "empty_reply",
+                $"risposta vuota (finish={reply.Value.FinishReason}, reasoning={reply.Value.Reasoning.Length} char)");
         }
 
         // SICUREZZA: il registro viene rigiocato intatto nei prompt dei turni
@@ -210,6 +223,9 @@ public sealed class ConversationSession
             Declared = declared,
             RefusedDeclarations = refused,
             Minute = draft.Minute,
+            FinishReason = reply.Value.FinishReason,
+            CompletionTokens = reply.Value.Usage.CompletionTokens,
+            ReasoningLength = reply.Value.Reasoning.Length,
         };
     }
 }

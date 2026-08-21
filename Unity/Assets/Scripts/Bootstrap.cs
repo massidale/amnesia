@@ -37,6 +37,20 @@ namespace AmnesiaUnity
         private PlaceTable _luoghi;
         private readonly Dictionary<string, Transform> _porte = new Dictionary<string, Transform>();
 
+        // Lasciato acceso, il paese e le figure si generano da codice come
+        // sempre. Ma qualunque figura con un componente Personaggio, o porta con
+        // un PortaMarker, piazzata a mano nell'editor viene usata al posto di
+        // quella generata: cosi' monti la scena a mano un pezzo alla volta. Togli
+        // la spunta per non generare piu' la scenografia decorativa.
+        [SerializeField] private bool generaScenografia = true;
+
+        // Spuntalo per rigenerare il villaggio COMPLETO di prima (case, tetti,
+        // interni, arredo, colline, confini). Spento: solo terreno + alberi +
+        // cielo, per costruire il paese a mano. La versione piena non e' persa.
+        [SerializeField] private bool villaggioCompleto = false;
+        private readonly HashSet<string> _aManoCorpi = new HashSet<string>();
+        private readonly HashSet<string> _aManoPorte = new HashSet<string>();
+
         /// Il taccuino si costruisce sul mondo di adesso e non si conserva: la
         /// sessione sostituisce il mondo a ogni turno riuscito, e un taccuino
         /// tenuto da parte leggerebbe la partita di due battute fa.
@@ -61,6 +75,57 @@ namespace AmnesiaUnity
             return Path.Combine(Application.streamingAssetsPath, relativo);
         }
 
+        /// Cuoce il paese in oggetti veri dentro la scena, in edit mode: da qui
+        /// lo sposti, lo cancelli, lo rifai a mano come una scena normale. Dopo,
+        /// SALVA la scena (Cmd+S). Spegne la generazione a runtime, e le figure/
+        /// porte restano riconosciute perche' cotte con il loro id. Fallo UNA
+        /// volta, su una scena pulita: rilanciarlo raddoppia tutto.
+        /// Distrugge i gruppi che genera il codice — «paese», «gente», «porte»
+        /// e il «sole» — cosi' un nuovo bake riparte pulito invece di impilare.
+        /// DestroyImmediate perche' in edit mode Destroy non rimuove subito.
+        private static void PulisciGenerato()
+        {
+            foreach (var nome in new[] { "paese", "gente", "porte", "sole" })
+            {
+                var vecchio = GameObject.Find(nome);
+                while (vecchio != null)
+                {
+                    DestroyImmediate(vecchio);
+                    vecchio = GameObject.Find(nome);
+                }
+            }
+        }
+
+        [ContextMenu("Genera scena statica (poi modificala a mano)")]
+        public void GeneraScenaStatica()
+        {
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Fallo in edit mode (non in Play).");
+                return;
+            }
+            if (!Carica())
+            {
+                Debug.LogError("Non riesco a caricare il contenuto: " + Problema);
+                return;
+            }
+            // Prima di rigenerare, butta via il generato di prima: senza, ogni
+            // clic impila un'altra copia (e un altro sole, per questo diventava
+            // solo piu' luminoso). Le figure/porte piazzate a mano non hanno
+            // questi nomi, quindi non le tocca.
+            PulisciGenerato();
+            // Il bake genera SEMPRE (anche se il flag era spento da una cottura
+            // precedente); lo rispegne in fondo, per il Play.
+            generaScenografia = true;
+            RegistraOggettiInScena();
+            CostruisciIlPaese();
+            CostruisciLeFigure();
+            CostruisciLePorte();
+            generaScenografia = false;
+            Debug.Log("Paese generato in scena. Ora e' statico: modificalo a mano e SALVA (Cmd+S). "
+                + "Al Play non verra' rigenerato.");
+        }
+
         private void Awake()
         {
             if (!Carica())
@@ -68,6 +133,7 @@ namespace AmnesiaUnity
                 enabled = false;
                 return;
             }
+            RegistraOggettiInScena();
             CostruisciIlPaese();
             CostruisciLeFigure();
             CostruisciLePorte();
@@ -168,7 +234,7 @@ namespace AmnesiaUnity
                 reazioni.IsOk ? reazioni.Value : ReactionTable.Empty());
             Session = new ConversationSession(
                 World, new ConversationLog(), contesto,
-                new OpenRouterTransport(chiave.Value, 60), tabelle, Items, "deepseek/deepseek-v3.2");
+                new OpenRouterTransport(chiave.Value, 60), tabelle, Items, "deepseek/deepseek-v4-flash-0731");
             return true;
         }
 
@@ -197,6 +263,36 @@ namespace AmnesiaUnity
         [System.Serializable] private sealed class ItemDto
         {
             public string id; public string name; public string visible; public string description;
+        }
+
+        /// Raccoglie gli oggetti piazzati a mano nell'editor — figure col
+        /// componente Personaggio, porte col PortaMarker — e li registra come se
+        /// li avesse creati il codice. Gli id trovati vengono saltati dalla
+        /// generazione, per non ritrovarsi due Anna. La figura la rinomino con
+        /// l'id, perche' la telecamera la cerca per nome.
+        private void RegistraOggettiInScena()
+        {
+            foreach (var p in FindObjectsByType<Personaggio>(FindObjectsSortMode.None))
+            {
+                var id = p.Id.Trim();
+                if (id.Length == 0)
+                {
+                    continue;
+                }
+                p.gameObject.name = id;
+                _corpi[id] = p.transform;
+                _aManoCorpi.Add(id);
+            }
+            foreach (var m in FindObjectsByType<PortaMarker>(FindObjectsSortMode.None))
+            {
+                var id = m.Id.Trim();
+                if (id.Length == 0)
+                {
+                    continue;
+                }
+                _porte[id] = m.transform;
+                _aManoPorte.Add(id);
+            }
         }
 
         private void PosizionaGliAttori()
@@ -247,7 +343,11 @@ namespace AmnesiaUnity
 
         private void CostruisciIlPaese()
         {
-            Scenografia.Costruisci(Map, CellSize, new GameObject("paese").transform);
+            if (!generaScenografia)
+            {
+                return;
+            }
+            Scenografia.Costruisci(Map, CellSize, new GameObject("paese").transform, villaggioCompleto);
         }
 
         /// Il ferro sulla porta. Sta in scena solo finche' e' chiuso: quando si
@@ -258,6 +358,10 @@ namespace AmnesiaUnity
             var porte = new GameObject("porte").transform;
             foreach (var id in _luoghi.Ids)
             {
+                if (_aManoPorte.Contains(id))
+                {
+                    continue;
+                }
                 var luogo = _luoghi.Find(id);
                 if (luogo == null || Porte.IsOpen(World, id))
                 {
@@ -282,6 +386,7 @@ namespace AmnesiaUnity
                     battente.GetComponent<Renderer>().sharedMaterial =
                         Scenografia.Materiale(new Color(0.24f, 0.21f, 0.18f));
                 }
+                battente.AddComponent<PortaMarker>().Id = id;
                 _porte[id] = battente.transform;
             }
         }
@@ -362,6 +467,10 @@ namespace AmnesiaUnity
             var gente = new GameObject("gente").transform;
             foreach (var pair in Corpo)
             {
+                if (_aManoCorpi.Contains(pair.Key))
+                {
+                    continue;
+                }
                 var posizione = World.ActorOf(pair.Key).Position;
                 if (!posizione.HasValue)
                 {
@@ -369,6 +478,7 @@ namespace AmnesiaUnity
                 }
                 var figura = Figura(pair.Key, pair.Value);
                 figura.name = pair.Key;
+                figura.AddComponent<Personaggio>().Id = pair.Key;
                 figura.transform.SetParent(gente);
                 var dove = InScena(posizione.Value);
                 // I piedi sul suolo vero: il prato ondeggia, e una figura a quota

@@ -14,6 +14,12 @@ public sealed record LlmReply
     public TokenUsage Usage { get; init; } = TokenUsage.Empty;
 
     public string FinishReason { get; init; } = "";
+
+    /// Il "pensiero" dei modelli reasoning, che arriva in un campo separato da
+    /// `content`. Non e' una battuta da mostrare: serve solo a diagnosticare i
+    /// turni in cui `content` torna vuoto perche' il budget e' finito nel
+    /// ragionamento.
+    public string Reasoning { get; init; } = "";
 }
 
 /// Una chiamata a strumento gia' validata: gli argomenti sono certamente un

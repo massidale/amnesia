@@ -34,6 +34,15 @@ public sealed record TurnResult
 
     public int Minute { get; init; }
 
+    /// Diagnostica del turno (perche' a volte lo schermo resta muto): come il
+    /// provider ha chiuso la risposta, quanti token di completamento ha speso, e
+    /// quanto lungo era il "pensiero" reasoning. Se il turno riesce ma Reply e'
+    /// vuota con FinishReason "length" e ReasoningLength grande, il budget e'
+    /// finito nel ragionamento e il testo non e' mai uscito.
+    public string FinishReason { get; init; } = "";
+    public int CompletionTokens { get; init; }
+    public int ReasoningLength { get; init; }
+
     public static TurnResult Fail(string code, string message) =>
         new() { IsOk = false, Code = code, Message = message };
 }

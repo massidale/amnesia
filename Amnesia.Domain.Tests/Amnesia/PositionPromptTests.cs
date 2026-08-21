@@ -1,4 +1,5 @@
 using Amnesia.Core;
+using System.Linq;
 using Amnesia.Dialogue;
 using NUnit.Framework;
 
@@ -21,7 +22,7 @@ public class PositionPromptTests
     {
         var messages = Builder(npcId).Build(npcId, world, Array.Empty<LoggedMessage>(),
             new TurnContext { Spoken = "buongiorno", ClockText = "9:00" });
-        return messages[messages.Count - 1].Parts.Single().Text;
+        return string.Join("\n", messages.SelectMany(m => m.Parts).Select(x => x.Text));
     }
 
     [Test]

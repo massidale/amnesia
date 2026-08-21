@@ -26,10 +26,12 @@ public sealed record ChatRequest
     /// tanto scrive un tema, e il giocatore aspetta trenta secondi una risposta
     /// che gli arriva lunga il doppio di quanto dovrebbe essere.
     [JsonPropertyName("max_tokens")]
-    /// Abbastanza per le sei righe di un turno normale E per il racconto lungo
-    /// di una svolta: il tetto basso di prima (340) tagliava a meta' proprio i
-    /// momenti in cui il motore autorizza a sforare.
-    public int MaxTokens { get; init; } = 520;
+    /// Con il reasoning acceso, `max_tokens` copre pensiero PIU' battuta: 520
+    /// bastavano a malapena alla battuta, e il ragionamento si mangiava tutto
+    /// lasciando `content` vuoto (finish=length). 2000 lascia largo margine al
+    /// pensiero e alle sei righe; se tronca ancora, il turno vuoto fallisce in
+    /// modo atomico invece di lasciare lo schermo muto.
+    public int MaxTokens { get; init; } = 2000;
 
     /// Lo stesso modello, su OpenRouter, gira su piu' fornitori, e la
     /// differenza fra il piu' rapido e il piu' lento e' quasi tutta la latenza
@@ -38,6 +40,23 @@ public sealed record ChatRequest
     /// da 1,6 a 3,6. La generazione, in mezzo, vale meno di due secondi.
     [JsonPropertyName("provider")]
     public ProviderPreferences Provider { get; init; } = new();
+
+    /// Reasoning acceso: il modello ragiona prima di rispondere. Regge insieme
+    /// a un `max_tokens` largo, o il pensiero si mangia il budget e `content`
+    /// torna vuoto. Sui modelli che non ragionano il campo e' innocuo.
+    [JsonPropertyName("reasoning")]
+    public ReasoningPreferences Reasoning { get; init; } = new();
+}
+
+public sealed record ReasoningPreferences
+{
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; init; } = true;
+
+    /// "low": il modello ragiona, ma poco — abbastanza per non dire sciocchezze,
+    /// senza spendere mezzo minuto e mezzo budget su una battuta di paese.
+    [JsonPropertyName("effort")]
+    public string Effort { get; init; } = "low";
 }
 
 public sealed record ProviderPreferences
@@ -123,6 +142,7 @@ public static class OpenRouterCodec
             ToolCalls = toolCalls,
             Usage = ReadUsage(response.Usage),
             FinishReason = choice.FinishReason ?? "",
+            Reasoning = message?.ReasoningContent ?? message?.Reasoning ?? "",
         });
     }
 
@@ -200,6 +220,14 @@ public static class OpenRouterCodec
     {
         [JsonPropertyName("content")]
         public string? Content { get; set; }
+
+        // I modelli reasoning mettono il ragionamento qui, non in `content`: se
+        // il budget finisce mentre ragionano, `content` torna vuoto e questo no.
+        [JsonPropertyName("reasoning")]
+        public string? Reasoning { get; set; }
+
+        [JsonPropertyName("reasoning_content")]
+        public string? ReasoningContent { get; set; }
 
         [JsonPropertyName("tool_calls")]
         public List<ToolCallDto>? ToolCalls { get; set; }
