@@ -98,6 +98,13 @@
       "sostituisce": "elena_morta"
     },
     {
+      "id": "matteo_ero_gia_sceso_taccuino",
+      "testo": "Matteo dice che quella notte era già sceso in paese quando la cava è franata, e che ha saputo tutto la mattina dopo come tutti.",
+      "quando": [
+        "matteo_ero_gia_sceso"
+      ]
+    },
+    {
       "id": "solo_matteo",
       "testo": "Quando Anna è scesa in paese, alla cava era rimasto solo Matteo.",
       "quando": [
@@ -106,66 +113,10 @@
       "sostituisce": "matteo_ero_gia_sceso_taccuino"
     },
     {
-      "id": "sgorbia_taccuino",
-      "testo": "Nino ha raccolto una sgorbia da falegname accanto a me, nel castagneto, la mattina che mi ha trovato. Un ferro da bottega, in un bosco dove non c'e' nessuna bottega.",
-      "quando": [
-        "nino_indizio"
-      ]
-    },
-    {
-      "id": "busta_taccuino",
-      "testo": "Don Carlo ha una busta che mio padre gli ha lasciato per me nel 1981. Me la darà quando verrò «a chiedere di quella bambina».",
-      "quando": [
-        "busta_esiste"
-      ]
-    },
-    {
-      "id": "affitto_taccuino",
-      "testo": "Mio padre ha pagato per vent'anni l'affitto di un posto, e mia madre non ha mai saputo di cosa.",
-      "quando": [
-        "affitto"
-      ]
-    },
-    {
-      "id": "usciva_allegro_taccuino",
-      "testo": "L'ultima sera prima del coma sono uscito dopo cena, allegro, e ho detto che andavo da uno che sapeva.",
-      "quando": [
-        "usciva_allegro"
-      ]
-    },
-    {
-      "id": "nessuno_denuncio_taccuino",
-      "testo": "Dopo che mi hanno trovato nel bosco nessuno ha denunciato niente: si è detto che ero caduto, e poi si è smesso di parlarne.",
-      "quando": [
-        "nessuno_denuncio"
-      ]
-    },
-    {
       "id": "laura_non_cera_taccuino",
       "testo": "Laura Valli quella notte alla cava non c'era: è rimasta a casa.",
       "quando": [
         "laura_non_cera"
-      ]
-    },
-    {
-      "id": "laura_assoggettata_taccuino",
-      "testo": "Laura dice che a quelle cose la portava suo marito, e che lei non poteva farci niente.",
-      "quando": [
-        "laura_assoggettata"
-      ]
-    },
-    {
-      "id": "matteo_ero_gia_sceso_taccuino",
-      "testo": "Matteo dice che quella notte era già sceso in paese quando la cava è franata, e che ha saputo tutto la mattina dopo come tutti.",
-      "quando": [
-        "matteo_ero_gia_sceso"
-      ]
-    },
-    {
-      "id": "matteo_mai_parlati_taccuino",
-      "testo": "Matteo dice che io e lui, prima del coma, non ci eravamo mai parlati.",
-      "quando": [
-        "matteo_mai_parlati"
       ]
     },
     {
@@ -190,52 +141,10 @@
       ]
     },
     {
-      "id": "segatura_taccuino",
-      "testo": "Nei vestiti che avevo addosso c'è della segatura nei risvolti dei pantaloni, e la giacca è consumata sulla schiena.",
-      "quando": [
-        "segatura"
-      ]
-    },
-    {
-      "id": "referto_taccuino",
-      "testo": "Il referto dell'ospedale dice: trauma alla nuca, escoriazioni su dorso e talloni.",
-      "quando": [
-        "referto"
-      ]
-    },
-    {
-      "id": "padre_cercava_taccuino",
-      "testo": "Negli ultimi anni mio padre cercava qualcuno che credeva ancora vivo. Nel suo diario i nomi sono raschiati via.",
-      "quando": [
-        "padre_cercava"
-      ]
-    },
-    {
-      "id": "padre_veniva_da_me_taccuino",
-      "testo": "Mio padre andava spesso da don Carlo, negli ultimi anni, e gli ha confidato qualcosa che il prete non può ripetermi.",
-      "quando": [
-        "padre_veniva_da_me"
-      ]
-    },
-    {
-      "id": "giovedi_sabato_taccuino",
-      "testo": "Prima del coma sono andato da don Carlo di giovedì. Il sabato mi hanno trovato nel bosco.",
-      "quando": [
-        "giovedi_sabato"
-      ]
-    },
-    {
       "id": "wanda_una_persona_sola_taccuino",
       "testo": "A Chivasso una donna ha detto che di questa faccenda parla con una persona sola — e non sono io.",
       "quando": [
         "wanda_una_persona_sola"
-      ]
-    },
-    {
-      "id": "elena_adottata_taccuino",
-      "testo": "Elena sa di essere stata adottata da bambina, e che la sua famiglia era morta. Non sa altro.",
-      "quando": [
-        "elena_adottata"
       ]
     }
   ]
