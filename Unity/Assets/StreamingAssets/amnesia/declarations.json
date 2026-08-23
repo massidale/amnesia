@@ -73,7 +73,7 @@
       ]
     },
     "magazzino_dove": {
-      "text": "La roba della cava l'hanno portata giù al deposito. Il magazzino in fondo, il diciassette.",
+      "text": "La roba della cava l'hanno portata giù al magazzino: l'edificio davanti alla chiesa, dall'altro lato del fiume. Il diciassette.",
       "truth": "true",
       "sources": [
         "anna",
@@ -272,14 +272,6 @@
       ],
       "requires_shown": []
     },
-    "matteo_mai_parlati": {
-      "text": "Io e te non ci eravamo mai parlati.",
-      "truth": "false",
-      "sources": [
-        "matteo"
-      ],
-      "requires_shown": []
-    },
     "matteo_confessa": {
       "text": "Quando ti sei girato ho visto tutto finire. Ho preso una pietra dal banco. Non ho deciso niente.",
       "truth": "true",
@@ -294,22 +286,6 @@
       "truth": "true",
       "sources": [
         "rosa"
-      ],
-      "requires_shown": []
-    },
-    "segatura": {
-      "text": "Nei risvolti dei pantaloni c'è la segatura. La giacca è consumata sulla schiena.",
-      "truth": "true",
-      "sources": [
-        "scatola_vestiti"
-      ],
-      "requires_shown": []
-    },
-    "referto": {
-      "text": "Trauma occipitale. Escoriazioni su dorso e talloni.",
-      "truth": "true",
-      "sources": [
-        "cartella_clinica"
       ],
       "requires_shown": []
     },
@@ -348,30 +324,6 @@
       ],
       "requires_shown": []
     },
-    "padre_cercava": {
-      "text": "Cercava qualcuno che credeva vivo. I nomi sono raschiati.",
-      "truth": "true",
-      "sources": [
-        "diario"
-      ],
-      "requires_shown": []
-    },
-    "padre_veniva_da_me": {
-      "text": "Tuo padre veniva qui. Spesso, negli ultimi anni. Di quello che mi ha detto non posso dirti niente.",
-      "truth": "true",
-      "sources": [
-        "don_carlo"
-      ],
-      "requires_shown": []
-    },
-    "busta_esiste": {
-      "text": "C'è una cosa che tuo padre ha lasciato per te. Mi ha detto quando dartela: se un giorno fossi venuto a chiedere di quella bambina.",
-      "truth": "true",
-      "sources": [
-        "don_carlo"
-      ],
-      "requires_shown": []
-    },
     "don_carlo_manda": {
       "text": "Non posso dirti niente. Va' a parlare con Matteo.",
       "truth": "true",
@@ -380,16 +332,6 @@
       ],
       "requires_shown": [
         "braccialetto"
-      ]
-    },
-    "don_carlo_consegna": {
-      "text": "Tuo padre me l'ha lasciata perché te la dessi, e mi ha detto a quale condizione. Adesso la condizione c'è.",
-      "truth": "true",
-      "sources": [
-        "don_carlo"
-      ],
-      "requires_shown": [
-        "foglio_indirizzo"
       ]
     },
     "wanda_una_persona_sola": {
@@ -561,13 +503,34 @@
       ],
       "requires_shown": []
     },
-    "nino_indizio": {
-      "text": "Accanto a te, nel castagneto, c'era un ferro da falegname. Una sgorbia, col manico lucido d'uso. L'ho raccolta quella mattina e l'ho tenuta: nessuno me l'ha mai chiesta. Tienila tu.",
+    "nino_giacca": {
+      "text": "Accanto a te, nel castagneto, c'era una giacca da uomo, buttata fra le foglie. L'ho raccolta quella mattina e l'ho tenuta: nessuno me l'ha mai chiesta. Tienila tu.",
       "truth": "true",
       "sources": [
         "nino"
       ],
       "counts_alone": true,
+      "requires_shown": []
+    },
+    "giacca_e_di_matteo": {
+      "text": "Ma quella è la giacca di Matteo. Gliel'ho vista addosso mille volte.",
+      "truth": "true",
+      "sources": [
+        "rosa",
+        "anna",
+        "laura"
+      ],
+      "counts_alone": true,
+      "requires_shown": [
+        "giacca"
+      ]
+    },
+    "padre_ricerche": {
+      "text": "Negli ultimi anni tuo padre cercava qualcuno. Era diventato un chiodo fisso, ci stava perdendo la testa. Non ho mai saputo chi, e non gliel'ho mai chiesto.",
+      "truth": "true",
+      "sources": [
+        "rosa"
+      ],
       "requires_shown": []
     }
   }

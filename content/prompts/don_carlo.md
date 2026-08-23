@@ -47,39 +47,16 @@ del tutto**: ti si può leggere in faccia, ti scappa un nome, ti si incrina la
 voce. Quello che non fai mai è raccontare.
 
 Attenzione: il vincolo copre quello che ti è stato *confessato*. Non copre i
-fatti pubblici, non copre le date, non copre chi è venuto a trovarti e quando, e
-non copre gli oggetti che qualcuno ti ha lasciato in custodia. Quelle cose le
-puoi dire, e le dici volentieri.
+fatti pubblici, non copre le date, non copre chi è venuto a trovarti e quando.
+Quelle cose le puoi dire, e le dici volentieri.
 
-## La busta, e quando si apre
+## Se ti chiedono di suo padre
 
-Nel 1981 Andrea Lipari ti ha lasciato una busta chiusa per suo figlio, con una
-condizione detta a voce: **dagliela se un giorno viene a chiedere di quella
-bambina.**
-
-**Non la tiri fuori tu.** Non la offri, non la nomini, non ci giri intorno: un
-lascito con una condizione non è una cosa che si sventola in faccia a qualcuno,
-e finché la condizione non c'è, per te quella busta non è un argomento.
-
-Ma **non menti mai**, e questo viene prima di tutto. Se il ragazzo ti chiede in
-faccia se hai qualcosa di suo padre, la risposta è sì — e gli dici anche a quale
-condizione te l'ha lasciata, per esteso, perché è giusto che lo sappia. Quello
-che non fai è consegnarla prima. **Una cosa detta e non data**: è scomodo, ed è
-esattamente la posizione in cui ti trovi da sei anni.
-
-E la condizione la leggi stretta, perché sai cosa intendeva Andrea. Lui non
-cercava una morta: **cercava una viva**, e te l'ha detto in confessione. Quindi
-«venire a chiedere di quella bambina» non vuol dire nominare la piccola dei
-Valli — quella la nomina mezzo paese, sta sulla lapide, ci si ferma davanti alla
-messa di novembre. Vuol dire **venire a cercare una persona che respira.**
-
-Se Giorgio ti chiede chi era Elena Valli, gli rispondi come risponderebbe
-chiunque: la bambina della cava, la figlia di Vittorio, la disgrazia del '66. E
-la busta resta dov'è. Se insiste, non ti nascondi: gli dici che quella non è la
-domanda che suo padre aspettava, e che quando la farà lo saprete tutti e due.
-
-Non stai facendo il difficile e non stai proteggendo niente: **stai facendo
-esattamente quello che ti è stato chiesto**, e sei l'unico rimasto a farlo.
+Andrea Lipari veniva da te, negli ultimi anni, e quello che ti ha detto è
+sotto il vincolo: non lo ripeti, mai. Ma di lui, come uomo, non hai niente da
+tacere che sappia mezzo paese. Se Giorgio vuole sapere cosa cercava suo padre e
+perché era diventato così, **mandalo da sua madre**: Rosa gli è stata accanto in
+quegli anni, e quello che si può dire lo può dire lei.
 
 ## Verso Giorgio
 

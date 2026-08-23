@@ -4,65 +4,52 @@ using NUnit.Framework;
 
 namespace Amnesia.Tests.Declarations;
 
-/// I cancelli che non guardano gli oggetti. Sono quelli che tengono in piedi
-/// l'ordine emotivo del finale, e prima esistevano solo sulla carta.
+/// I cancelli che tengono in piedi l'ordine della trama: la prova della cava fa
+/// cedere Matteo sul rito e sul ratto, e solo la giacca — riconosciuta come sua
+/// — apre la confessione del 1985 e il foglio per Wanda.
 public class CancelliTests
 {
     private static PositionTable Reali() =>
         PositionTable.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "Amnesia", "fixtures", "positions.json")).Value!;
 
     [Test]
-    public void LaBustaDelPadreNonEsceFinchePrimaElenaNonRisultaViva()
+    public void UnOggettoDelMagazzinoFaCedereMatteoSulRitoESulRatto()
     {
         var world = new WorldState();
-        world.MarkShown("don_carlo", "braccialetto");
-        Assert.That(Reali().PositionOf("don_carlo", world), Is.EqualTo("C1"));
+        world.MarkShown("matteo", "frase");
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M1"));
 
-        // Mostrargli il foglio con l'indirizzo e' una mossa naturale del primo
-        // atto, e prima apriva la busta: la lettera del padre cadeva mezza partita
-        // prima di Matteo, e con lei tutto l'ordine del finale.
-        world.MarkShown("don_carlo", "foglio_indirizzo");
-        Assert.That(Reali().PositionOf("don_carlo", world), Is.EqualTo("C1"),
-            "un oggetto in mano non e' una cosa accertata");
-
-        new Register(world).Record("matteo", "elena_viva", countsAlone: true);
-        Assert.That(Reali().PositionOf("don_carlo", world), Is.EqualTo("C2"),
-            "la condizione che Andrea ha scritto e' venire a chiedere di una persona VIVA");
-    }
-
-    [Test]
-    public void MatteoCedeAllaTestimonianzaDiAnnaENonAUnOggetto()
-    {
-        var world = new WorldState();
-        foreach (var itemId in new[] { "frase", "braccialetto", "registro", "diario" })
-        {
-            world.MarkShown("matteo", itemId);
-        }
+        // Basta un solo oggetto della cava sul banco — qui il quaderno di
+        // Vittorio — e la scampagnata non regge: rito e ratto insieme.
+        world.MarkShown("matteo", "quaderno_vittorio");
         Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"),
-            "si puo' arrivare con le mani piene e non ottenere niente");
-
-        // Cancello provvisorio, in attesa della prova alla cava: Anna l'ha
-        // detto davvero, e una testimone unica senza motivo di mentire vale.
-        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
-        world.MarkShown("matteo", "foglio_indirizzo");
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
+            "una prova che lassù c'era una bambina, e Matteo racconta di averla portata via");
+        Assert.That(Reali().Granted("matteo", world), Does.Contain("matteo_la_porto_via"));
+        Assert.That(Reali().Granted("matteo", world), Does.Contain("elena_viva"));
     }
 
     [Test]
-    public void LaProvaFisicaInFacciaFaCedereMatteo()
+    public void SoloLaGiaccaRiconosciutaComeSuaFaConfessareMatteo()
     {
         var world = new WorldState();
-        foreach (var itemId in new[] { "frase", "braccialetto", "foglio_indirizzo" })
+        foreach (var itemId in new[] { "frase", "braccialetto" })
         {
             world.MarkShown("matteo", itemId);
         }
-        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"));
 
-        // La giacca con la segatura nei risvolti, o il referto: una delle due.
-        world.MarkShown("matteo", "cartella_clinica");
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M5"),
-            "la prova fisica mostrata in faccia chiude la scala");
+        // La giacca in mano, ma non ancora accertata di chi sia: Matteo regge.
+        world.MarkShown("matteo", "giacca");
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"),
+            "una giacca qualunque non lo tocca finché non si sa di chi è");
+
+        // Qualcuno la riconosce — la conta da sola, come una cosa vista mille
+        // volte — e adesso, in faccia, non c'è versione che regga.
+        new Register(world).Record("rosa", "giacca_e_di_matteo", countsAlone: true);
+        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M3"),
+            "la giacca sua, mostrata in faccia, chiude la scala");
+        Assert.That(Reali().ConsegnateFinora("matteo", world), Does.Contain("due_righe_matteo"),
+            "e concede il foglio per Wanda");
     }
 
     [Test]
@@ -91,35 +78,20 @@ public class CancelliTests
     }
 
     [Test]
-    public void NinoTieneLaSgorbiaFinoAlQuartoAtto()
+    public void NinoTieneLaGiaccaFinoAlloStalloConMatteo()
     {
         var world = new WorldState();
         Assert.That(Reali().PositionOf("nino", world), Is.EqualTo("N0"));
         Assert.That(Reali().ConsegnateFinora("nino", world), Is.Empty,
-            "prima dello stallo la sgorbia non esiste per il giocatore");
+            "prima dello stallo la giacca non esiste per il giocatore");
 
-        // L'atto quarto non e' un contatore: e' questo stato.
+        // Lo stallo non e' un contatore: e' questo stato — Elena viva, e Matteo
+        // che dice di no.
         var registro = new Register(world);
         registro.Record("matteo", "elena_viva", countsAlone: true);
         registro.Record("matteo", "matteo_non_dice_dove", countsAlone: true);
 
         Assert.That(Reali().PositionOf("nino", world), Is.EqualTo("N1"));
-        Assert.That(Reali().ConsegnateFinora("nino", world), Does.Contain("scalpello"));
-    }
-
-    [Test]
-    public void LaSgorbiaEUnaChiaveDellUltimoGradinoDiMatteo()
-    {
-        var world = new WorldState();
-        foreach (var itemId in new[] { "frase", "braccialetto", "foglio_indirizzo" })
-        {
-            world.MarkShown("matteo", itemId);
-        }
-        new Register(world).Record("anna", "anna_solo_matteo", countsAlone: true);
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M4"));
-
-        world.MarkShown("matteo", "scalpello");
-        Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M5"),
-            "il suo ferro, raccolto accanto al corpo: la terza chiave della serratura");
+        Assert.That(Reali().ConsegnateFinora("nino", world), Does.Contain("giacca"));
     }
 }

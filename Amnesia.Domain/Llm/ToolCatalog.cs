@@ -62,10 +62,9 @@ public static class ToolCatalog
                         "laura_assoggettata", "anna_solo_matteo", "padre_nella_cava",
                         "io_ero_con_lui", "matteo_ero_gia_sceso", "matteo_la_porto_via",
                         "elena_viva", "matteo_non_dice_dove", "matteo_cosa_ti_ricordi",
-                        "matteo_mai_parlati", "matteo_confessa", "usciva_allegro", "segatura",
-                        "referto", "dove_lo_trovai", "giovedi_sabato", "nessuno_denuncio",
-                        "padre_cercava", "padre_veniva_da_me", "busta_esiste", "don_carlo_manda",
-                        "don_carlo_consegna", "wanda_una_persona_sola", "elena_adottata",
+                        "matteo_confessa", "usciva_allegro",
+                        "dove_lo_trovai", "giovedi_sabato", "nessuno_denuncio",
+                        "don_carlo_manda", "wanda_una_persona_sola", "elena_adottata",
                         // Le righe nuove vanno IN FONDO: questo blocco e' il
                         // prefisso in cache, e infilarne una in mezzo
                         // invaliderebbe ogni conversazione gia' cominciata.
@@ -73,7 +72,10 @@ public static class ToolCatalog
                         "foto_andrea", "foto_vittorio", "foto_laura",
                         // Appesi in coda, mai in mezzo: l'ordine dell'enum e'
                         // parte del prefisso in cache.
-                        "vittorio_morto", "vittorio_capo", "nino_indizio",
+                        "vittorio_morto", "vittorio_capo",
+                        // Revisione storia: la giacca al posto della sgorbia/segatura,
+                        // il padre via Rosa. Via busta, «mai parlati», diario, referto.
+                        "nino_giacca", "giacca_e_di_matteo", "padre_ricerche",
                     },
                 },
             },

@@ -89,6 +89,13 @@
       ]
     },
     {
+      "id": "padre_ricerche_taccuino",
+      "testo": "Negli ultimi anni mio padre cercava qualcuno. Era un chiodo fisso, ci stava perdendo la testa. Mia madre non ha mai saputo chi.",
+      "quando": [
+        "padre_ricerche"
+      ]
+    },
+    {
       "id": "elena_salvata",
       "testo": "Elena non è morta nella cava: Matteo Sardi l'ha sentita sotto le pietre, l'ha tirata fuori e l'ha portata in un paese lontano. È viva.",
       "quando": [
@@ -138,6 +145,20 @@
       "testo": "Nino mi ha trovato nel castagneto sopra la curva, un posto dove non si arriva camminando e non ci si cade da soli.",
       "quando": [
         "dove_lo_trovai"
+      ]
+    },
+    {
+      "id": "giacca_nino_taccuino",
+      "testo": "Nino ha ritrovato una giacca da uomo accanto al punto dove mi ha trovato, e me l'ha data.",
+      "quando": [
+        "nino_giacca"
+      ]
+    },
+    {
+      "id": "giacca_di_matteo_taccuino",
+      "testo": "Quella giacca è di Matteo.",
+      "quando": [
+        "giacca_e_di_matteo"
       ]
     },
     {

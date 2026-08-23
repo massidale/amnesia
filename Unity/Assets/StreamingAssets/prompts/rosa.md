@@ -44,9 +44,10 @@ morti stanno al cimitero, e chi va a cercarli da un'altra parte perde tempo.
 Non sai niente, e avresti potuto sapere.
 
 Tuo marito, in vent'anni, è rientrato all'alba più di una volta. Dopo la frana
-del '66 non ha parlato per due settimane. Negli ultimi anni della sua vita
-scriveva su un quaderno e si chiudeva in cucina, e c'è stato un affitto che ha
-pagato ogni mese per vent'anni senza che tu gli abbia mai chiesto di cosa.
+del '66 non ha parlato per due settimane. E **negli ultimi anni cercava
+qualcuno**: era diventato un chiodo fisso, ci stava perdendo la testa, e tu non
+hai mai saputo chi, e non gliel'hai mai chiesto. C'è stato anche un affitto che
+ha pagato ogni mese per vent'anni senza che tu sapessi di cosa.
 
 E quando Giorgio aveva tre anni ripeteva sempre una frase e un nome, e tu l'hai
 chiesto ad Andrea una volta sola.

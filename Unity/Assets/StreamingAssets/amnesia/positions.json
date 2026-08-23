@@ -31,41 +31,27 @@
     "id": "M2",
     "grants": [
      "il_rito",
-     "elena_prescelta"
+     "elena_prescelta",
+     "matteo_la_porto_via",
+     "elena_viva",
+     "matteo_non_dice_dove"
     ],
-    "requires_shown": [
-     "braccialetto"
+    "requires_any_shown": [
+     "braccialetto",
+     "cassetta_latta",
+     "quaderno_vittorio"
     ]
    },
    {
     "id": "M3",
     "grants": [
-     "matteo_la_porto_via",
-     "elena_viva",
-     "matteo_non_dice_dove"
-    ],
-    "requires_declared": [
-     "anna_solo_matteo"
-    ]
-   },
-   {
-    "id": "M4",
-    "grants": [
-     "matteo_mai_parlati"
-    ],
-    "requires_shown": [
-     "foglio_indirizzo"
-    ]
-   },
-   {
-    "id": "M5",
-    "grants": [
      "matteo_confessa"
     ],
-    "requires_any_shown": [
-     "scatola_vestiti",
-     "cartella_clinica",
-     "scalpello"
+    "requires_shown": [
+     "giacca"
+    ],
+    "requires_declared": [
+     "giacca_e_di_matteo"
     ],
     "consegna": [
      "due_righe_matteo"
@@ -109,8 +95,19 @@
      "padre_nella_cava",
      "io_ero_con_lui"
     ],
+    "requires_any_shown": [
+     "braccialetto",
+     "cassetta_latta",
+     "quaderno_vittorio"
+    ]
+   },
+   {
+    "id": "A3",
+    "grants": [
+     "giacca_e_di_matteo"
+    ],
     "requires_shown": [
-     "braccialetto"
+     "giacca"
     ]
    }
   ],
@@ -148,8 +145,19 @@
      "laura_non_cera",
      "laura_assoggettata"
     ],
+    "requires_any_shown": [
+     "braccialetto",
+     "cassetta_latta",
+     "quaderno_vittorio"
+    ]
+   },
+   {
+    "id": "L3",
+    "grants": [
+     "giacca_e_di_matteo"
+    ],
     "requires_shown": [
-     "braccialetto"
+     "giacca"
     ]
    }
   ],
@@ -163,8 +171,6 @@
      "nessuno_denuncio",
      "circolo_esisteva",
      "avevano_una_frase",
-     "padre_veniva_da_me",
-     "busta_esiste",
      "giovedi_sabato",
      "vittorio_morto",
      "vittorio_capo"
@@ -176,20 +182,10 @@
     "grants": [
      "don_carlo_manda"
     ],
-    "requires_shown": [
-     "braccialetto"
-    ]
-   },
-   {
-    "id": "C2",
-    "grants": [
-     "don_carlo_consegna"
-    ],
-    "requires_declared": [
-     "elena_viva"
-    ],
-    "consegna": [
-     "busta_andrea"
+    "requires_any_shown": [
+     "braccialetto",
+     "cassetta_latta",
+     "quaderno_vittorio"
     ]
    }
   ],
@@ -211,14 +207,14 @@
    {
     "id": "N1",
     "grants": [
-     "nino_indizio"
+     "nino_giacca"
     ],
     "requires_declared": [
      "elena_viva",
      "matteo_non_dice_dove"
     ],
     "consegna": [
-     "scalpello"
+     "giacca"
     ]
    }
   ]

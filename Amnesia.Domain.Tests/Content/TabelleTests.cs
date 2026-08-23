@@ -143,6 +143,7 @@ public class TabelleTests
         ["diario"] = "rosa",
         ["scatola_vestiti"] = "rosa",
         ["cartella_clinica"] = "rosa",
+        ["giacca"] = "nino",
         ["quaderno_vittorio"] = Magazzino,
         ["registro"] = Magazzino,
         ["cassetta_latta"] = Magazzino,
@@ -157,7 +158,7 @@ public class TabelleTests
         Assert.That(Declarations().Ids.Count, Is.GreaterThanOrEqualTo(25),
             "meno di venticinque righe non e' un'indagine");
         Assert.That(Scale().Keys, Is.EquivalentTo(new[] { "matteo", "anna", "laura", "don_carlo", "nino" }),
-            "hanno una scala i quattro guardinghi — e Nino, che tiene la sgorbia");
+            "hanno una scala i quattro guardinghi — e Nino, che tiene la giacca");
     }
 
     /// Orfani nella prima direzione: un gradino che concede un id che la tabella
@@ -404,10 +405,9 @@ public class TabelleTests
         // Atto I. La fotografia apre il paese: ogni faccia riconosciuta e' un nome.
         partita.Mostra("rosa", "fotografia");
         partita.Dice("rosa", "circolo_esisteva");
-        partita.Dice("rosa", "usciva_allegro");
+        partita.Dice("rosa", "padre_ricerche");
         partita.Dice("nino", "avevano_una_frase");
         partita.Dice("nino", "dove_lo_trovai");
-        partita.Dice("don_carlo", "busta_esiste");
 
         // Atto II. La frase apre i membri, e Anna dice dov'e' il magazzino.
         partita.Mostra("anna", "frase");
@@ -415,7 +415,7 @@ public class TabelleTests
         partita.Dice("anna", "magazzino_dove");
         partita.ApreIlMagazzino();
 
-        // Il braccialetto apre il rito. Anna fa l'elenco di chi c'era e chi no.
+        // La prova della cava apre il rito. Anna fa l'elenco di chi c'era e chi no.
         partita.Mostra("anna", "braccialetto");
         Assert.That(partita.Posizione("anna"), Is.EqualTo("A2"));
         partita.Dice("anna", "sacrificio_per_vittorio");
@@ -423,42 +423,30 @@ public class TabelleTests
         partita.Dice("anna", "padre_nella_cava");
         partita.Dice("anna", "io_ero_con_lui");
 
-        // Atto III. Matteo: la frase, poi il braccialetto, poi il registro delle
-        // presenze — e la versione che reggeva da ventun anni non regge piu'.
+        // Atto III. Matteo: la frase, poi UN oggetto del magazzino sul banco —
+        // basta quello, e la scampagnata non regge piu': rito e ratto insieme.
         partita.Mostra("matteo", "frase");
         partita.Dice("matteo", "matteo_ero_gia_sceso");
         partita.Dice("matteo", "non_erano_gite");
-        partita.Mostra("matteo", "braccialetto");
+        partita.Mostra("matteo", "quaderno_vittorio");
+        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M2"));
         partita.Dice("matteo", "il_rito");
-        // La testimonianza di Anna — era rimasto solo lui — e' gia' agli atti:
-        // col braccialetto sul banco Matteo non ha piu' un gradino dove
-        // fermarsi. Cancello provvisorio, in attesa della prova alla cava.
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M3"));
         partita.Dice("matteo", "matteo_la_porto_via");
         partita.Dice("matteo", "elena_viva");
         partita.Dice("matteo", "matteo_non_dice_dove");
 
-        // Don Carlo consegna la busta a chi e' venuto a chiedere di una persona viva.
-        partita.Mostra("don_carlo", "braccialetto");
-        partita.Dice("don_carlo", "don_carlo_manda");
-        partita.Mostra("don_carlo", "foglio_indirizzo");
-        partita.Dice("don_carlo", "don_carlo_consegna");
-        Assert.That(partita.InTasca, Does.Contain("busta_andrea"), "la busta del padre arriva in mano");
-
-        // Atto IV. Il foglio per Chivasso, il rifiuto, e la segatura nei risvolti.
-        partita.Mostra("matteo", "foglio_indirizzo");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M4"));
-        partita.Dice("matteo", "matteo_mai_parlati");
-        // Le cose che un oggetto dice le legge il giocatore quando ce l'ha in
-        // mano: la segatura sta nei risvolti dei pantaloni, e a vederla e' lui.
-        partita.Dice("scatola_vestiti", "segatura");
-        partita.Mostra("matteo", "scatola_vestiti");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M5"),
-            "la giacca con la segatura nei risvolti, mostrata in faccia, chiude la scala");
-        partita.Dice("matteo", "matteo_confessa");
+        // Atto IV. Col ratto confessato, il paese sa che Nino ha una cosa da
+        // dare: la giacca ritrovata accanto al corpo.
+        Assert.That(partita.InTasca, Does.Contain("giacca"), "col ratto confessato Nino consegna la giacca");
+        // La si fa riconoscere — basta una bocca — e la si porta in faccia a Matteo.
+        partita.Mostra("rosa", "giacca");
+        partita.Dice("rosa", "giacca_e_di_matteo");
+        partita.Mostra("matteo", "giacca");
 
         var ultimo = Scale()["matteo"].Last().Id;
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo(ultimo), "Matteo e' arrivato in cima alla sua scala");
+        Assert.That(partita.Posizione("matteo"), Is.EqualTo(ultimo),
+            "la giacca sua, mostrata in faccia, chiude la scala di Matteo");
+        partita.Dice("matteo", "matteo_confessa");
         Assert.That(partita.InTasca, Does.Contain("due_righe_matteo"), "e concede il foglio per Wanda");
 
         // E la porta di Chivasso si apre.

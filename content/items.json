@@ -72,10 +72,10 @@
     "description": "Due iniziali su un braccialetto non vogliono dire niente, finché qualcuno non ti ha raccontato di chi erano."
   },
   {
-    "id": "scalpello",
-    "name": "sgorbia",
-    "visible": "Una sgorbia da falegname, col manico lucido d'uso. Nino l'ha raccolta nel castagneto, a un braccio da dove eri disteso.",
-    "description": "Un ferro da bottega, in un bosco dove non c'e' nessuna bottega."
+    "id": "giacca",
+    "name": "giacca",
+    "visible": "Una giacca da uomo, di fustagno, consumata. Me l'ha data Nino: dice di averla trovata fra le foglie del castagneto, a due passi da dove ha trovato me.",
+    "description": "Una giacca che non è mia. Chi la conosce sa di chi è."
   },
   {
     "id": "busta_andrea",
