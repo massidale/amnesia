@@ -41,11 +41,6 @@ public sealed record ChatMessage
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? ToolCallId { get; init; }
 
-    public static ChatMessage SystemPrompt(string content) => new() { Role = "system", Content = content };
-
-    public static ChatMessage SystemPrompt(IReadOnlyList<ContentBlock> blocks) =>
-        new() { Role = "system", ContentBlocks = blocks };
-
     public static ChatMessage User(string content) => new() { Role = "user", Content = content };
 
     public static ChatMessage Assistant(string? content, IReadOnlyList<ToolCallWire>? toolCalls = null) =>

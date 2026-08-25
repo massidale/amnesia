@@ -6,21 +6,6 @@ namespace Amnesia.Time;
 public sealed class WorldClock
 {
     public const int DialogueTurnMinutes = 1;
-    public const int TravelMinutes = 3;
-    public const int InspectionMinutes = 5;
-
-    public int Minute { get; private set; }
-
-    public WorldClock(int startMinute) => Minute = startMinute;
-
-    public int Advance(int minutes)
-    {
-        if (minutes > 0)
-        {
-            Minute += minutes;
-        }
-        return Minute;
-    }
 
     /// L'ora come la leggerebbe un uomo con un orologio addosso.
     public static string Format(int minute) => $"{minute / 60:00}:{minute % 60:00}";
