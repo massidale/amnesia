@@ -140,15 +140,11 @@ public class TabelleTests
         ["chiave_b17"] = Risveglio,
         ["taccuino"] = Risveglio,
         ["lapide"] = "paese",
-        ["diario"] = "rosa",
-        ["scatola_vestiti"] = "rosa",
-        ["cartella_clinica"] = "rosa",
         ["giacca"] = "nino",
         ["quaderno_vittorio"] = Magazzino,
         ["registro"] = Magazzino,
         ["cassetta_latta"] = Magazzino,
         ["braccialetto"] = Magazzino,
-        ["busta_andrea"] = "don_carlo",
         ["due_righe_matteo"] = "matteo",
     };
 

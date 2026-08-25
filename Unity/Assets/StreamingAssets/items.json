@@ -30,24 +30,6 @@
     "description": "Il mio taccuino. Ci scrivo quello che mi viene detto, con la data, perché di quello che ricordo non mi fido più."
   },
   {
-    "id": "diario",
-    "name": "diario di mio padre",
-    "visible": "Un quaderno con la copertina di tela nera, portato addosso per anni. Molte righe sono state raschiate via con la lametta: restano i nomi dei posti — Roccavione, Chivasso, istituti, parrocchie — e le date, dal 1974 al 1981. In fondo a una pagina, non raschiata, una riga sola: «se è ancora viva».",
-    "description": "Sette anni di viaggi e di lettere, e ogni nome che ha scritto l'ha poi grattato via dalla carta."
-  },
-  {
-    "id": "scatola_vestiti",
-    "name": "scatola dei vestiti",
-    "visible": "Una scatola di cartone con i vestiti di un uomo, lavati e piegati. Nei risvolti dei pantaloni è rimasta della segatura. La giacca è consumata sulla schiena, dalle scapole in giù.",
-    "description": "Quello che avevo addosso quella sera. Mia madre l'ha lavato e piegato due anni fa e non l'ha più toccato."
-  },
-  {
-    "id": "cartella_clinica",
-    "name": "cartella clinica",
-    "visible": "Due fogli ciclostilati dell'ospedale di Cuneo, intestati al ricovero d'urgenza. «Trauma occipitale.» «Escoriazioni al dorso e ai talloni.»",
-    "description": "Quello che i medici hanno scritto la mattina in cui mi hanno portato giù dal bosco."
-  },
-  {
     "id": "quaderno_vittorio",
     "name": "quaderno di Vittorio",
     "visible": "Un quaderno scritto fitto da una mano sola, senza date, senza nomi e senza firme. Spiega per esteso cosa si deve fare perché qualcuno passi dall'altra parte e torni indietro: che chi passa dev'essere del sangue di chi si chiama, che deve scendere senza niente addosso, e che chi tiene la corda non la lascia per nessun motivo.",
@@ -76,12 +58,6 @@
     "name": "giacca",
     "visible": "Una giacca da uomo, di fustagno, consumata. Me l'ha data Nino: dice di averla trovata fra le foglie del castagneto, a due passi da dove ha trovato me.",
     "description": "Una giacca che non è mia. Chi la conosce sa di chi è."
-  },
-  {
-    "id": "busta_andrea",
-    "name": "busta di mio padre",
-    "visible": "Una busta da lettere chiusa, ingiallita ai bordi, senza francobollo e senza indirizzo. Sul davanti, a penna: «Per mio figlio. Da dargli se un giorno viene a chiedere di quella bambina».",
-    "description": "L'ha lasciata a qualcun altro perché me la desse, e ha scritto sopra a quale condizione. Sapeva già che sarei venuto a chiedere."
   },
   {
     "id": "due_righe_matteo",
