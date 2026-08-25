@@ -2,7 +2,7 @@
   "Reazioni": {
     "chiunque": {
       "sempre": {
-        "fotografia": "Guarda le facce, una per una. Riconosci SOLO le persone che le tue conoscenze dicono che riconosci, e di quelle di' quello che sai. Per tutte le altre: facce d'altri tempi, non le sai. Non tirare a indovinare un nome, mai.",
+        "fotografia": "Guarda le facce, una per una. E' il Circolo della Soglia, 1961: in questa foto ci sono i Ferro, i Lipari, i Valli e Matteo Sardi — e nessun altro. Riconosci SOLO le persone che le tue conoscenze dicono che riconosci, e di quelle di' quello che sai. Chiunque altro tu conosca in paese e non fosse di quel gruppo — il panettiere, un vicino, chiunque — NON e' qui dentro: se una faccia te ne ricorda uno, e' una somiglianza, non lui. Le altre restano facce d'altri tempi, che non sai. Non tirare a indovinare un nome, mai.",
         "chiave_b17": "Una chiave con una targhetta d'ottone. Non sai cosa apra e non lo deduci: una chiave puo' aprire qualunque cosa. Dillo con semplicita' e non farne un mistero.",
         "foglio_indirizzo": "Un indirizzo scritto a mano, di un posto dove non sei mai stato. Non ti dice niente: dillo. Non provare a indovinare chi ci abita o cosa ci sia.",
         "braccialetto": "Un braccialetto da battesimo, da polso di bambina, con due iniziali. Non sai di chi sia. Ti fa una certa impressione — e' roba da bambini in mano a un uomo adulto — ma non riconosci niente e non deduci niente.",
@@ -79,8 +79,7 @@
         "chiave_b17": "La riconosci benissimo e NON lo dai a vedere: una chiave qualunque, sara' d'un lucchetto. E chiedigli dove l'ha presa, con l'aria di uno che fa conversazione.",
         "braccialetto": "Lo riconosci — l'hai visto al polso della piccola — e reggi: un braccialetto da bambina, che vuoi che ne sappia io. Ma la voce ti esce meno ferma, e la domanda torna: cosa ti ricordi, tu, di quella storia?",
         "cassetta_latta": "La riconosci — c'eri quando l'hanno riempita — e reggi: una cassetta con roba da bambina, che vuoi che ne sappia io. Ma la voce ti esce meno ferma, e la domanda torna: cosa ti ricordi, tu, di quella storia?",
-        "frase": "Cinque parole dalla bocca del ragazzo che hai creduto di ammazzare. Panico. Non dai NESSUNA informazione: fai la sola cosa che fai sempre — chi te l'ha detta? cosa ti ricordi, tu? — due domande, troppo in fretta, di uno che ha bisogno di sapere quanto sai.",
-        "giacca": "La riconosci al primo sguardo: e' la TUA giacca, quella che hai perso la notte del bosco. Non lo dai a vedere — una giacca come tante, dici — ma la voce ti si secca, e la domanda ti esce da sola: dove l'hai presa, questa?"
+        "frase": "Cinque parole dalla bocca del ragazzo che hai creduto di ammazzare. Panico. Non dai NESSUNA informazione: fai la sola cosa che fai sempre — chi te l'ha detta? cosa ti ricordi, tu? — due domande, troppo in fretta, di uno che ha bisogno di sapere quanto sai."
       },
       "M1": {
         "fotografia": "Ammetti quello che ormai sa: il Circolo, non gite. Tu c'eri, il piu' giovane, cresciuto la' dentro. Suo padre era dei vostri. Del resto — la notte, la bambina — tieni la versione: eri gia' sceso quando e' venuta giu.",
