@@ -531,6 +531,9 @@ public class TabelleTests
 
         [JsonPropertyName("requires_shown")]
         public List<string> RequiresShown { get; set; } = new();
+
+        [JsonPropertyName("requires_any_shown")]
+        public List<string> RequiresAnyShown { get; set; } = new();
     }
 
     /// Una porta con le coordinate sbagliate non rompe niente: il gioco parte,
@@ -569,6 +572,58 @@ public class TabelleTests
             {
                 Assert.That(catalogo.Find(luogo.RequiresItem), Is.Not.Null,
                     $"{id} chiede {luogo.RequiresItem}, che non sta nel catalogo");
+            }
+        }
+    }
+
+    /// Se un oggetto fa salire un personaggio di gradino, la reazione a
+    /// quell'oggetto DEVE essere una battuta d'autore — del gradino nuovo, di uno
+    /// gia' raggiunto o del suo «sempre» — mai il ripiego generico «questa cosa
+    /// non la conosci». Anna che sale in A2 col quaderno e nella stessa riga dice
+    /// di non riconoscerlo e' il gioco che si contraddice.
+    ///
+    /// L'eccezione onesta e' Matteo alla frase: sale in M1 ma resta sul panico di
+    /// M0, che e' comunque una reazione scritta e non il default. Percio' la
+    /// regola non e' «la reazione sta nel gradino nuovo», ma «la reazione di un
+    /// oggetto che fa salire non e' mai il ripiego generico».
+    [Test]
+    public void OgniOggettoCheFaSalireHaLaSuaReazioneENonIlRipiego()
+    {
+        var reazioni = ReactionTable.Load(PathOf("amnesia", "reazioni.json"));
+        Assert.That(reazioni.IsOk, Is.True, reazioni.Message);
+        var tavola = reazioni.Value!;
+
+        // I default generici, per confronto: la reazione risolta non deve mai
+        // coincidere con uno di questi quando l'oggetto e' cio' che fa salire.
+        var generici = new Dictionary<string, string>();
+        using (var doc = JsonDocument.Parse(File.ReadAllText(PathOf("amnesia", "reazioni.json"))))
+        {
+            var comune = doc.RootElement.GetProperty("Reazioni").GetProperty("chiunque").GetProperty("sempre");
+            foreach (var voce in comune.EnumerateObject())
+            {
+                generici[voce.Name] = voce.Value.GetString() ?? "";
+            }
+        }
+
+        foreach (var (npc, scala) in Scale())
+        {
+            // I gradini raggiunti fin qui, in ordine: la reazione si risolve
+            // esattamente su questi, come nel turno in cui l'oggetto sale sul banco.
+            var idFinora = new List<string>();
+            foreach (var gradino in scala)
+            {
+                idFinora.Add(gradino.Id);
+                foreach (var oggetto in gradino.RequiresShown.Concat(gradino.RequiresAnyShown).Distinct())
+                {
+                    var reazione = tavola.Reazione(npc, idFinora, oggetto);
+                    Assert.That(reazione, Is.Not.Empty,
+                        $"{npc}/{gradino.Id}: «{oggetto}» fa salire ma non ha reazione — cade sul default muto");
+                    if (generici.TryGetValue(oggetto, out var difetto))
+                    {
+                        Assert.That(reazione, Is.Not.EqualTo(difetto),
+                            $"{npc}/{gradino.Id}: «{oggetto}» fa salire ma la reazione e' il ripiego generico — contraddice il gradino");
+                    }
+                }
             }
         }
     }

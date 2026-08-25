@@ -39,6 +39,7 @@
       "A2": {
         "braccialetto": "E' il braccialetto di battesimo di Elena Valli, e adesso racconti TUTTO, per esteso, senza che lui debba chiedere altro: il rito, e perche'. Vittorio era morto in primavera; il Circolo voleva riportarlo, e per farlo serviva un sacrificio di sangue suo: Elena, la sua bambina. Andava data alla Soglia — calata nell'acqua in fondo alla Stanza — e NESSUNO di voi credeva che sarebbe tornata su: era un sacrificio, e lo sapevate tutti. Tu ci credevi, e in fondo ci credi ancora: e' questo che ti rende insopportabile parlarne. Poi la montagna e' venuta giu' prima della fine, e ti sei sempre detta che la piccola e' morta nel crollo. E ricorda ad alta voce: quando sei scesa in paese, lassu' era rimasto solo Matteo. E il ragazzo c'era anche lui, bambino: suo padre l'aveva portato su, non aveva a chi lasciarlo.",
         "cassetta_latta": "La cassetta delle cose della piccola: gliele avete tolte prima di calarla, perche' il rito voleva che passasse senza niente addosso. Racconta il rito per esteso, come per il braccialetto: il sacrificio per Vittorio, che nessuno credeva che sarebbe tornata su, la frana arrivata prima della fine.",
+        "quaderno_vittorio": "Il quaderno di Vittorio, il rito scritto di suo pugno: non e' una diceria, e' quello che facevate, nero su bianco. Non puoi piu' far finta. Racconta TUTTO per esteso, come per il braccialetto: il sacrificio per riportare Vittorio, Elena data alla Soglia, che nessuno di voi credeva che sarebbe tornata su, la frana arrivata prima della fine. E ricorda ad alta voce: quando sei scesa in paese, lassu' era rimasto solo Matteo. E il ragazzo c'era anche lui, bambino: suo padre l'aveva portato su, non aveva a chi lasciarlo.",
         "fotografia": "Adesso quella foto e' un elenco di colpevoli, e lo sai. Nominali con rispetto e paura: gente che credeva. E di' del ragazzo: c'era anche lui quella notte, bambino, con suo padre."
       },
       "A3": {
@@ -61,6 +62,7 @@
       "L2": {
         "braccialetto": "E' il battesimo di Elena, e adesso racconti tutto, per esteso, senza farti strappare le parole: il rito voleva riportare Vittorio, e per farlo serviva lei, sangue suo. La dovevano dare alla Soglia, e tu SAPEVI che non sarebbe tornata su: nessuno lo credeva. Tu quella sera non c'eri — sei rimasta a casa con la luce accesa, e non ti sei opposta e non hai chiamato nessuno. Dillo: e' l'unica colpa che hai, ed e' quella che non prescrive. Eri assoggettata, ti dici da ventun anni; ed e' vera per tre quarti.",
         "cassetta_latta": "Le cose di tua figlia. Le scarpine, il fermaglio. Racconta il rito per esteso come per il braccialetto — il sacrificio, che nessuno credeva che sarebbe tornata, la sera in cui sei rimasta a casa — e alla fine chiedi l'unica cosa che ti importa: dove le ha trovate.",
+        "quaderno_vittorio": "Il quaderno di Vittorio, il rito scritto per esteso: la cosa che aveva messo su tuo marito, nero su bianco. Con uno che ha questo in mano non riesci piu' a negare. Racconta il rito come per il braccialetto — il sacrificio per riportare Vittorio, che tu SAPEVI che non sarebbe tornata su, la sera in cui sei rimasta a casa con la luce accesa — e non minimizzare: eri assoggettata, ti dici, ed e' vera per tre quarti.",
         "fotografia": "Guardala e nomina Vittorio per quello che era: l'uomo che ha costruito la cosa che ha mangiato tua figlia. E che amavi."
       },
       "L3": {
@@ -95,7 +97,9 @@
         "frase": "La formula. L'hai combattuta dieci anni senza mai sentirla per intero, e adesso te la dice un ragazzo di ventiquattro anni. Digli questo: che quella frase era la LORO, del Circolo, il segno con cui si riconoscevano — e che chi gliel'ha lasciata in testa lo sapeva."
       },
       "C1": {
-        "braccialetto": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»"
+        "braccialetto": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»",
+        "cassetta_latta": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»",
+        "quaderno_vittorio": "Il vincolo tiene, e tu no. Non puoi dire una parola di quello che sai. Fai l'unica cosa che ti resta, e falla subito: «Io non posso dirti niente, figliolo. Va' a parlare con Matteo.»"
       }
     },
     "nino": {
