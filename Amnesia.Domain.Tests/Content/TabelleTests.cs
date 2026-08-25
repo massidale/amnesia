@@ -114,7 +114,10 @@ public class TabelleTests
         Directory.GetFiles(PathOf("prompts"), "*.md")
             .Select(Path.GetFileNameWithoutExtension)
             .Where(name => name != "rules")
-            .Select(name => name!)
+            // Le schede per-gradino si chiamano "npc@GRADINO": la persona e' la
+            // parte prima della chiocciola — "matteo@M0" e "matteo@M2" sono lo
+            // stesso Matteo.
+            .Select(name => name!.Split('@')[0])
             .ToHashSet();
 
     private static IReadOnlyCollection<string> Oggetti()

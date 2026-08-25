@@ -43,9 +43,36 @@ public sealed class ContextBuilder
 
     /// Identico byte per byte a ogni turno: qui dentro non puo' colare niente di
     /// dinamico, o la cache del fornitore manca a ogni singola richiesta (design §13).
-    public IReadOnlyList<PromptMessage> StaticPrefix(string npcId)
+    public IReadOnlyList<PromptMessage> StaticPrefix(string npcId) =>
+        PrefissoConScheda(_characterTexts.TryGetValue(npcId, out var sheet) ? sheet : "");
+
+    /// La scheda giusta per QUESTO gradino: se esiste una variante per-posizione
+    /// ("npc@GRADINO") la usa, altrimenti ripiega sulla scheda unica. La variante
+    /// cambia solo ai passaggi di scalino — poche volte a partita — quindi il
+    /// prefisso in cache resta stabile fra un salto e l'altro.
+    private IReadOnlyList<PromptMessage> StaticPrefix(string npcId, WorldState world) =>
+        PrefissoConScheda(SchedaDi(npcId, world));
+
+    private string SchedaDi(string npcId, WorldState world)
     {
-        var character = _characterTexts.TryGetValue(npcId, out var sheet) ? sheet : "";
+        var gradino = _positions?.PositionOf(npcId, world) ?? "";
+        if (gradino.Length > 0 && _characterTexts.TryGetValue($"{npcId}@{gradino}", out var perGradino))
+        {
+            return perGradino;
+        }
+        return _characterTexts.TryGetValue(npcId, out var unica) ? unica : "";
+    }
+
+    /// C'e' una scheda scritta apposta per il gradino corrente? Se si', quella
+    /// scheda porta gia' la posizione, e il blocco <posizione> non va emesso.
+    private bool HaSchedaDiGradino(string npcId, WorldState world)
+    {
+        var gradino = _positions?.PositionOf(npcId, world) ?? "";
+        return gradino.Length > 0 && _characterTexts.ContainsKey($"{npcId}@{gradino}");
+    }
+
+    private IReadOnlyList<PromptMessage> PrefissoConScheda(string character)
+    {
         if (_useCacheControl)
         {
             return new[]
@@ -68,7 +95,7 @@ public sealed class ContextBuilder
         IEnumerable<LoggedMessage> history,
         TurnContext turn)
     {
-        var messages = new List<PromptMessage>(StaticPrefix(npcId));
+        var messages = new List<PromptMessage>(StaticPrefix(npcId, world));
         // Chi sei oggi e cosa sai vengono PRIMA della conversazione: sono il tuo
         // stato, non una reazione all'ultima battuta. Tenerli qui, davanti allo
         // storico, libera l'ultimo messaggio — che cosi' finisce con le parole
@@ -98,10 +125,16 @@ public sealed class ContextBuilder
         // ciascuno inventa a modo suo. Sta col resto del fondale, prima della
         // conversazione.
         parts.Add($"<quando>{WorldClock.Quando(world.Minute)}</quando>");
-        var stance = PositionLines(npcId, world);
-        if (stance.Length > 0)
+        // Se c'e' una scheda scritta per questo gradino, la posizione sta gia'
+        // dentro la scheda: il blocco <posizione> assemblato non va emesso, o si
+        // ripeterebbe (e a stratificarsi con i gradini di sotto).
+        if (!HaSchedaDiGradino(npcId, world))
         {
-            parts.Add($"<posizione>{stance}</posizione>");
+            var stance = PositionLines(npcId, world);
+            if (stance.Length > 0)
+            {
+                parts.Add($"<posizione>{stance}</posizione>");
+            }
         }
         parts.Add($"<conoscenze>{KnowledgeLines(npcId, world)}</conoscenze>");
         return string.Join("\n", parts);
