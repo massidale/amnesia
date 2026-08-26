@@ -227,7 +227,11 @@ namespace AmnesiaUnity
                     _nomi[persona] = TitoloDi(voce.Value, persona);
                 }
             }
-            var regole = File.ReadAllText(Contenuto("prompts", "rules.md"));
+            // Il prefisso condiviso = regole + mondo (paese, gente, Giorgio); le
+            // conoscenze di base (la versione del paese) le iniettera' il
+            // ContextBuilder solo alle comparse.
+            var regole = Amnesia.Dialogue.PromptLibrary.SharedPrefix(Contenuto("prompts"));
+            var conoscenze = Amnesia.Dialogue.ConoscenzeBase.Load(Contenuto("prompts"));
 
             // SICUREZZA: la chiave sta in un .env fuori dal progetto Unity, non
             // viene mai stampata e non entra in nessuna build. Se manca, lo si
@@ -272,7 +276,7 @@ namespace AmnesiaUnity
             var tabelle = new DeclarationService(dichiarazioni.Value, posizioni.Value);
             var contesto = new ContextBuilder(regole, schede, Items, true,
                 dichiarazioni.Value, posizioni.Value,
-                reazioni.IsOk ? reazioni.Value : ReactionTable.Empty());
+                reazioni.IsOk ? reazioni.Value : ReactionTable.Empty(), conoscenze);
             Session = new ConversationSession(
                 World, new ConversationLog(), contesto,
                 new OpenRouterTransport(chiave.Value, 60), tabelle, Items, "deepseek/deepseek-v4-flash-0731");

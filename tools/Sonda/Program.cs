@@ -57,10 +57,11 @@ foreach (var starting in new[] { "fotografia", "foglio_indirizzo", "chiave_b17" 
 }
 
 var schede = Amnesia.Dialogue.PromptLibrary.Load(Percorso("prompts"));
-var regole = File.ReadAllText(Percorso("prompts", "rules.md"));
+var regole = Amnesia.Dialogue.PromptLibrary.SharedPrefix(Percorso("prompts"));
+var conoscenze = Amnesia.Dialogue.ConoscenzeBase.Load(Percorso("prompts"));
 
 var tabelle = new DeclarationService(dichiarazioni.Value!, posizioni.Value!);
-var contesto = new ContextBuilder(regole, schede, items, false, dichiarazioni.Value, posizioni.Value, reazioni.Value);
+var contesto = new ContextBuilder(regole, schede, items, false, dichiarazioni.Value, posizioni.Value, reazioni.Value, conoscenze);
 var trasporto = new FileTransport(cartella, opzioni);
 var log = new ConversationLog();
 var sessione = new ConversationSession(world, log, contesto, trasporto, tabelle, items, "player");

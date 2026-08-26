@@ -4,14 +4,16 @@ namespace Amnesia.Dialogue;
 ///
 /// Una scheda per gradino sta in una sottocartella — "matteo/M2.md" diventa la
 /// chiave "matteo/M2"; una scheda unica sta al primo livello — "anna.md" diventa
-/// "anna". Le regole comuni ("rules.md") non sono una scheda e restano fuori.
+/// "anna". I file condivisi ("rules.md", "mondo.md", "conoscenze_base.md") non
+/// sono schede di personaggio e restano fuori: li assembla il prefisso.
 ///
 /// Vive nel dominio, non nell'app: Bootstrap, la sonda e i test caricano tutti di
-/// qui, cosi' la logica e' una sola e testata una volta, e le sottocartelle si
-/// leggono ovunque senza ripetere la ricorsione in tre posti.
+/// qui, cosi' la logica e' una sola e testata una volta.
 public static class PromptLibrary
 {
     public const string RulesId = "rules";
+    public const string MondoId = "mondo";
+    public const string ConoscenzeDir = "conoscenze";
 
     public static Dictionary<string, string> Load(string promptsDir)
     {
@@ -20,12 +22,26 @@ public static class PromptLibrary
         {
             var rel = Path.GetRelativePath(promptsDir, file);
             var id = rel.Substring(0, rel.Length - ".md".Length).Replace('\\', '/');
-            if (id != RulesId)
+            // Fuori: le regole, il mondo, e i blocchi di conoscenza condivisa
+            // (prompts/conoscenze/*.md) — non sono schede di personaggio.
+            if (id == RulesId || id == MondoId || PersonaDi(id) == ConoscenzeDir)
             {
-                schede[id] = File.ReadAllText(file);
+                continue;
             }
+            schede[id] = File.ReadAllText(file);
         }
         return schede;
+    }
+
+    /// Il prefisso condiviso da OGNI prompt: le regole di recitazione piu' il
+    /// mondo (il paese, la gente, Giorgio). Universale, e sta in cache.
+    public static string SharedPrefix(string promptsDir)
+    {
+        var regole = File.ReadAllText(Path.Combine(promptsDir, RulesId + ".md"));
+        var mondo = Path.Combine(promptsDir, MondoId + ".md");
+        return File.Exists(mondo)
+            ? regole + "\n\n" + File.ReadAllText(mondo)
+            : regole;
     }
 
     /// La persona a cui appartiene una chiave di scheda: "matteo/M2" e "matteo/M0"

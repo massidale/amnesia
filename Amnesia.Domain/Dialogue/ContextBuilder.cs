@@ -14,6 +14,7 @@ public sealed class ContextBuilder
     private readonly DeclarationTable? _declarations;
     private readonly PositionTable? _positions;
     private readonly ReactionTable _reactions;
+    private readonly ConoscenzeBase _conoscenze;
 
     /// Il catalogo sta qui insieme alle regole e alle schede perche' e' la stessa
     /// materia: testo d'autore che vale per tutta la partita, non stato che cambia
@@ -28,7 +29,8 @@ public sealed class ContextBuilder
         bool useCacheControl,
         DeclarationTable? declarations = null,
         PositionTable? positions = null,
-        ReactionTable? reactions = null)
+        ReactionTable? reactions = null,
+        ConoscenzeBase? conoscenze = null)
     {
         _rulesText = rules;
         _characterTexts = characters;
@@ -37,6 +39,7 @@ public sealed class ContextBuilder
         _declarations = declarations;
         _positions = positions;
         _reactions = reactions ?? ReactionTable.Empty();
+        _conoscenze = conoscenze ?? ConoscenzeBase.Empty();
     }
 
     /// Identico byte per byte a ogni turno: qui dentro non puo' colare niente di
@@ -54,19 +57,16 @@ public sealed class ContextBuilder
     private string SchedaDi(string npcId, WorldState world)
     {
         var gradino = _positions?.PositionOf(npcId, world) ?? "";
-        if (gradino.Length > 0 && _characterTexts.TryGetValue($"{npcId}/{gradino}", out var perGradino))
-        {
-            return perGradino;
-        }
-        return _characterTexts.TryGetValue(npcId, out var unica) ? unica : "";
-    }
+        var scheda = gradino.Length > 0 && _characterTexts.TryGetValue($"{npcId}/{gradino}", out var perGradino)
+            ? perGradino
+            : _characterTexts.TryGetValue(npcId, out var unica) ? unica : "";
 
-    /// C'e' una scheda scritta apposta per il gradino corrente? Se si', quella
-    /// scheda porta gia' la posizione, e il blocco <posizione> non va emesso.
-    private bool HaSchedaDiGradino(string npcId, WorldState world)
-    {
-        var gradino = _positions?.PositionOf(npcId, world) ?? "";
-        return gradino.Length > 0 && _characterTexts.ContainsKey($"{npcId}/{gradino}");
+        // La conoscenza condivisa che questo personaggio ha — i blocchi assegnati,
+        // in prosa — si somma alla scheda: la scheda dice COME parla, i blocchi
+        // COSA sa. Chi non ha assegnamenti sa solo quello che dice la scheda (i
+        // guardinghi con la scala, Wanda ed Elena con la loro versione).
+        var blocchi = _conoscenze.PerPersonaggio(npcId);
+        return blocchi.Length > 0 ? scheda + "\n\n" + blocchi : scheda;
     }
 
     private IReadOnlyList<PromptMessage> PrefissoConScheda(string character)
@@ -123,17 +123,6 @@ public sealed class ContextBuilder
         // ciascuno inventa a modo suo. Sta col resto del fondale, prima della
         // conversazione.
         parts.Add($"<quando>{WorldClock.Quando(world.Minute)}</quando>");
-        // Se c'e' una scheda scritta per questo gradino, la posizione sta gia'
-        // dentro la scheda: il blocco <posizione> assemblato non va emesso, o si
-        // ripeterebbe (e a stratificarsi con i gradini di sotto).
-        if (!HaSchedaDiGradino(npcId, world))
-        {
-            var stance = PositionLines(npcId, world);
-            if (stance.Length > 0)
-            {
-                parts.Add($"<posizione>{stance}</posizione>");
-            }
-        }
         return string.Join("\n", parts);
     }
 
@@ -214,31 +203,4 @@ public sealed class ContextBuilder
         return $"<come_reagisci>{PlayerInput.Sanitize(reazione)}{coda}</come_reagisci>";
     }
 
-    /// Cio' che questo personaggio, oggi, ritiene di poter dire — in prima persona
-    /// e come convinzione sincera. Mai una scaletta: il nome del gradino non entra
-    /// qui, e non c'e' nessuna istruzione a tacere. Cio' che non deve uscire
-    /// semplicemente non compare, perche' un modello non trapela quello che non ha.
-    /// SECURITY: testo autoriale, ma passa dal prompt come tutto il resto —
-    /// sanitizzato per la stessa ragione delle conoscenze.
-    private string PositionLines(string npcId, WorldState world)
-    {
-        if (_declarations is null || _positions is null)
-        {
-            return "";
-        }
-        var lines = new List<string>();
-        // Chi non ha una scala non e' uno a cui manca qualcosa: e' uno che non
-        // nasconde niente, e le righe di cui e' fonte deve averle davanti. Un
-        // paesano che non ha il testo della versione del paese la racconta a
-        // modo suo — e il coro, che e' la prova migliore del gioco, non esiste.
-        foreach (var declarationId in DeclarationService.Sayable(_declarations, _positions, npcId, world))
-        {
-            var text = _declarations.TextOf(declarationId, npcId);
-            if (text.Length > 0)
-            {
-                lines.Add(PlayerInput.Sanitize(text));
-            }
-        }
-        return string.Join(" ", lines);
-    }
 }
