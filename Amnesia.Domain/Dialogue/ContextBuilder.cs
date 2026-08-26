@@ -56,7 +56,7 @@ public sealed class ContextBuilder
     private string SchedaDi(string npcId, WorldState world)
     {
         var gradino = _positions?.PositionOf(npcId, world) ?? "";
-        if (gradino.Length > 0 && _characterTexts.TryGetValue($"{npcId}@{gradino}", out var perGradino))
+        if (gradino.Length > 0 && _characterTexts.TryGetValue($"{npcId}/{gradino}", out var perGradino))
         {
             return perGradino;
         }
@@ -68,7 +68,7 @@ public sealed class ContextBuilder
     private bool HaSchedaDiGradino(string npcId, WorldState world)
     {
         var gradino = _positions?.PositionOf(npcId, world) ?? "";
-        return gradino.Length > 0 && _characterTexts.ContainsKey($"{npcId}@{gradino}");
+        return gradino.Length > 0 && _characterTexts.ContainsKey($"{npcId}/{gradino}");
     }
 
     private IReadOnlyList<PromptMessage> PrefissoConScheda(string character)

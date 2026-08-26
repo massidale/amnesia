@@ -48,6 +48,38 @@ namespace AmnesiaUnity
         // interni, arredo, colline, confini). Spento: solo terreno + alberi +
         // cielo, per costruire il paese a mano. La versione piena non e' persa.
         [SerializeField] private bool villaggioCompleto = false;
+
+        // Mappa costruita tutta a mano nell'editor (case, terreno, abitanti gia'
+        // piazzati con il loro Personaggio). Acceso: il codice NON genera niente
+        // — niente scenografia, niente figure, niente porte — e usa solo quello
+        // che c'e' in scena; e il giocatore parte dove l'hai messo, non dalla
+        // griglia di gioco (che ha altre coordinate). E' il modo per giocare
+        // dentro una scena disegnata a mano come «mappa».
+        [SerializeField] private bool mappaAMano = false;
+        public bool MappaAMano => mappaAMano;
+
+        [Header("Mappa della pausa (foto dall'alto)")]
+        [Tooltip("La foto del paese vista dall'alto. Se c'e', la pausa mostra questa invece della griglia.")]
+        [SerializeField] private Texture2D mappaImmagine;
+        [Tooltip("Coordinate mondo (x,z) del punto che sta all'angolo ALTO-SINISTRA dell'immagine.")]
+        [SerializeField] private Vector2 mappaMondoAltoSinistra = new Vector2(-80f, 40f);
+        [Tooltip("Coordinate mondo (x,z) del punto che sta all'angolo BASSO-DESTRA dell'immagine.")]
+        [SerializeField] private Vector2 mappaMondoBassoDestra = new Vector2(110f, -100f);
+
+        public Texture2D MappaImmagine => mappaImmagine;
+        public IReadOnlyDictionary<string, Transform> Corpi => _corpi;
+
+        /// Dove cade un punto del mondo sull'immagine mappa: (u,v) in [0,1] con
+        /// (0,0) in ALTO A SINISTRA. Regola i due angoli nell'Inspector finche' i
+        /// pallini non stanno sulle case giuste. z del mondo va sull'asse
+        /// verticale della foto.
+        public Vector2 MappaUV(Vector3 mondo)
+        {
+            float u = Mathf.InverseLerp(mappaMondoAltoSinistra.x, mappaMondoBassoDestra.x, mondo.x);
+            float v = Mathf.InverseLerp(mappaMondoAltoSinistra.y, mappaMondoBassoDestra.y, mondo.z);
+            return new Vector2(u, v);
+        }
+
         private readonly HashSet<string> _aManoCorpi = new HashSet<string>();
         private readonly HashSet<string> _aManoPorte = new HashSet<string>();
 
@@ -134,9 +166,15 @@ namespace AmnesiaUnity
                 return;
             }
             RegistraOggettiInScena();
-            CostruisciIlPaese();
-            CostruisciLeFigure();
-            CostruisciLePorte();
+            // A mano: la scena e' gia' tutta li'. Il codice registra soltanto gli
+            // abitanti piazzati (per il loro id) e non aggiunge altro, cosi' non
+            // spuntano case sulla griglia di gioco lontano dal paese disegnato.
+            if (!mappaAMano)
+            {
+                CostruisciIlPaese();
+                CostruisciLeFigure();
+                CostruisciLePorte();
+            }
         }
 
         private bool Carica()
@@ -176,14 +214,17 @@ namespace AmnesiaUnity
             }
             PosizionaGliAttori();
 
-            var schede = new Dictionary<string, string>();
-            foreach (var file in Directory.GetFiles(Contenuto("prompts"), "*.md"))
+            // Le schede stanno in prompts/: quella unica al primo livello
+            // (anna.md -> "anna"), quelle per gradino in sottocartella
+            // (matteo/M2.md -> "matteo/M2"). Il nome visualizzato lo si prende
+            // dal titolo della scheda, una volta per persona.
+            var schede = Amnesia.Dialogue.PromptLibrary.Load(Contenuto("prompts"));
+            foreach (var voce in schede)
             {
-                var id = Path.GetFileNameWithoutExtension(file);
-                if (id != "rules")
+                var persona = Amnesia.Dialogue.PromptLibrary.PersonaDi(voce.Key);
+                if (!_nomi.ContainsKey(persona))
                 {
-                    schede[id] = File.ReadAllText(file);
-                    _nomi[id] = TitoloDi(schede[id], id);
+                    _nomi[persona] = TitoloDi(voce.Value, persona);
                 }
             }
             var regole = File.ReadAllText(Contenuto("prompts", "rules.md"));
@@ -293,6 +334,8 @@ namespace AmnesiaUnity
                 _porte[id] = m.transform;
                 _aManoPorte.Add(id);
             }
+            Debug.Log($"[Amnesia] Registrati {_corpi.Count} abitanti: {string.Join(", ", _corpi.Keys)}. " +
+                      $"Porte: {_porte.Count}. mappaAMano={mappaAMano}");
         }
 
         private void PosizionaGliAttori()
@@ -402,12 +445,34 @@ namespace AmnesiaUnity
                 }
                 var quanto = Vector2.Distance(
                     new Vector2(da.x, da.z), new Vector2(pair.Value.position.x, pair.Value.position.z));
-                if (quanto < portata)
+                if (quanto < portata && ConoscenzaPronta(pair.Key))
                 {
                     return pair.Key;
                 }
             }
             return "";
+        }
+
+        /// Il pulsante di una porta si annuncia solo quando sai dov'e': se il
+        /// luogo pretende una dichiarazione (es. il magazzino: qualcuno deve
+        /// averti detto dov'e') e nessuno l'ha ancora detta, la porta resta muta.
+        /// L'oggetto (la chiave) invece si controlla all'apertura, non qui.
+        private bool ConoscenzaPronta(string id)
+        {
+            var luogo = _luoghi?.Find(id);
+            if (luogo == null || luogo.RequiresDeclared.Count == 0)
+            {
+                return true;
+            }
+            var registro = new Register(Session.World);
+            foreach (var detta in luogo.RequiresDeclared)
+            {
+                if (registro.SupportsFor(detta).Count == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void SpalancaLaPorta(string id)

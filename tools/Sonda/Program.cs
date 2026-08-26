@@ -56,12 +56,7 @@ foreach (var starting in new[] { "fotografia", "foglio_indirizzo", "chiave_b17" 
     world.ItemOwners[starting] = "player";
 }
 
-var schede = new Dictionary<string, string>();
-foreach (var file in Directory.GetFiles(Percorso("prompts"), "*.md"))
-{
-    var id = Path.GetFileNameWithoutExtension(file);
-    if (id != "rules") { schede[id] = File.ReadAllText(file); }
-}
+var schede = Amnesia.Dialogue.PromptLibrary.Load(Percorso("prompts"));
 var regole = File.ReadAllText(Percorso("prompts", "rules.md"));
 
 var tabelle = new DeclarationService(dichiarazioni.Value!, posizioni.Value!);
