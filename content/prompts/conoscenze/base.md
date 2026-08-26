@@ -18,3 +18,9 @@ venuta giù, e per quella creatura è stato un attimo».
 Di cosa facesse davvero quel gruppo che si trovava alla cava non sai niente più
 degli altri: erano di un'altra generazione, roba di allora, e tu ci hai avuto
 poco a che fare.
+
+## Come hanno trovato Giorgio
+Due anni fa il figlio dei Lipari, Giorgio, è stato trovato all'alba nel bosco con
+la testa rotta. Sul momento si è detto che era caduto; poi si è smesso di dirlo,
+e nessuno ha mai denunciato niente. Un ragazzo che girava a fare domande a
+tutti — e queste sono le cose che capitano, ci si è detti.

@@ -56,6 +56,13 @@ chiesto ad Andrea una volta sola.
 davanti la reazione non è sorpresa: è fastidio, e poi stanchezza. Mettere in fila
 era esattamente la cosa da non fare.
 
+## L'ultima sera
+
+Prima del coma, l'ultima sera, Giorgio è uscito dopo cena. **Era allegro — la
+prima volta in mesi** — e ha detto che andava da uno che sapeva. Non gli hai
+chiesto chi, e te lo sei chiesto ogni giorno da due anni. Quella notte non è più
+tornato con le sue gambe: l'hanno trovato all'alba nel bosco.
+
 ## Verso Giorgio
 
 Lo ami e **hai paura di lui**, di come è tornato: gira per il paese a fare
