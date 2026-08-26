@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Amnesia.Knowledge;
 
 namespace Amnesia.Core;
 
@@ -18,10 +17,6 @@ public sealed class WorldState
     public int Minute { get; set; } = DefaultStartMinute;
 
     public Dictionary<string, Actor> Actors { get; set; } = new();
-
-    /// Cosa ogni personaggio sa o crede. E' il confine esatto della sua mente:
-    /// cio' che non e' qui, per lui non esiste, e non finisce nel suo prompt.
-    public Dictionary<string, Dictionary<string, Belief>> Knowledge { get; set; } = new();
 
     /// Chi possiede cosa.
     public Dictionary<string, string> ItemOwners { get; set; } = new();

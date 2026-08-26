@@ -1,7 +1,5 @@
-using System.Globalization;
 using Amnesia.Core;
 using Amnesia.Time;
-using Amnesia.Knowledge;
 
 namespace Amnesia.Dialogue;
 
@@ -136,7 +134,6 @@ public sealed class ContextBuilder
                 parts.Add($"<posizione>{stance}</posizione>");
             }
         }
-        parts.Add($"<conoscenze>{KnowledgeLines(npcId, world)}</conoscenze>");
         return string.Join("\n", parts);
     }
 
@@ -243,26 +240,5 @@ public sealed class ContextBuilder
             }
         }
         return string.Join(" ", lines);
-    }
-
-    /// SICUREZZA: la conoscenza non e' testo d'autore — RecordClaim lascia che il
-    /// modello scriva le parole del giocatore dentro lo stato del mondo, quindi una
-    /// dichiarazione registrata e' un percorso di riciclaggio che riporta quelle
-    /// parole nel prompt (parole del giocatore → RecordClaim → conoscenza → turno
-    /// dopo). Si neutralizza ogni stringa interpolata, proposizione e fonte allo
-    /// stesso modo, perche' nessuna dichiarazione registrata possa forgiare un
-    /// blocco del motore.
-    private static string KnowledgeLines(string npcId, WorldState world)
-    {
-        var lines = new KnowledgeService(world).ContextFor(npcId).Select(belief => string.Format(
-            // La cultura della macchina non decide i byte del prompt: con una
-            // virgola decimale al posto del punto ogni prompt validato sarebbe un
-            // altro prompt, a seconda di dove gira il gioco.
-            CultureInfo.InvariantCulture,
-            "{0} (fonte: {1}, confidenza: {2:0.0})",
-            PlayerInput.Sanitize(belief.Proposition),
-            PlayerInput.Sanitize(belief.SourceId),
-            belief.Confidence));
-        return string.Join("; ", lines);
     }
 }

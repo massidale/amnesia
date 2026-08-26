@@ -14,16 +14,6 @@ public static class ToolCatalog
     /// somiglino, ma dal fatto che siano la stessa cosa.
     private static readonly IReadOnlyList<ToolDefinition> Catalog = new[]
     {
-        Function("record_claim", "Registra un'affermazione fattuale del giocatore, senza renderla vera.", new JsonSchema
-        {
-            Properties = new Dictionary<string, JsonSchema>
-            {
-                ["fact_id"] = new() { Type = "string", Description = "Identificatore breve in snake_case dell'affermazione." },
-                ["content"] = new() { Type = "string" },
-                ["confidence"] = new() { Type = "number", Description = "Quanto il personaggio ci crede.", Minimum = 0.0, Maximum = 1.0 },
-            },
-            Required = new[] { "fact_id", "content", "confidence" },
-        }),
         Function("attempt_action", "Descrive un tentativo fisico del personaggio. Azioni non supportate restano impraticabili.", new JsonSchema
         {
             Properties = new Dictionary<string, JsonSchema>

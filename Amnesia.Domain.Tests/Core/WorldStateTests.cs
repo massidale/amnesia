@@ -1,5 +1,4 @@
 using Amnesia.Core;
-using Amnesia.Knowledge;
 using NUnit.Framework;
 
 namespace Amnesia.Tests.Core;
@@ -19,7 +18,6 @@ public class WorldStateTests
         world.ActorOf("matteo").Position = new Cell(4, 7);
         world.MarkShown("matteo", "frase");
         world.Flags["incipit_letto"] = true;
-        new KnowledgeService(world).RevealFact("matteo", "cava_crollata", "la cava e' crollata", "vissuto", 1.0);
 
         var reloaded = WorldState.FromJson(world.ToJson());
 
@@ -27,7 +25,6 @@ public class WorldStateTests
         Assert.That(reloaded.ActorOf("matteo").Position, Is.EqualTo(new Cell(4, 7)));
         Assert.That(reloaded.ShownToNpc("matteo"), Is.EqualTo(new[] { "frase" }));
         Assert.That(reloaded.Flags["incipit_letto"], Is.True);
-        Assert.That(new KnowledgeService(reloaded).Knows("matteo", "cava_crollata"), Is.True);
     }
 
     [Test]

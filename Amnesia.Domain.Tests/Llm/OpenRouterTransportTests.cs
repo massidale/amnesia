@@ -118,7 +118,7 @@ public class OpenRouterTransportTests
 
         Assert.That(handler.LastBody, Does.Contain("\"model\":\"deepseek/deepseek-v3.2\""));
         Assert.That(handler.LastBody, Does.Contain("\"tool_choice\":\"auto\""));
-        Assert.That(handler.LastBody, Does.Contain("record_claim"));
+        Assert.That(handler.LastBody, Does.Contain("attempt_action"));
         Assert.That(handler.LastBody, Does.Not.Contain(FakeKey), "la chiave sta nell'header, non nel corpo");
     }
 
