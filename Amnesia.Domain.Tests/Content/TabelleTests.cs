@@ -607,22 +607,29 @@ public class TabelleTests
 
         foreach (var (npc, scala) in Scale())
         {
-            // I gradini raggiunti fin qui, in ordine: la reazione si risolve
-            // esattamente su questi, come nel turno in cui l'oggetto sale sul banco.
-            var idFinora = new List<string>();
-            foreach (var gradino in scala)
+            // Per ogni oggetto che fa salire, il gradino PIU' ALTO in cui e' un
+            // trigger: e' li' che si atterra quando lo si mostra. Una prova della
+            // cava fa saltare Matteo dritto a M2 (e' nell'any_shown sia di M1 che
+            // di M2), non si ferma a M1 — quindi la reazione si risolve sui gradini
+            // raggiunti fino a M2, dove la reazione c'e'.
+            var gradinoPiuAlto = new Dictionary<string, int>();
+            for (var i = 0; i < scala.Count; i++)
             {
-                idFinora.Add(gradino.Id);
-                foreach (var oggetto in gradino.RequiresShown.Concat(gradino.RequiresAnyShown).Distinct())
+                foreach (var oggetto in scala[i].RequiresShown.Concat(scala[i].RequiresAnyShown))
                 {
-                    var reazione = tavola.Reazione(npc, idFinora, oggetto);
-                    Assert.That(reazione, Is.Not.Empty,
-                        $"{npc}/{gradino.Id}: «{oggetto}» fa salire ma non ha reazione — cade sul default muto");
-                    if (generici.TryGetValue(oggetto, out var difetto))
-                    {
-                        Assert.That(reazione, Is.Not.EqualTo(difetto),
-                            $"{npc}/{gradino.Id}: «{oggetto}» fa salire ma la reazione e' il ripiego generico — contraddice il gradino");
-                    }
+                    gradinoPiuAlto[oggetto] = i; // scorrendo in su, l'ultimo vince
+                }
+            }
+            foreach (var (oggetto, i) in gradinoPiuAlto)
+            {
+                var raggiunti = scala.Take(i + 1).Select(g => g.Id).ToList();
+                var reazione = tavola.Reazione(npc, raggiunti, oggetto);
+                Assert.That(reazione, Is.Not.Empty,
+                    $"{npc}: «{oggetto}» fa salire (fino a {scala[i].Id}) ma non ha reazione — cade sul default muto");
+                if (generici.TryGetValue(oggetto, out var difetto))
+                {
+                    Assert.That(reazione, Is.Not.EqualTo(difetto),
+                        $"{npc}: «{oggetto}» fa salire (fino a {scala[i].Id}) ma la reazione e' il ripiego generico — contraddice il gradino");
                 }
             }
         }

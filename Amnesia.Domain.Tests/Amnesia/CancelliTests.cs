@@ -13,17 +13,25 @@ public class CancelliTests
         PositionTable.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "Amnesia", "fixtures", "positions.json")).Value!;
 
     [Test]
-    public void UnOggettoDelMagazzinoFaCedereMatteoSulRitoESulRatto()
+    public void LaFraseDaSolaScuoteMatteoMaTieneLaNotte()
     {
         var world = new WorldState();
+        // La frase lo scuote — sale a M1, agitato, e ammette il Circolo — ma
+        // sulla notte tiene la versione: non oltre M1.
         world.MarkShown("matteo", "frase");
         Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M1"));
+    }
 
-        // Basta un solo oggetto della cava sul banco — qui il quaderno di
-        // Vittorio — e la scampagnata non regge: rito e ratto insieme.
-        world.MarkShown("matteo", "quaderno_vittorio");
+    [Test]
+    public void UnaProvaDellaCavaDaSolaFaSaltareMatteoAM2()
+    {
+        var world = new WorldState();
+        // Una prova che lassù c'era una bambina — qui il braccialetto — fa
+        // saltare Matteo DIRETTAMENTE a M2, senza passare per la frase: salta la
+        // fase agitata e arriva alla confessione del rito e del ratto.
+        world.MarkShown("matteo", "braccialetto");
         Assert.That(Reali().PositionOf("matteo", world), Is.EqualTo("M2"),
-            "una prova che lassù c'era una bambina, e Matteo racconta di averla portata via");
+            "il braccialetto da solo porta dritto alla confessione, senza la frase");
         Assert.That(Reali().Granted("matteo", world), Does.Contain("matteo_la_porto_via"));
         Assert.That(Reali().Granted("matteo", world), Does.Contain("elena_viva"));
     }

@@ -96,12 +96,31 @@ public sealed class DeclarationService
     public static IReadOnlyList<string> Sayable(
         DeclarationTable declarations, PositionTable positions, string npcId, WorldState world)
     {
+        var shown = world.ShownToNpc(npcId);
+
         if (positions.HasLadder(npcId))
         {
-            return positions.Granted(npcId, world);
+            // La scala decide cosa il personaggio ha, gradino per gradino. Ma un
+            // riconoscimento legato a un OGGETTO — «questa giacca e' di Matteo» —
+            // non e' un gradino: lo fa chiunque conosca l'oggetto, appena lo vede.
+            // Percio' a chi ha una scala si aggiunge, oltre a cio' che la scala
+            // concede, ogni dichiarazione di cui e' fonte che dipende da un oggetto
+            // sul banco E che la sua scala non governa gia' — altrimenti si
+            // scavalcherebbero i gradini (anna_solo_matteo resta cosa di A2, non
+            // della giacca).
+            var governateDallaScala = new HashSet<string>(positions.AllGrants(npcId));
+            var perOggetto = declarations.Ids.Where(id =>
+            {
+                var d = declarations.Find(id);
+                return d is not null
+                    && d.Sources.Contains(npcId)
+                    && d.RequiresShown.Count > 0
+                    && d.RequiresShown.All(shown.Contains)
+                    && !governateDallaScala.Contains(id);
+            });
+            return positions.Granted(npcId, world).Concat(perOggetto).Distinct().ToList();
         }
 
-        var shown = world.ShownToNpc(npcId);
         return declarations.Ids
             .Where(id =>
             {

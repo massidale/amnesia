@@ -23,8 +23,11 @@
      "non_erano_gite",
      "padre_nel_circolo"
     ],
-    "requires_shown": [
-     "frase"
+    "requires_any_shown": [
+     "frase",
+     "braccialetto",
+     "cassetta_latta",
+     "quaderno_vittorio"
     ]
    },
    {
@@ -100,15 +103,6 @@
      "cassetta_latta",
      "quaderno_vittorio"
     ]
-   },
-   {
-    "id": "A3",
-    "grants": [
-     "giacca_e_di_matteo"
-    ],
-    "requires_shown": [
-     "giacca"
-    ]
    }
   ],
   "laura": [
@@ -149,15 +143,6 @@
      "braccialetto",
      "cassetta_latta",
      "quaderno_vittorio"
-    ]
-   },
-   {
-    "id": "L3",
-    "grants": [
-     "giacca_e_di_matteo"
-    ],
-    "requires_shown": [
-     "giacca"
     ]
    }
   ],
