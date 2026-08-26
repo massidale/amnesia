@@ -29,7 +29,7 @@ public class PromptLibraryTests
         Assert.That(schede.Keys, Does.Contain("matteo/M2"));
         Assert.That(schede["matteo/M2"], Does.Contain("Matteo Sardi"));
         // La scheda unica resta al primo livello.
-        Assert.That(schede.Keys, Does.Contain("anna"));
+        Assert.That(schede.Keys, Does.Contain("rosa"));
         // Le regole non sono una scheda.
         Assert.That(schede.Keys, Does.Not.Contain("rules"));
     }
