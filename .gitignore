@@ -62,3 +62,7 @@ Unity/Assets/EmaceArt/
 Unity/Assets/EmaceArt.meta
 Unity/Assets/OccaSoftware/
 Unity/Assets/OccaSoftware.meta
+
+# Fotogrammi rigenerabili dei sopralluoghi: conservare report e video, non frame.
+/artifacts/sopralluogo/SanRocco1987/[0-9]*.png
+/artifacts/sopralluogo/Chivasso1987/[0-9]*.png
