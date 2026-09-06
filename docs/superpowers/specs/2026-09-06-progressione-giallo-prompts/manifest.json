@@ -1,0 +1,166 @@
+{
+  "status": "proposta_non_installata",
+  "version": 5,
+  "note": "Specifica di contenuto; solo meccaniche esistenti. Consultare incompatibilità nella specifica prima di applicare: alcune condizioni narrative non sono esprimibili esattamente con i soli scalini.",
+  "characters": {
+    "rosa": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "rosa.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "lidia": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "lidia.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "marisa": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "marisa.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "beppe": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "beppe.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "teresa": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "teresa.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "piero": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "piero.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "gino": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "gino.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "don_carlo": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "profile": "don_carlo.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "elena": {
+      "shared_knowledge": [],
+      "profile": "elena.md",
+      "activation": "sempre; nessuna scala narrativa"
+    },
+    "anna": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "variants": [
+        {
+          "id": "A0",
+          "file": "anna/A0.md",
+          "activation": "versione pubblica finché non viene mostrato un reperto; frase e ricordo aggiungono solo contesto, senza cambiare posizione"
+        },
+        {
+          "id": "A1",
+          "file": "anna/A1.md",
+          "activation": "quaderno_vittorio oppure cassetta_latta oppure braccialetto realmente mostrato; nessun prerequisito frase o fotografia"
+        }
+      ]
+    },
+    "laura": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "variants": [
+        {
+          "id": "L0",
+          "file": "laura/L0.md",
+          "activation": "nessun reperto mostrato"
+        },
+        {
+          "id": "L1",
+          "file": "laura/L1.md",
+          "activation": "quaderno_vittorio oppure cassetta_latta oppure braccialetto mostrato"
+        }
+      ]
+    },
+    "matteo": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "variants": [
+        {
+          "id": "M0",
+          "file": "matteo/M0.md",
+          "activation": "nessun reperto mostrato"
+        },
+        {
+          "id": "M1",
+          "file": "matteo/M1.md",
+          "activation": "reperto pertinente mostrato; finché Giorgio non possiede la giacca"
+        },
+        {
+          "id": "M2",
+          "file": "matteo/M2.md",
+          "activation": "Giorgio possiede la giacca: passaggio immediato, senza accusa, presentazione o riconoscimento esterno come prerequisiti. Il prompt gestisce evasione, accusa diretta e confessione.",
+          "existing_mechanic": {
+            "requires_declared": [
+              "nino_giacca"
+            ]
+          },
+          "limitation": "Riscontro narrativo della consegna, non controllo di inventario. Nessun nuovo campo requires_owned."
+        }
+      ]
+    },
+    "nino": {
+      "shared_knowledge": [
+        "san_rocco"
+      ],
+      "variants": [
+        {
+          "id": "N0",
+          "file": "nino/N0.md",
+          "activation": "Matteo non ha ancora pronunciato elena_viva"
+        },
+        {
+          "id": "N1",
+          "file": "nino/N1.md",
+          "activation": "Matteo ha pronunciato elena_viva: Nino trova la giacca ora e la consegna alla prossima visita, senza altri requisiti"
+        }
+      ]
+    },
+    "wanda": {
+      "shared_knowledge": [],
+      "variants": [
+        {
+          "id": "W0",
+          "file": "wanda/W0.md",
+          "activation": "lettera autentica non mostrata"
+        },
+        {
+          "id": "W1",
+          "file": "wanda/W1.md",
+          "activation": "due_righe_matteo possedute e mostrate a Wanda; ingresso persistente"
+        }
+      ]
+    }
+  },
+  "object_reactions": "reazioni.json",
+  "contextual_reactions": {
+    "anna/frase": "riconoscimento deterministico delle parole → reazione e contesto locale persistente; non è una posizione e non richiede fotografia posseduta"
+  }
+}

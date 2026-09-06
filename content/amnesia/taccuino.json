@@ -2,107 +2,147 @@
   "convinzioni": [
     {
       "id": "coma",
-      "testo": "Sono stato due anni in coma, per una frattura cranica. Mi hanno trovato nel bosco, e nessuno sa perché fossi lì.",
+      "testo": "Sono stato due anni in coma, per una frattura cranica. Mi hanno trovato nel bosco; non ricordo perché fossi lì.",
       "iniziale": true
     },
     {
       "id": "frase_taccuino",
-      "testo": "Prima del coma ripetevo cinque parole: «chi passa per primo tiene la porta». Le dicevo anche da bambino. E ripetevo un nome: Elena.",
+      "testo": "Prima del coma ripetevo sette parole: «chi passa per primo tiene la porta». Le dicevo anche da bambino. E ripetevo un nome: Elena.",
       "iniziale": true
     },
     {
       "id": "elena_morta",
-      "testo": "Elena Valli è morta a tre anni nella cava, nella frana del 1966. Il corpo non l'hanno mai trovato.",
+      "testo": "In paese Elena Valli è considerata morta nel crollo della cava del 1966. È la versione degli abitanti, non una certezza sulla sua sorte.",
       "quando": [
-        "versione_paese",
-        "corpo_mai_trovato",
+        "versione_paese"
+      ]
+    },
+    {
+      "id": "elena_famiglia",
+      "testo": "Elena era la figlia di Laura e Vittorio Valli.",
+      "quando": [
         "elena_figlia_vittorio"
       ]
     },
     {
+      "id": "elena_corpo",
+      "testo": "Il corpo di Elena non fu ritrovato. Ci sono un memoriale alla cava e un ricordo al cimitero senza il suo corpo.",
+      "quando": [
+        "corpo_mai_trovato"
+      ]
+    },
+    {
       "id": "vittorio_morto_taccuino",
-      "testo": "Vittorio Valli, il padre di Elena, è morto di malattia qualche mese prima della tragedia della cava.",
+      "testo": "Vittorio Valli morì di malattia nella primavera del 1966, pochi mesi prima della frana.",
       "quando": [
         "vittorio_morto"
       ]
     },
     {
       "id": "vittorio_capo_taccuino",
-      "testo": "Vittorio Valli era il capo del Circolo della Soglia.",
+      "testo": "Vittorio Valli fondò e guidava il Circolo della Soglia.",
       "quando": [
         "vittorio_capo"
       ]
     },
     {
-      "id": "circolo_scampagnate",
-      "testo": "Il Circolo della Soglia era un gruppo che si riuniva per fare scampagnate alla cava.",
+      "id": "circolo_esisteva_taccuino",
+      "testo": "A San Rocco esisteva un gruppo chiamato Circolo della Soglia.",
       "quando": [
-        "scampagnate",
         "circolo_esisteva"
       ]
     },
     {
-      "id": "codice_porta",
-      "testo": "Quelli del Circolo avevano un codice fra loro, qualcosa riguardo una «porta». Forse dirlo a uno di loro potrebbe fargli rivelare cose che normalmente non direbbe.",
+      "id": "circolo_scampagnate",
+      "testo": "I partecipanti descrivevano il Circolo come una compagnia di amici che faceva gite e pranzi alla cava.",
       "quando": [
-        "avevano_una_frase",
+        "scampagnate"
+      ]
+    },
+    {
+      "id": "codice_porta",
+      "testo": "Anna e Pietro avevano un loro modo di dire, uno diceva \"chi passa per primo\" e l'altro rispondeva \"tiene la porta\".",
+      "quando": [
         "frase_per_riconoscersi"
       ]
     },
     {
       "id": "circolo_rituali",
-      "testo": "Il Circolo della Soglia non faceva scampagnate: si riuniva per fare rituali.",
+      "testo": "Il Circolo praticava anche riti: la versione delle sole scampagnate nascondeva questa parte.",
       "quando": [
-        "non_erano_gite",
-        "il_rito"
+        "non_erano_gite"
       ],
       "sostituisce": "circolo_scampagnate"
     },
     {
-      "id": "elena_sacrificio",
-      "testo": "Elena era la vittima sacrificale: il rito doveva riconnettere il Circolo con suo padre, Vittorio. Sapevano tutti che sarebbe morta.",
+      "id": "rito_passaggio",
+      "testo": "Il rito prevedeva di calare qualcuno nell’acqua in fondo alla Stanza e farlo tornare, per richiamare un morto. Chi lo praticava credeva nel ritorno, pur sapendo del pericolo.",
       "quando": [
-        "elena_prescelta",
+        "il_rito"
+      ]
+    },
+    {
+      "id": "elena_sacrificio",
+      "testo": "Elena era stata scelta per il rito perché era sangue di Vittorio. Doveva scendere e tornare; chi la scelse sapeva del pericolo.",
+      "quando": [
+        "elena_prescelta"
+      ]
+    },
+    {
+      "id": "sacrificio_vittorio_taccuino",
+      "testo": "Anna dice che il sacrificio serviva a richiamare Vittorio, morto in primavera.",
+      "quando": [
         "sacrificio_per_vittorio"
       ]
     },
     {
       "id": "magazzino_taccuino",
-      "testo": "La roba della cava è nel deposito ferroviario, magazzino diciassette. La mia chiave d'ottone apre lì.",
+      "testo": "Il magazzino è nel deposito ferroviario: fabbricato B, stanza 17 in fondo al corridoio. Andrea ne aveva la chiave B-17.",
       "quando": [
         "magazzino_dove"
       ]
     },
     {
       "id": "padre_taccuino",
-      "testo": "Mio padre era nel Circolo. Otto anni, forse nove.",
+      "testo": "Mio padre Andrea frequentava il Circolo della Soglia.",
       "quando": [
         "padre_nel_circolo"
       ]
     },
     {
       "id": "padre_quella_notte",
-      "testo": "Mio padre quella notte era alla cava. E c'ero anch'io: mi aveva portato su, non aveva a chi lasciarmi.",
+      "testo": "Mio padre era alla cava la notte del crollo.",
       "quando": [
-        "padre_nella_cava",
+        "padre_nella_cava"
+      ]
+    },
+    {
+      "id": "io_quella_notte",
+      "testo": "Anch’io ero alla cava: mio padre mi aveva portato con sé perché non aveva a chi lasciarmi.",
+      "quando": [
         "io_ero_con_lui"
       ]
     },
     {
       "id": "padre_ricerche_taccuino",
-      "testo": "Negli ultimi anni mio padre cercava qualcuno. Era un chiodo fisso, ci stava perdendo la testa. Mia madre non ha mai saputo chi.",
+      "testo": "Negli ultimi anni mio padre era assorbito da una ricerca e si assentava spesso.",
       "quando": [
         "padre_ricerche"
       ]
     },
     {
-      "id": "elena_salvata",
-      "testo": "Elena non è morta nella cava: Matteo Sardi l'ha sentita sotto le pietre, l'ha tirata fuori e l'ha portata in un paese lontano. È viva.",
+      "id": "andrea_cercava_elena_taccuino",
+      "testo": "Piero dice che mio padre cercava Elena, convinto che potesse essere sopravvissuta. A lui non mostrò una prova né diede un recapito verificato.",
       "quando": [
-        "matteo_la_porto_via",
-        "elena_viva"
-      ],
-      "sostituisce": "elena_morta"
+        "andrea_cercava_elena"
+      ]
+    },
+    {
+      "id": "giorgio_continuo_ricerche_taccuino",
+      "testo": "Dopo la morte di mio padre nel 1981 continuai io a cercare Elena, per chiarire ciò che lui non aveva risolto. Prima del coma ne parlavo con Piero.",
+      "quando": [
+        "giorgio_continuo_ricerche"
+      ]
     },
     {
       "id": "matteo_ero_gia_sceso_taccuino",
@@ -113,59 +153,88 @@
     },
     {
       "id": "solo_matteo",
-      "testo": "Quando Anna è scesa in paese, alla cava era rimasto solo Matteo.",
+      "testo": "Anna vide Matteo tornare verso l’imbocco della cava durante la fuga. Non sa dove fossero tutti gli altri o che cosa trovò.",
       "quando": [
         "anna_solo_matteo"
+      ]
+    },
+    {
+      "id": "elena_salvata",
+      "testo": "Matteo dice di aver sentito Elena sotto le pietre e di averla tirata fuori dopo il crollo.",
+      "quando": [
+        "matteo_la_porto_via"
       ],
       "sostituisce": "matteo_ero_gia_sceso_taccuino"
     },
     {
+      "id": "elena_viva_taccuino",
+      "testo": "Matteo afferma che Elena è viva oggi: è adulta e vive in un’altra città.",
+      "quando": [
+        "elena_viva"
+      ],
+      "sostituisce": "elena_morta"
+    },
+    {
       "id": "laura_non_cera_taccuino",
-      "testo": "Laura Valli quella notte alla cava non c'era: è rimasta a casa.",
+      "testo": "Laura dice che quella notte non andò alla cava: rimase a casa.",
       "quando": [
         "laura_non_cera"
       ]
     },
     {
+      "id": "laura_consenso_taccuino",
+      "testo": "Laura ammette che, dopo la morte di Vittorio, accettò la promessa che Elena sarebbe scesa e tornata. Rimase a casa sapendo dove la portavano.",
+      "quando": [
+        "laura_assoggettata"
+      ]
+    },
+    {
       "id": "matteo_non_dice_dove_taccuino",
-      "testo": "Matteo sa dov'è Elena, e non vuole dirmelo.",
+      "testo": "Matteo sa dove vive Elena, ma rifiuta di dirmelo o di fare da tramite.",
       "quando": [
         "matteo_non_dice_dove"
       ]
     },
     {
       "id": "matteo_confessa_taccuino",
-      "testo": "È stato Matteo: quella sera del 1985, quando mi sono girato per andarmene, ha preso una pietra dal banco.",
+      "testo": "Matteo ha confessato di avermi colpito con una pietra nel 1985 e trascinato nel castagneto.",
       "quando": [
         "matteo_confessa"
       ]
     },
     {
       "id": "dove_lo_trovai_taccuino",
-      "testo": "Nino mi ha trovato nel castagneto sopra la curva, un posto dove non si arriva camminando e non ci si cade da soli.",
+      "testo": "Nino mi trovò all’alba nel castagneto sopra la curva, lontano dal bordo della strada. Non vide come ci fossi arrivato né chi mi avesse fatto male.",
       "quando": [
         "dove_lo_trovai"
       ]
     },
     {
       "id": "giacca_nino_taccuino",
-      "testo": "Nino ha ritrovato una giacca da uomo accanto al punto dove mi ha trovato, e me l'ha data.",
+      "testo": "Nino ha trovato oggi una giacca vicino al punto dove mi trovò due anni fa. Me la consegna: non l’aveva raccolta allora.",
       "quando": [
         "nino_giacca"
       ]
     },
     {
       "id": "giacca_di_matteo_taccuino",
-      "testo": "Quella giacca è di Matteo.",
+      "testo": "La giacca che ho mostrato è stata riconosciuta come quella di Matteo.",
       "quando": [
         "giacca_e_di_matteo"
       ]
     },
     {
       "id": "wanda_una_persona_sola_taccuino",
-      "testo": "A Chivasso una donna ha detto che di questa faccenda parla con una persona sola — e non sono io.",
+      "testo": "Wanda vuole due righe scritte da chi mi ha mandato: deve riconoscere una persona di cui si fida.",
       "quando": [
         "wanda_una_persona_sola"
+      ]
+    },
+    {
+      "id": "elena_adottata_taccuino",
+      "testo": "Elena sa di essere stata adottata: le fu detto a undici anni che la sua famiglia era morta. Non le fu raccontato altro.",
+      "quando": [
+        "elena_adottata"
       ]
     }
   ]

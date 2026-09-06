@@ -1,37 +1,34 @@
 {
   "greetings": {
     "rosa": {
-      "": "Sei sceso. Hai mangiato qualcosa, tu?"
+      "": "Giorgio, prima dell’incidente gridavi Elena. La bambina dei Valli. Marisa e Beppe conoscono quelle famiglie: possono aiutarti a capire chi fosse."
     },
     "nino": {
       "N0": "Oh. Il ragazzo dei Lipari. Cammini bene, adesso.",
-      "N1": "Ti cercavo, sai. È da stamattina che lo dico in giro. C'è una cosa che tengo da due anni, ed è ora che la veda anche tu."
+      "N1": "Giorgio, oggi ho trovato una cosa vicino al punto dove ti avevo soccorso. Vieni, te ne parlo."
     },
     "matteo": {
-      "M0": "Giorgio! Guarda chi si vede in piedi. Vieni, vieni — occhio alla polvere. Dimmi tutto.",
-      "M1": "Ancora tu. …Va bene. Chiudi la porta che entra freddo.",
-      "M2": "Ti aspettavo, sai. Uno arriva a chiedere e poi torna sempre.",
-      "M3": "Giorgio. …Siediti, che in piedi non ti reggi ancora bene."
+      "M0": "Giorgio! Come stai? Vieni, dimmi pure.",
+      "M1": "Giorgio. Sì, parliamone.",
+      "M2": "Giorgio. Che cosa vuoi chiedermi?",
+      "M3": "Dimmi, Giorgio. Dopo quello che ti ho detto hai diritto alle risposte."
     },
     "anna": {
-      "A0": "Sì? …Ah. Il figlio di Rosa. Cosa vuoi, che ho il pane in forno.",
-      "A1": "Sei tornato. Lo sapevo che tornavi.",
-      "A2": "Entra, va'. Che qui fuori si gela e quello che devi chiedere è lungo."
+      "A0": "Giorgio, entra pure. Dimmi che cosa vuoi sapere.",
+      "A1": "Ne parliamo, Giorgio. Ti dirò quello che ricordo io."
     },
     "laura": {
-      "L0": "Buongiorno. …Tu sei il figlio di Rosa, vero? Sei cresciuto che non ti riconoscevo.",
-      "L1": "Ancora tu. Va bene, dimmi.",
-      "L2": "Chiudi la porta. Non voglio che si senta dalla strada."
+      "L0": "Buongiorno. Tu sei il figlio di Rosa, vero? Dimmi pure.",
+      "L1": "Siediti. Ti racconto quello che so, ma lassù non c’ero."
     },
     "don_carlo": {
-      "C0": "Giorgio Lipari. Prima o poi lo sapevo che venivi. Siediti pure.",
-      "C1": "Sei di nuovo qui. Lo sai che io ti posso dire poco."
+      "": "Giorgio, siediti. Raccontami che cosa stai cercando di capire."
     },
     "teresa": {
       "": "Oh, il figlio della Rosa. Vieni, siediti un momento che io qui sto sempre."
     },
     "piero": {
-      "": "Buongiorno. …Sei tu quello dell'ospedale, vero?"
+      "": "Giorgio. Tuo padre era il mio amico più stretto. Siediti: se vuoi sapere di lui, qualcosa te la posso raccontare."
     },
     "marisa": {
       "": "Dimmi pure. Se è per la spesa hai la frutta fresca dietro di te."
@@ -44,6 +41,13 @@
     },
     "gino": {
       "": "Oh! Giorgio! Ma allora è vero che cammini. Vieni qui, siediti — dimmi tutto."
+    },
+    "wanda": {
+      "W0": "Buongiorno. Mi dica chi cerca.",
+      "W1": "Ho letto il messaggio. Può entrare."
+    },
+    "elena": {
+      "": "Mi ha detto Wanda che volevi parlarmi. Chi sei?"
     }
   }
 }

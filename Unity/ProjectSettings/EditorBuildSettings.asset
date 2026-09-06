@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SanRocco1987.unity
+    guid: 303fde12c4c324bce8f90564fa499e02
+  - enabled: 1
+    path: Assets/Scenes/Chivasso1987.unity
+    guid: 2cd3c53bfbd7d4f539efe1b5ef0e0ef3
   m_configObjects: {}

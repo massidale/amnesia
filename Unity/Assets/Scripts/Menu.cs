@@ -15,7 +15,7 @@ namespace AmnesiaUnity
     /// Il tempo qui non scorre e non c'e' niente da fermare: in Amnesia
     /// l'orologio avanza a ogni battuta, quindi la pausa e' esattamente cio'
     /// che sembra — il gioco fermo ad aspettarti.
-    public sealed class Menu : MonoBehaviour
+    public sealed partial class Menu : MonoBehaviour
     {
         private const float ZoomMinimo = 4f;
         private const float ZoomMassimo = 26f;
@@ -34,8 +34,11 @@ namespace AmnesiaUnity
         private RectTransform _vista;
         private RectTransform _carta;
         private RectTransform _iosono;
-        private readonly List<(RectTransform Etichetta, float X, float Y)> _didascalie =
-            new List<(RectTransform, float, float)>();
+        private Text _scalaMappa;
+        private bool _mappaInquadrata;
+        private readonly List<(RectTransform Etichetta, Vector3 Mondo)> _didascalie =
+            new List<(RectTransform, Vector3)>();
+        private readonly Dictionary<RectTransform,RectTransform> _segnaposti = new Dictionary<RectTransform,RectTransform>();
         private float _zoom = 12f;
         private Vector3 _presa;
         private bool _trascino;
@@ -73,6 +76,7 @@ namespace AmnesiaUnity
         public void Chiudi()
         {
             Aperto = false;
+            _trascino = false;
             if (_radice != null)
             {
                 _radice.SetActive(false);
@@ -96,8 +100,7 @@ namespace AmnesiaUnity
             {
                 return;
             }
-            var qui = _gioco.CellaDi(_giocatore.position);
-            _carta.anchoredPosition = -SulFoglio(qui.X + 0.5f, qui.Y + 0.5f);
+            _carta.anchoredPosition = -PostoSuCarta(_giocatore.position);
             Trattieni();
         }
 
@@ -110,7 +113,8 @@ namespace AmnesiaUnity
 
         private void Mostra()
         {
-            _rullo.gameObject.SetActive(_pagina != Pagina.Paese);
+            _rullo.gameObject.SetActive(_pagina == Pagina.Taccuino);
+            _tasche.SetActive(_pagina == Pagina.Tasche);
             _pianta.SetActive(_pagina == Pagina.Paese);
             if (_pagina == Pagina.Paese)
             {
@@ -119,25 +123,34 @@ namespace AmnesiaUnity
                     _zoom = 12f;
                 }
                 Ridisegna();
-                InquadraIlGiocatore();
+                if (!_mappaInquadrata)
+                {
+                    Canvas.ForceUpdateCanvases();
+                    Ridisegna();
+                    _zoom = Mathf.Clamp(_zoom * Mathf.Min(_vista.rect.width / _carta.sizeDelta.x,
+                        _vista.rect.height / _carta.sizeDelta.y) * .94f, ZoomMinimo, ZoomMassimo);
+                    Ridisegna();
+                    InquadraIlGiocatore();
+                    _mappaInquadrata = true;
+                }
             }
             if (_pagina == Pagina.Tasche)
             {
-                _foglio.text = Inventario.Oggetti(_gioco);
+                AggiornaTasche();
             }
             else if (_pagina == Pagina.Taccuino)
             {
                 _foglio.text = Inventario.Righe(_gioco);
             }
-            if (_pagina != Pagina.Paese)
+            if (_pagina == Pagina.Taccuino)
             {
                 // Una pagina si apre in cima, sempre.
                 Canvas.ForceUpdateCanvases();
                 _rullo.verticalNormalizedPosition = 1f;
             }
             _coda.text = _pagina == Pagina.Paese
-                ? "esc riprende   ·   tab cambia pagina   ·   rotella per lo zoom, trascina o WASD per spostarti"
-                : "esc riprende   ·   tab o ← → cambiano pagina   ·   rotella o ↑ ↓ per scorrere";
+                ? "M  CHIUDI MAPPA     TAB  CAMBIA SCHEDA     WASD  SPOSTA     ROTELLA  ZOOM"
+                : "ESC  TORNA AL GIOCO     TAB / ← →  CAMBIA SCHEDA     ↑ ↓ / ROTELLA  SCORRI";
             foreach (var linguetta in _linguette)
             {
                 var scelta = linguetta.Key == _pagina;
@@ -159,19 +172,18 @@ namespace AmnesiaUnity
                 var passo = (Premuto(KeyCode.UpArrow) - Premuto(KeyCode.DownArrow)) * Time.unscaledDeltaTime * 0.9f;
                 if (passo != 0f)
                 {
-                    _rullo.verticalNormalizedPosition =
-                        Mathf.Clamp01(_rullo.verticalNormalizedPosition + passo);
+                    var rullo = _pagina == Pagina.Tasche ? _dettaglioRullo : _rullo;
+                    rullo.verticalNormalizedPosition = Mathf.Clamp01(rullo.verticalNormalizedPosition + passo);
                 }
                 return;
             }
             if (_giocatore != null)
             {
-                var qui = _gioco.CellaDi(_giocatore.position);
-                _iosono.anchoredPosition = SulFoglio(qui.X + 0.5f, qui.Y + 0.5f);
+                _iosono.anchoredPosition = PostoSuCarta(_giocatore.position);
             }
 
             var rotella = Input.mouseScrollDelta.y;
-            if (Mathf.Abs(rotella) > 0.01f)
+            if (Mathf.Abs(rotella) > 0.01f && RectTransformUtility.RectangleContainsScreenPoint(_vista, Input.mousePosition))
             {
                 _zoom = Mathf.Clamp(_zoom * (1f + rotella * 0.12f), ZoomMinimo, ZoomMassimo);
                 Ridisegna();
@@ -179,7 +191,7 @@ namespace AmnesiaUnity
 
             // Si trascina con il mouse, o con le frecce per chi ha le mani sulla
             // tastiera. Le frecce qui non cambiano pagina: cambiano vista.
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && RectTransformUtility.RectangleContainsScreenPoint(_vista, Input.mousePosition))
             {
                 _presa = Input.mousePosition;
                 _trascino = true;
@@ -192,7 +204,7 @@ namespace AmnesiaUnity
             {
                 var scarto = Input.mousePosition - _presa;
                 _presa = Input.mousePosition;
-                _carta.anchoredPosition += new Vector2(scarto.x, scarto.y);
+                _carta.anchoredPosition += new Vector2(scarto.x, scarto.y) / _radice.GetComponentInParent<Canvas>().scaleFactor;
                 Trattieni();
             }
             else
@@ -215,22 +227,27 @@ namespace AmnesiaUnity
         {
             var canvas = Stile.Tela("menu", 10);
             _radice = Stile.Riquadro(canvas.transform, "pagina", Stile.Velo, Vector2.zero, Vector2.one).gameObject;
+            Stile.Riquadro(_radice.transform, "cornice", Stile.Incavo, new Vector2(.035f,.095f), new Vector2(.965f,.84f));
+            Stile.Riquadro(_radice.transform, "interno", Stile.Notte, new Vector2(.037f,.098f), new Vector2(.963f,.837f));
 
-            var occhiello = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+            var occhiello = Stile.Scritta(_radice.transform, Stile.Interfaccia, 14, Stile.Grafite,
                 new Vector2(0.07f, 0.925f), new Vector2(0.5f, 0.965f));
-            occhiello.text = "PAUSA";
+            occhiello.text = "AMNESIA   /   GIORGIO LIPARI";
+            Pulsante(_radice.transform, "TORNA AL GIOCO  [ESC]", new Vector2(.72f,.93f), new Vector2(.94f,.975f), Chiudi);
 
             var barra = new GameObject("linguette", typeof(RectTransform));
             barra.transform.SetParent(_radice.transform, false);
             var disposizione = barra.AddComponent<HorizontalLayoutGroup>();
             disposizione.spacing = 34f;
             disposizione.childForceExpandWidth = false;
+            disposizione.childControlWidth = true;
+            disposizione.childControlHeight = true;
             disposizione.childAlignment = TextAnchor.MiddleLeft;
             Stile.Ancora((RectTransform)barra.transform, new Vector2(0.07f, 0.855f), new Vector2(0.93f, 0.915f));
 
-            Linguetta(barra.transform, Pagina.Tasche, "In tasca", "I");
-            Linguetta(barra.transform, Pagina.Paese, "Il paese", "M");
-            Linguetta(barra.transform, Pagina.Taccuino, "Il taccuino", "T");
+            Linguetta(barra.transform, Pagina.Tasche, "INVENTARIO", "I");
+            Linguetta(barra.transform, Pagina.Paese, "MAPPA", "M");
+            Linguetta(barra.transform, Pagina.Taccuino, "TACCUINO", "T");
 
             Stile.Filo(_radice.transform, new Vector2(0.07f, 0.845f), new Vector2(0.93f, 0.848f), Stile.Incavo);
 
@@ -238,11 +255,13 @@ namespace AmnesiaUnity
             // dichiarazioni non stanno in una schermata, e quello che non ci
             // sta va potuto scorrere invece che tagliato via.
             _foglio = Stile.Rullo(_radice.transform, Stile.Macchina, 16, Stile.Carta,
-                new Vector2(0.07f, 0.09f), new Vector2(0.93f, 0.825f), out _rullo);
+                new Vector2(0.09f, 0.13f), new Vector2(0.91f, 0.79f), out _rullo);
+
+            CostruisciTasche();
 
             CostruisciLaPianta();
 
-            _coda = Stile.Scritta(_radice.transform, Stile.Macchina, 13, Stile.Grafite,
+            _coda = Stile.Scritta(_radice.transform, Stile.Interfaccia, 14, Stile.Grafite,
                 new Vector2(0.07f, 0.035f), new Vector2(0.93f, 0.075f));
 
             _radice.SetActive(false);
@@ -252,39 +271,58 @@ namespace AmnesiaUnity
         {
             _pianta = new GameObject("paese", typeof(RectTransform));
             _pianta.transform.SetParent(_radice.transform, false);
-            Stile.Ancora((RectTransform)_pianta.transform, new Vector2(0.06f, 0.09f), new Vector2(0.94f, 0.825f));
+            Stile.Ancora((RectTransform)_pianta.transform, new Vector2(0.05f, 0.115f), new Vector2(0.95f, 0.82f));
 
             // La carta sta dentro una feritoia: il paese e' piu' grande della
             // finestra, e una pianta che non si puo' spostare mostra meta' paese
             // e taglia l'altra.
-            _vista = Stile.Feritoia(_pianta.transform, "vista", Vector2.zero, Vector2.one);
+            Stile.Riquadro(_pianta.transform, "fondo carta", new Color(.20f,.23f,.19f), Vector2.zero, new Vector2(.78f,1f));
+            _vista = Stile.Feritoia(_pianta.transform, "vista", new Vector2(.008f,.015f), new Vector2(.772f,.985f));
+            var titolo = Stile.Scritta(_pianta.transform, Stile.Interfaccia, 26, Stile.Carta, new Vector2(.81f,.83f), new Vector2(1f,.98f));
+            titolo.text = "MAPPA";
+            titolo.fontStyle = FontStyle.Bold;
+            var legenda = Stile.Scritta(_pianta.transform, Stile.Macchina, 14, Stile.Carta, new Vector2(.81f,.48f), new Vector2(.99f,.81f));
+            legenda.text = "ESPLORA IL PAESE\n\n<color=#66D1AD>◆</color>  La tua posizione\n\nTrascina la carta per esplorare i dintorni.";
+            _scalaMappa = Stile.Scritta(_pianta.transform, Stile.Macchina, 14, Stile.Ottone, new Vector2(.81f,.40f), new Vector2(.99f,.47f));
+            Pulsante(_pianta.transform, "−", new Vector2(.81f,.27f), new Vector2(.89f,.37f), () => CambiaZoom(1f / 1.25f));
+            Pulsante(_pianta.transform, "+", new Vector2(.91f,.27f), new Vector2(.99f,.37f), () => CambiaZoom(1.25f));
+            Pulsante(_pianta.transform, "DOVE SONO", new Vector2(.81f,.12f), new Vector2(.99f,.22f), InquadraIlGiocatore);
             var disegno = new GameObject("carta", typeof(RectTransform));
             disegno.transform.SetParent(_vista, false);
-            disegno.AddComponent<RawImage>().texture = Pianta.Disegna(_gioco.Map);
+            // La foto dall'alto se c'e', altrimenti la vecchia pianta a griglia.
+            var immagine = _gioco.MappaImmagine;
+            disegno.AddComponent<RawImage>().texture =
+                immagine != null ? (Texture)immagine : Pianta.Disegna(_gioco.Map);
             _carta = (RectTransform)disegno.transform;
             _carta.anchorMin = _carta.anchorMax = new Vector2(0.5f, 0.5f);
 
-            foreach (var luogo in _gioco.Map.Places)
+            if (immagine != null)
             {
-                if (!Pianta.SiScrive(luogo.Key))
+                // Un pallino con nome per ogni personaggio piazzato: la casa la
+                // dice dove sta la persona. Se ne sposti uno, il segno lo segue.
+                foreach (var pair in _gioco.Corpi)
                 {
-                    continue;
+                    if (pair.Value == null) continue;
+                    var nome = pair.Key == "don_carlo" ? "Don Carlo" : _gioco.NomeDi(pair.Key).Split(' ')[0];
+                    _didascalie.Add((Etichetta(nome), pair.Value.position));
                 }
-                var rettangolo = luogo.Value;
-                var etichetta = Stile.Scritta(_carta, Stile.Macchina, 12, Stile.Carta,
-                    new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
-                etichetta.alignment = TextAnchor.MiddleCenter;
-                etichetta.horizontalOverflow = HorizontalWrapMode.Overflow;
-                etichetta.verticalOverflow = VerticalWrapMode.Overflow;
-                etichetta.text = Pianta.NomeDi(luogo.Key);
-                var rect = etichetta.GetComponent<RectTransform>();
-                rect.sizeDelta = new Vector2(170f, 16f);
-                _didascalie.Add((rect, rettangolo.X + rettangolo.W / 2f, rettangolo.Y + rettangolo.H / 2f));
+            }
+            else
+            {
+                foreach (var luogo in _gioco.Map.Places)
+                {
+                    if (!Pianta.SiScrive(luogo.Key)) continue;
+                    var r = luogo.Value;
+                    var mondo = new Vector3((r.X + r.W / 2f) * _gioco.CellSize, 0f, -(r.Y + r.H / 2f) * _gioco.CellSize);
+                    _didascalie.Add((Etichetta(Pianta.NomeDi(luogo.Key)), mondo));
+                }
             }
 
             var segno = Stile.Riquadro(_carta, "io", Stile.Ottone,
                 new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
-            segno.sizeDelta = new Vector2(9f, 9f);
+            segno.sizeDelta = new Vector2(13f, 13f);
+            segno.localRotation = Quaternion.Euler(0f, 0f, 45f);
+            segno.gameObject.AddComponent<Outline>().effectColor = Stile.Notte;
             _iosono = segno;
 
             _pianta.SetActive(false);
@@ -294,13 +332,77 @@ namespace AmnesiaUnity
         /// resta come l'hai lasciata.
         private void Ridisegna()
         {
-            _carta.sizeDelta = new Vector2(_gioco.Map.Width * _zoom, _gioco.Map.Height * _zoom);
-            foreach (var (etichetta, x, y) in _didascalie)
+            var immagine = _gioco.MappaImmagine;
+            if (immagine != null)
             {
-                etichetta.anchoredPosition = SulFoglio(x, y);
+                float aspetto = (float)immagine.width / immagine.height;
+                float alt = Mathf.Max(1f,_vista.rect.height) * _zoom / 12f;
+                _carta.sizeDelta = new Vector2(alt * aspetto, alt);
+            }
+            else
+            {
+                _carta.sizeDelta = new Vector2(_gioco.Map.Width * _zoom, _gioco.Map.Height * _zoom);
+            }
+            var occupied = new List<Rect>();
+            foreach (var (etichetta, mondo) in _didascalie)
+            {
+                etichetta.sizeDelta=new Vector2(Mathf.Clamp(etichetta.GetComponent<Text>().preferredWidth+10,32,150),16);
+                var point = PostoSuCarta(mondo);
+                _segnaposti[etichetta].anchoredPosition = point;
+                var offsets = new[]{new Vector2(0,13),new Vector2(0,-13),new Vector2(0,29),new Vector2(0,-29),new Vector2(52,13),new Vector2(-52,13),new Vector2(52,-13),new Vector2(-52,-13)};
+                foreach(var offset in offsets) {
+                    var candidate=point+offset;
+                    var bounds=new Rect(candidate-etichetta.sizeDelta*.5f-Vector2.one*3,etichetta.sizeDelta+Vector2.one*6);
+                    bool overlap=false;
+                    foreach(var previous in occupied) if(previous.Overlaps(bounds)) { overlap=true;break; }
+                    etichetta.anchoredPosition=candidate;
+                    if(!overlap) { occupied.Add(bounds);break; }
+                }
                 etichetta.gameObject.SetActive(_zoom >= 8f);
             }
+            _scalaMappa.text = "ZOOM  " + Mathf.RoundToInt(_zoom / 12f * 100f) + "%";
             Trattieni();
+        }
+
+        private void CambiaZoom(float fattore)
+        {
+            _zoom = Mathf.Clamp(_zoom * fattore, ZoomMinimo, ZoomMassimo);
+            Ridisegna();
+        }
+
+        /// Dove cade un punto del mondo sulla carta (in pixel, centro = 0,0).
+        /// Con la foto usa la calibrazione del Bootstrap; senza, la vecchia
+        /// griglia.
+        private Vector2 PostoSuCarta(Vector3 mondo)
+        {
+            if (_gioco.MappaImmagine != null)
+            {
+                var uv = _gioco.MappaUV(mondo);
+                return new Vector2((uv.x - 0.5f) * _carta.sizeDelta.x, (0.5f - uv.y) * _carta.sizeDelta.y);
+            }
+            var c = _gioco.CellaDi(mondo);
+            return SulFoglio(c.X + 0.5f, c.Y + 0.5f);
+        }
+
+        /// Un'etichetta-nome sulla carta; torna il suo RectTransform.
+        private RectTransform Etichetta(string nome)
+        {
+            var etichetta = Stile.Scritta(_carta, Stile.Macchina, 10, Stile.Carta,
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            etichetta.alignment = TextAnchor.MiddleCenter;
+            etichetta.horizontalOverflow = HorizontalWrapMode.Overflow;
+            etichetta.verticalOverflow = VerticalWrapMode.Overflow;
+            etichetta.text = nome;
+            etichetta.gameObject.AddComponent<Outline>().effectColor = new Color(0f, 0f, 0f, .95f);
+            var rect = etichetta.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(Mathf.Clamp(etichetta.preferredWidth+8,32,150),16f);
+            etichetta.raycastTarget=true;
+            var shadow=etichetta.gameObject.AddComponent<Shadow>();shadow.effectColor=new Color(0,0,0,.65f);shadow.effectDistance=new Vector2(0,-1);
+            etichetta.gameObject.AddComponent<EtichettaMappa>();
+            var marker=Stile.Riquadro(_carta,"punto_"+nome,new Color(.72f,.79f,.75f),new Vector2(.5f,.5f),new Vector2(.5f,.5f));
+            marker.sizeDelta=new Vector2(4,4);marker.GetComponent<Image>().raycastTarget=false;
+            _segnaposti[rect]=marker;
+            return rect;
         }
 
         /// La carta non si perde: si puo' spostare finche' un pezzo resta in
@@ -327,13 +429,14 @@ namespace AmnesiaUnity
             scritta.alignment = TextAnchor.MiddleLeft;
             scritta.horizontalOverflow = HorizontalWrapMode.Overflow;
             scritta.text = $"{testo}  ({tasto})";
+            scritta.fontStyle = FontStyle.Bold;
 
             // Il filo d'ottone sotto la linguetta aperta: la stessa firma del
             // pannello, e lo stesso significato — sei qui dentro.
             var filo = Stile.Filo(go.transform, new Vector2(0f, 0f), new Vector2(1f, 0.06f), Stile.Ottone);
             _sottolineature[pagina] = filo;
 
-            go.AddComponent<LayoutElement>().preferredWidth = scritta.preferredWidth + 4f;
+            go.AddComponent<LayoutElement>().preferredWidth = 220f;
             var bottone = go.AddComponent<Button>();
             bottone.targetGraphic = scritta;
             bottone.onClick.AddListener(() => { _pagina = pagina; Mostra(); });

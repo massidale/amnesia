@@ -1,0 +1,745 @@
+{
+  "declarations": {
+    "nome_elena": {
+      "text": "Prima dell’incidente gridavi il nome Elena.",
+      "sources": [
+        "rosa"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "frammento_frase": {
+      "text": "Ripetevi «Chi passa per primo…», da bambino e prima dell’incidente.",
+      "sources": [
+        "rosa"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "oggetti_restituiti": {
+      "text": "Ti restituisco il foglio e la chiave dell’ospedale e ti do un taccuino nuovo.",
+      "sources": [
+        "rosa"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "circolo_esisteva": {
+      "text": "Il Circolo della Soglia era il gruppo di Vittorio Valli.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "versione_paese": {
+      "text": "Il paese considera Elena morta nel crollo della cava del 1966.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "scampagnate": {
+      "text": "I partecipanti raccontavano di una compagnia per gite e pranzi.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "dubbi_scampagnate": {
+      "text": "La versione delle gite mi è sempre sembrata incompleta.",
+      "sources": [
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "gino",
+        "piero",
+        "don_carlo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "elena_figlia_vittorio": {
+      "text": "Elena era figlia di Laura e Vittorio Valli.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "corpo_mai_trovato": {
+      "text": "Il corpo di Elena non fu mai ritrovato.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "vittorio_morto": {
+      "text": "Vittorio morì di malattia nella primavera del 1966, prima della frana.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "vittorio_capo": {
+      "text": "Vittorio aveva una forte influenza sul gruppo.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "padre_nel_circolo": {
+      "text": "Andrea Lipari frequentava il Circolo.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "voce_piero": {
+      "text": "Piero parlava dei dubbi di Andrea sulla morte di Elena.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "piero_amico_andrea": {
+      "text": "Andrea era il mio amico più stretto.",
+      "sources": [
+        "piero"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "andrea_dubbi_elena": {
+      "text": "Andrea cercava una bambina che pensava potesse essere Elena; non mi mostrò una prova.",
+      "sources": [
+        "piero"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "giorgio_continuava_ricerca": {
+      "text": "Dopo la morte di Andrea continuasti tu a cercare Elena, prima del coma.",
+      "sources": [
+        "piero"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "padre_ricerche": {
+      "text": "Andrea negli ultimi anni si assentava per cercare qualcuno.",
+      "sources": [
+        "rosa",
+        "piero"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "usciva_allegro": {
+      "text": "L’ultima sera uscisti dopo cena, allegro, dicendo che andavi da qualcuno che sapeva.",
+      "sources": [
+        "rosa"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "foto_parrocchia": {
+      "text": "Questa stampa del 1961 era conservata fra le carte della parrocchia.",
+      "sources": [
+        "don_carlo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "foto_consegnata": {
+      "text": "Ti do questa fotografia: mostrala a Marisa o Beppe, che conoscevano quelle persone nella vita quotidiana.",
+      "sources": [
+        "don_carlo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "foto_anna_e_pietro": {
+      "text": "Questi sono Anna e suo marito Pietro Ferro.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_andrea": {
+      "text": "Questo è Andrea Lipari.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_matteo": {
+      "text": "Questo è Matteo Sardi.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_vittorio": {
+      "text": "Questo è Vittorio Valli.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_laura": {
+      "text": "Questa è Laura Valli.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_rosa": {
+      "text": "Questa è Rosa Lipari; essere nella foto non significa essere del Circolo.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "foto_giuseppe": {
+      "text": "Questo è Giuseppe Boasso, morto nella frana.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "fotografia"
+      ]
+    },
+    "frase_completa": {
+      "text": "Chi passa per primo tiene la porta.",
+      "sources": [
+        "lidia",
+        "marisa",
+        "beppe",
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Lidia/Marisa/Beppe: reazione alla foto oppure citazione completa nel turno, con seguito persistente. Anna: reazione alla frase e seguito locale, senza cambio di posizione; il rito ha una condizione distinta. Non creare scale per le persone del paese."
+    },
+    "frase_anna_pietro": {
+      "text": "Pietro cominciava quella frase e Anna la finiva.",
+      "sources": [
+        "lidia",
+        "marisa",
+        "beppe",
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Lidia/Marisa/Beppe: reazione alla foto oppure citazione completa nel turno, con seguito persistente. Anna: reazione alla frase e seguito locale, senza cambio di posizione; il rito ha una condizione distinta. Non creare scale per le persone del paese."
+    },
+    "anna_ricordo_magazzino": {
+      "text": "Pietro cominciava la frase uscendo dal magazzino con le braccia piene.",
+      "sources": [
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Anna: conoscenza nel contesto della reazione alla frase e nei seguiti, oppure nella scheda del rito. Non concedere tramite una posizione della frase. Per la chiave richiedere anche oggetto realmente mostrato."
+    },
+    "magazzino_dove": {
+      "text": "Il magazzino è al deposito ferroviario, fabbricato B, stanza 17 in fondo al corridoio.",
+      "sources": [
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Anna: conoscenza nel contesto della reazione alla frase e nei seguiti, oppure nella scheda del rito. Non concedere tramite una posizione della frase. Per la chiave richiedere anche oggetto realmente mostrato."
+    },
+    "chiave_del_deposito": {
+      "text": "La chiave B-17 di Andrea apre quel magazzino.",
+      "sources": [
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Anna: conoscenza nel contesto della reazione alla frase e nei seguiti, oppure nella scheda del rito. Non concedere tramite una posizione della frase. Per la chiave richiedere anche oggetto realmente mostrato."
+    },
+    "il_rito": {
+      "text": "Il rito prevedeva che una persona scendesse nell’acqua e tornasse.",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "sacrificio_per_vittorio": {
+      "text": "Il rito serviva a richiamare Vittorio.",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "elena_prescelta": {
+      "text": "Elena era stata scelta per il rito.",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "rito_interrotto": {
+      "text": "Il rito fu interrotto dalla frana.",
+      "sources": [
+        "anna",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "effetti_elena": {
+      "text": "Il braccialetto e le cose della cassetta appartenevano a Elena.",
+      "sources": [
+        "anna",
+        "laura",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "anna_matteo_torno": {
+      "text": "Durante la fuga vidi Matteo tornare verso l’imbocco.",
+      "sources": [
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "padre_nella_cava": {
+      "text": "Andrea quella notte era alla cava.",
+      "sources": [
+        "anna",
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "io_ero_con_lui": {
+      "text": "Giorgio era alla cava da bambino, portato da Andrea.",
+      "sources": [
+        "anna"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "laura_non_cera": {
+      "text": "Io rimasi a casa, pur sapendo che avrebbero portato Elena alla cava.",
+      "sources": [
+        "laura"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "matteo_la_porto_via": {
+      "text": "Tirai fuori Elena viva e la portai lontano.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "elena_viva": {
+      "text": "Elena è viva.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "counts_alone": true
+    },
+    "matteo_non_dice_dove": {
+      "text": "Non voglio fare da tramite: ha una vita che non c’entra con noi.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "dove_lo_trovai": {
+      "text": "Ti trovai all’alba nel castagneto sopra il tornante, in un punto dove non si finisce inciampando dalla strada.",
+      "sources": [
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "nino_giacca": {
+      "text": "Ho trovato adesso una giacca vicino al punto dove ti avevo trovato.",
+      "sources": [
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "giacca_e_di_matteo": {
+      "text": "Riconosco questa giacca come quella di Matteo.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "piero",
+        "anna",
+        "laura"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "giacca"
+      ],
+      "counts_alone": true
+    },
+    "matteo_giacca_mia": {
+      "text": "Quella giacca era mia; da sola non racconta quello che ti è accaduto.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [
+        "giacca"
+      ]
+    },
+    "matteo_confessa": {
+      "text": "Sono stato io a colpirti con una pietra nel 1985 e a portarti nel castagneto.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "counts_alone": true,
+      "authorization_note": "Conoscenza presente in M2 per giacca posseduta; il prompt richiede accusa diretta prima della confessione e conserva l’ammissione nei seguiti. Annotare solo se pronunciato. Lettera: consegna solo dopo confessione e richiesta, non per M2 da solo."
+    },
+    "matteo_motivo": {
+      "text": "Dopo averti aiutato ebbi paura delle conseguenze della verità e ti colpii quando ti girasti.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Conoscenza presente in M2 per giacca posseduta; il prompt richiede accusa diretta prima della confessione e conserva l’ammissione nei seguiti. Annotare solo se pronunciato. Lettera: consegna solo dopo confessione e richiesta, non per M2 da solo."
+    },
+    "indirizzo_dettato": {
+      "text": "Io ti dettai l’indirizzo di Wanda a Chivasso, tu lo scrivesti.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Conoscenza presente in M2 per giacca posseduta; il prompt richiede accusa diretta prima della confessione e conserva l’ammissione nei seguiti. Annotare solo se pronunciato. Lettera: consegna solo dopo confessione e richiesta, non per M2 da solo."
+    },
+    "matteo_lettera": {
+      "text": "Scrivo a Wanda Cauda: conosce me e la mia scrittura, le chiedo di lasciarti parlare con Elena.",
+      "sources": [
+        "matteo"
+      ],
+      "truth": "true",
+      "requires_shown": [],
+      "authorization_note": "Conoscenza presente in M2 per giacca posseduta; il prompt richiede accusa diretta prima della confessione e conserva l’ammissione nei seguiti. Annotare solo se pronunciato. Lettera: consegna solo dopo confessione e richiesta, non per M2 da solo."
+    },
+    "wanda_chiede_garanzia": {
+      "text": "Torna con due righe scritte da chi ti ha mandato: riconoscerò se è una persona che conosco.",
+      "sources": [
+        "wanda"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "wanda_apre": {
+      "text": "Riconosco questo messaggio; puoi entrare e parlare con Elena.",
+      "sources": [
+        "wanda"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "wanda_arrivo": {
+      "text": "Matteo mi portò una bambina ferita a Roccavione nel 1966; mi disse un nome e una storia a cui non credetti.",
+      "sources": [
+        "wanda"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "elena_adottata": {
+      "text": "Wanda mi disse a undici anni che ero stata adottata e che la mia famiglia era morta.",
+      "sources": [
+        "elena"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "anna_e_pietro": {
+      "text": "Anna Ferro è la vedova di Pietro, morto nella frana.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "matteo_falegname": {
+      "text": "Matteo Sardi è il falegname del paese.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    },
+    "rosa_madre_giorgio": {
+      "text": "Rosa Lipari è tua madre e la vedova di Andrea.",
+      "sources": [
+        "rosa",
+        "lidia",
+        "marisa",
+        "beppe",
+        "teresa",
+        "piero",
+        "gino",
+        "anna",
+        "laura",
+        "matteo",
+        "don_carlo",
+        "nino"
+      ],
+      "truth": "true",
+      "requires_shown": []
+    }
+  },
+  "status": "Catalogo editoriale; convertire al DTO esistente, con autorizzazioni per fonte/reazione/scala. Non copiare direttamente nel gioco."
+}

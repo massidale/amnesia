@@ -7,7 +7,11 @@ namespace Amnesia.Game;
 /// cosa che credeva e che la storia ha smentito — cancellata a penna, non
 /// strappata: i segni degli errori sono il modo in cui si vede la trama
 /// muoversi.
-public sealed record RigaDelTaccuino(string Id, string Testo, bool Cancellata);
+public sealed record RigaDelTaccuino(string Id, string Testo, bool Cancellata)
+{
+    /// Id delle fonti che hanno effettivamente dichiarato il fatto; la UI ne risolve i nomi.
+    public IReadOnlyList<string> Fonti { get; init; } = Array.Empty<string>();
+}
 
 /// Il taccuino di Giorgio. Segna le cose rilevanti considerate vere fino a
 /// questo momento, nell'ordine scritto dall'autore: e' la bussola con cui il
@@ -53,7 +57,10 @@ public sealed class Taccuino
             .Select(riga => riga.Sostituisce)
             .ToHashSet();
         return comparse
-            .Select(riga => new RigaDelTaccuino(riga.Id, riga.Testo, smentite.Contains(riga.Id)))
+            .Select(riga => new RigaDelTaccuino(riga.Id, riga.Testo, smentite.Contains(riga.Id))
+            {
+                Fonti = riga.Quando.SelectMany(id => register.SupportsFor(id)).Distinct().ToList()
+            })
             .ToList();
     }
 }

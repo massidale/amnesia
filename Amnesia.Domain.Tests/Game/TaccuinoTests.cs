@@ -7,6 +7,26 @@ namespace Amnesia.Tests.Game;
 
 public class TaccuinoTests
 {
+    [Test]
+    public void LeFontiSonoSoloChiHaDichiaratoSenzaDuplicati()
+    {
+        var world = new WorldState();
+        var registro = new Register(world);
+        registro.Record("rosa", "versione_paese");
+        registro.Record("rosa", "versione_paese");
+        registro.Record("lidia", "versione_paese");
+        registro.Record("matteo", "matteo_la_porto_via");
+        registro.Record("matteo", "elena_viva");
+        var righe = new Taccuino(world, Convinzioni(), Catalogo()).Convinzioni();
+
+        Assert.That(righe.Single(r => r.Id == "elena_morta").Fonti,
+            Is.EqualTo(new[] { "rosa", "lidia" }));
+        Assert.That(righe.Single(r => r.Id == "elena_morta").Cancellata, Is.True);
+        Assert.That(righe.Single(r => r.Id == "elena_salvata").Fonti,
+            Is.EqualTo(new[] { "matteo" }));
+        Assert.That(righe.Single(r => r.Id == "coma").Fonti, Is.Empty);
+    }
+
     private static ItemCatalog Catalogo() => new(
         new ItemDefinition("fotografia", "una fotografia sbiadita", "la fotografia"),
         new ItemDefinition("braccialetto", "un braccialetto d'argento", "il braccialetto"),
@@ -104,7 +124,11 @@ public class TaccuinoTests
 
         // Ogni id in "quando" deve esistere nella tabella delle dichiarazioni:
         // un refuso qui e' una riga che non comparira' mai.
-        var dichiarazioni = Amnesia.Tests.Declarations.TestDeclarations.Table().Ids.ToHashSet();
+        var catalogo = DeclarationTable.Load(
+            Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", "..",
+                "content", "amnesia", "declarations.json"));
+        Assert.That(catalogo.IsOk, Is.True, catalogo.Message);
+        var dichiarazioni = catalogo.Value!.Ids.ToHashSet();
         foreach (var riga in vera.Value!.Righe)
         {
             foreach (var id in riga.Quando)
@@ -117,5 +141,26 @@ public class TaccuinoTests
                     $"{riga.Id}: sostituisce una riga che non c'e'");
             }
         }
+    }
+
+    [TestCase("elena_figlia_vittorio", "elena_morta")]
+    [TestCase("corpo_mai_trovato", "elena_morta")]
+    [TestCase("circolo_esisteva", "circolo_scampagnate")]
+    [TestCase("avevano_una_frase", "codice_porta")]
+    [TestCase("padre_nella_cava", "io_quella_notte")]
+    [TestCase("matteo_la_porto_via", "elena_viva_taccuino")]
+    [TestCase("elena_prescelta", "sacrificio_vittorio_taccuino")]
+    public void IlTaccuinoVeroNonAggiungeInformazioniNonDichiarate(string detta, string nonAncoraNota)
+    {
+        var tabella = ConvinzioniTable.Load(
+            Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", "..",
+                "content", "amnesia", "taccuino.json"));
+        Assert.That(tabella.IsOk, Is.True, tabella.Message);
+        var world = new WorldState();
+        new Register(world).Record("testimone", detta);
+
+        var righe = new Taccuino(world, tabella.Value!, Catalogo()).Convinzioni();
+
+        Assert.That(righe.Select(r => r.Id), Does.Not.Contain(nonAncoraNota));
     }
 }

@@ -274,6 +274,8 @@ Giorgio la incontra da sveglio, per la prima volta. E a un certo punto qualcuno 
 
 **La chiave B-17** apre un magazzino nel deposito ferroviario dismesso, dove nel 1966 il Circolo ha portato via tutto quello che c'era nella cava.
 
+Nella mappa 3D il deposito comprende due fabbricati, A e B, con locali interni affacciati su corridoi. B-17 e' uno dei dieci locali del fabbricato B, in fondo al corridoio, non un edificio autonomo. Sulle facciate compaiono soltanto le lettere A e B; la targhetta B-17 si trova sopra la saracinesca interna.
+
 **Il magazzino non contiene le risposte** — vincolo, non dettaglio. Un archivio che chiude i fatti da solo cortocircuita un gioco il cui unico verbo è la conversazione. Contiene cose illeggibili senza una testimonianza: un registro di presenze 1958–1966 con solo nomi di battesimo e iniziali; fotografie senza didascalie; il quaderno di Vittorio con la formula e nessuna spiegazione; le carte di Andrea del 1974–1981, che sono appunti di uno che cerca e non ha ancora trovato.
 
 **E una cassetta di latta con dentro le cose tolte a una bambina prima di calarla nell'acqua**, perché il rito voleva che passasse senza niente addosso. Un paio di scarpine. Un fermaglio. E **un braccialetto da battesimo, d'argento sottile, con inciso *E.V.***
@@ -339,4 +341,3 @@ Alla fine le porte le ha in mano lui. **Sono tre, e sono indipendenti.**
 - **Se Elena è in casa quando Wanda apre**, o se c'è ancora un passo.
 - **Se le tre porte si possono aprire tutte**, o se il gioco ne concede meno di tre.
 - **I nomi.** Sono tutti sostituibili.
-

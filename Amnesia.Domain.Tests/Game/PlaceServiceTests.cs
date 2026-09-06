@@ -6,6 +6,39 @@ namespace Amnesia.Tests.Game;
 
 public class PlaceServiceTests
 {
+    [Test]
+    public void AprireIn3DNonRaccoglieIlContenuto()
+    {
+        var world = ConLaChiave();
+        new Register(world).Record("anna", "magazzino_dove");
+        var service = new PlaceService(Luoghi());
+        var result = service.Apri(world, "magazzino_b17", raccogliContenuto: false);
+        Assert.That(result.IsOk, Is.True);
+        Assert.That(result.Value.Presi, Is.Empty);
+        Assert.That(world.ItemOwners.ContainsKey("cassetta_latta"), Is.False);
+    }
+
+    [Test]
+    public void LaRaccoltaESingolaEValidata()
+    {
+        var world = ConLaChiave();
+        var service = new PlaceService(Luoghi());
+        Assert.That(service.Raccogli(world, "magazzino_b17", "cassetta_latta").IsOk, Is.False);
+        new Register(world).Record("anna", "magazzino_dove");
+        service.Apri(world, "magazzino_b17", raccogliContenuto: false);
+        Assert.That(service.Raccogli(world, "magazzino_b17", "inventato").IsOk, Is.False);
+        Assert.That(service.Raccogli(world, "magazzino_b17", "cassetta_latta").IsOk, Is.True);
+        Assert.That(world.ItemOwners.ContainsKey("braccialetto"), Is.False);
+        Assert.That(service.Raccogli(world, "magazzino_b17", "cassetta_latta").IsOk, Is.False);
+        world.ItemOwners["braccialetto"] = "nino";
+        Assert.That(service.Raccogli(world, "magazzino_b17", "braccialetto").IsOk, Is.False);
+        Assert.That(world.ItemOwners["braccialetto"], Is.EqualTo("nino"));
+        var ripristinato = world.Clone();
+        Assert.That(service.IsOpen(ripristinato, "magazzino_b17"), Is.True);
+        Assert.That(service.Raccogli(ripristinato, "magazzino_b17", "cassetta_latta").IsOk, Is.False);
+        Assert.That(ripristinato.ItemOwners["cassetta_latta"], Is.EqualTo("player"));
+    }
+
     private static PlaceTable Luoghi() => PlaceTable.FromJson("""
     {"places": {"magazzino_b17": {
       "door": {"x": 39, "y": 28},

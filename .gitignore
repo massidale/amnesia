@@ -30,6 +30,9 @@ Unity/*.sln
 
 # La chiave dell'API non entra mai in git.
 .env
+.env.*
+!.env.example
+.DS_Store
 
 # Le mesh comprate sull'Asset Store non entrano in git.
 #
@@ -49,3 +52,13 @@ Unity/Assets/Church 3D/
 Unity/Assets/Church 3D.meta
 Unity/Assets/Resources/paese/
 Unity/Assets/Resources/paese.meta
+
+# Altri pacchetti di terzi: conservati in locale e nella copia iCloud.
+Unity/Assets/AssetsStore/
+Unity/Assets/AssetsStore.meta
+Unity/Assets/DavidJalbert/
+Unity/Assets/DavidJalbert.meta
+Unity/Assets/EmaceArt/
+Unity/Assets/EmaceArt.meta
+Unity/Assets/OccaSoftware/
+Unity/Assets/OccaSoftware.meta

@@ -82,12 +82,22 @@ namespace AmnesiaUnity
                 {
                     // Niente barrato nei font di UI Text: la penna si rende con
                     // il colore spento e la parola "cancellato".
-                    scritto.Append("<color=#6E6656>· ").Append(riga.Testo)
+                    scritto.Append("<color=#81929C>· ").Append(riga.Testo)
                         .Append("   — cancellato</color>\n");
                 }
                 else
                 {
                     scritto.Append("· ").Append(riga.Testo).Append('\n');
+                }
+                if (riga.Fonti.Count > 0)
+                {
+                    var nomi = riga.Fonti.Select(id =>
+                    {
+                        var oggetto = gioco.Items.Find(id);
+                        return oggetto != null && !string.IsNullOrEmpty(oggetto.Name)
+                            ? oggetto.Name : gioco.NomeDi(id);
+                    });
+                    scritto.Append("  Fonte: ").Append(string.Join(", ", nomi)).Append('\n');
                 }
             }
             return scritto.ToString().TrimEnd('\n');

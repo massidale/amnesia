@@ -1,9 +1,40 @@
 {
-  "beppe": ["base"],
-  "teresa": ["base"],
-  "lidia": ["base"],
-  "piero": ["base"],
-  "marisa": ["base"],
-  "gino": ["base"],
-  "rosa": ["base"]
+  "rosa": [
+    "base"
+  ],
+  "lidia": [
+    "base"
+  ],
+  "marisa": [
+    "base"
+  ],
+  "beppe": [
+    "base"
+  ],
+  "teresa": [
+    "base"
+  ],
+  "piero": [
+    "base"
+  ],
+  "gino": [
+    "base"
+  ],
+  "anna": [
+    "base"
+  ],
+  "laura": [
+    "base"
+  ],
+  "matteo": [
+    "base"
+  ],
+  "don_carlo": [
+    "base"
+  ],
+  "nino": [
+    "base"
+  ],
+  "wanda": [],
+  "elena": []
 }

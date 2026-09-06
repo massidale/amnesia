@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const assets=new URL('../Unity/Assets/',import.meta.url);
+const read=p=>fs.readFileSync(new URL(p,assets),'utf8');
+assert.ok(fs.existsSync(new URL('Scenes/Chivasso1987.unity',assets)),'Manca la scena Chivasso');
+const city=read('Scenes/Chivasso1987.unity'),village=read('Scenes/SanRocco1987.unity');
+assert.ok(city.includes('DestinazioneScena: SanRocco1987'),'Manca il viaggio di ritorno');
+assert.ok(village.includes('DestinazioneScena: Chivasso1987'),'Manca il viaggio di andata');
+for(const p of ['corriera_1987','treno_regionale_1987']) assert.ok(read(`SanRocco1987/Props/${p}.prefab`).length>1000);
+assert.ok(read('SanRocco1987/Buildings/casa_wanda.prefab').includes('Id: casa_wanda'));
+assert.ok(read('SanRocco1987/Buildings/casa_wanda.prefab').includes('m_Name: secondo_letto'),'Wanda ed Elena devono avere due letti');
+assert.ok(city.includes('m_Name: quartiere_sant_orsola'),'Quartiere assente');
+assert.ok(city.includes('value: stazione_chivasso'),'Stazione assente');
+assert.ok(read('SanRocco1987/Materials/ferro.mat').includes('m_EnableInstancingVariants: 1'),'Instancing non attivo');
+console.log('Chivasso, viaggi reciproci, veicoli, quartiere e materiali verificati.');

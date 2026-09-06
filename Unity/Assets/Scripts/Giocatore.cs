@@ -10,8 +10,23 @@ namespace AmnesiaUnity
     public sealed class Giocatore : MonoBehaviour
     {
         public const float PortataDiParola = 2.5f;
+        public GameObject FiguraPrefab;
+        public bool LiberoPerViaggio => enabled && _gioco != null && _gioco.Session != null
+            && (_pannello == null || !_pannello.Aperto) && (_menu == null || !_menu.Aperto);
 
-        private const float Passo = 3.6f;
+        public void Posiziona(Vector3 posizione, Quaternion rotazione)
+        {
+            bool attivo = _corpo != null && _corpo.enabled;
+            if (attivo) _corpo.enabled = false;
+            transform.SetPositionAndRotation(posizione, rotazione);
+            _imbardata = rotazione.eulerAngles.y; _beccheggio = 0; _caduta = 0;
+            if (_occhio != null) _occhio.transform.localRotation = Quaternion.identity;
+            if (attivo) _corpo.enabled = true;
+        }
+
+        [Tooltip("Metri al secondo camminando. Alzalo se il paese e' grande.")]
+        [SerializeField] private float _passo = 5.5f;
+
         private const float Gravita = 18f;
         private const float Sensibilita = 2.2f;
         private const float GradiAlSecondo = 110f;
@@ -50,8 +65,15 @@ namespace AmnesiaUnity
                 _menu = new GameObject("menu").AddComponent<Menu>();
             }
 
-            var posizione = _gioco.World.ActorOf("player").Position ?? new Cell(0, 0);
-            transform.position = _gioco.InScena(posizione) + Vector3.up * 0.2f;
+            // Su una mappa disegnata a mano il giocatore parte dove l'hai messo
+            // nell'editor: il paese vero sta a coordinate sue, e la griglia di
+            // gioco lo spedirebbe fuori mappa. Altrimenti, come sempre, dalla
+            // casa Lipari secondo la mappa del gioco.
+            if (!_gioco.MappaAMano)
+            {
+                var posizione = _gioco.World.ActorOf("player").Position ?? new Cell(0, 0);
+                transform.position = _gioco.InScena(posizione) + Vector3.up * 0.2f;
+            }
 
             // Un corpo, finalmente: i muri fermano, la montagna ferma, e un
             // paese in cui si passa attraverso le case non ha ne' dentro ne'
@@ -63,28 +85,27 @@ namespace AmnesiaUnity
             _corpo.slopeLimit = 50f;
             _corpo.stepOffset = 0.35f;
 
-            // Il paese sta verso -Z, e un giocatore che nasce con rotazione zero
-            // guarda verso +Z: di spalle a tutto. E' quello che faceva sembrare
-            // W invertito — non lo era, camminava solo fuori dalla mappa.
-            _imbardata = 180f;
+            // Direzione iniziale dello sguardo. Girato di 180 gradi rispetto a
+            // prima, cosi' nasce rivolto dall'altra parte (verso il paese).
+            _imbardata = transform.eulerAngles.y;
             transform.rotation = Quaternion.Euler(0f, _imbardata, 0f);
 
             _occhio = new GameObject("occhio").AddComponent<Camera>();
             _occhio.transform.SetParent(transform, false);
             _occhio.transform.localPosition = SedeDellOcchio;
             _occhio.fieldOfView = 62f;
-            _occhio.clearFlags = CameraClearFlags.SolidColor;
+            // Mostra lo skybox della scena (Lighting → Environment) invece del
+            // grigio pieno del vecchio paese generato. Il colore resta come
+            // ripiego se non c'e' nessuno skybox impostato.
+            _occhio.clearFlags = CameraClearFlags.Skybox;
             _occhio.backgroundColor = Scenografia.ColoreDelCielo;
-            // Oltre questo non si vede niente comunque — la nebbia mangia tutto
-            // molto prima — ma la cupola del cielo e' geometria, e una geometria
-            // tagliata si vede: dal fondo del paese il cielo dall'altra parte sta
-            // a centotrenta metri.
-            _occhio.farClipPlane = 220f;
+            _occhio.farClipPlane = 600f;
 
             // Il corpo di Giorgio esiste sempre e si vede solo di spalle: in
             // prima persona guardarsi addosso vuol dire vedersi il collo da
             // dentro.
-            _figura = Bootstrap.Figura("giorgio", "PT_Male_Peasant_01").transform;
+            _figura = (FiguraPrefab != null ? Instantiate(FiguraPrefab) : Bootstrap.Figura("giorgio", "PT_Male_Peasant_01")).transform;
+            foreach (var identity in _figura.GetComponentsInChildren<Personaggio>()) Destroy(identity);
             _figura.name = "giorgio";
             _figura.SetParent(transform, false);
             _figura.localPosition = Vector3.zero;
@@ -225,7 +246,12 @@ namespace AmnesiaUnity
             // apre parlando.
             var porta = _gioco.PortaVicina(transform.position, PortataDiParola);
             var chi = _gioco.PiuVicino(transform.position, PortataDiParola);
-            if (!string.IsNullOrEmpty(porta))
+            var oggetto = OggettoRaccoglibile.Puntato(_occhio, transform.position);
+            if (oggetto != null)
+            {
+                _pannello.Suggerimento("E   " + oggetto.Azione(_gioco));
+            }
+            else if (!string.IsNullOrEmpty(porta))
             {
                 _pannello.Suggerimento($"E   {_gioco.DescrizioneDellaPorta(porta)}");
             }
@@ -236,13 +262,24 @@ namespace AmnesiaUnity
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (!string.IsNullOrEmpty(porta))
+                Debug.Log($"[Amnesia] E premuto. chi='{chi}' porta='{porta}' pos={transform.position}");
+                if (oggetto != null)
+                {
+                    oggetto.Interagisci(_gioco, _pannello);
+                }
+                else if (!string.IsNullOrEmpty(porta))
                 {
                     Prova(porta);
                 }
                 else if (!string.IsNullOrEmpty(chi))
                 {
-                    _bersaglio = GameObject.Find(chi).transform;
+                    var go = GameObject.Find(chi);
+                    if (go == null)
+                    {
+                        Debug.LogWarning($"[Amnesia] GameObject.Find('{chi}') = null: non trovo l'oggetto per nome.");
+                        return;
+                    }
+                    _bersaglio = go.transform;
                     _pannello.Apri(chi);
                 }
             }
@@ -253,7 +290,7 @@ namespace AmnesiaUnity
         /// andare a prenderlo.
         private void Prova(string porta)
         {
-            var esito = _gioco.Porte.Apri(_gioco.Session.World, porta);
+            var esito = _gioco.Porte.Apri(_gioco.Session.World, porta, raccogliContenuto: false);
             if (!esito.IsOk)
             {
                 _pannello.Avviso(Rifiuto(esito.Code), true);
@@ -319,7 +356,7 @@ namespace AmnesiaUnity
             var verso = transform.forward * avanti + transform.right * lato;
             if (verso.sqrMagnitude > 0.001f)
             {
-                verso = verso.normalized * Passo;
+                verso = verso.normalized * _passo;
             }
             else
             {
@@ -346,7 +383,8 @@ namespace AmnesiaUnity
             // Fra due facce, non fra due paia di piedi. Le figure — e il
             // giocatore — hanno l'origine a terra: prendere `transform.position`
             // come punto di vista significa guardare l'altro dal selciato.
-            var verso = _bersaglio.position + Vector3.up * AltezzaDelVolto;
+            float altezza = _bersaglio.Find("posa_seduta") != null ? 1.25f : AltezzaDelVolto;
+            var verso = _bersaglio.position + Vector3.up * altezza;
             var occhi = transform.position + Vector3.up * SedeDellOcchio.y;
             var da = verso - (verso - occhi).normalized * 1.5f;
             _occhio.transform.position = Vector3.Lerp(_occhio.transform.position, da, Time.deltaTime * 4f);

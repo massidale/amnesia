@@ -1,0 +1,145 @@
+{
+  "Reazioni": {
+    "chiunque": {
+      "sempre": {
+        "fotografia": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "frase": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "foglio_indirizzo": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "chiave_b17": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "taccuino": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "quaderno_vittorio": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "registro": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "cassetta_latta": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "braccialetto": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "giacca": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "due_righe_matteo": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo.",
+        "lapide": "Se non hai un riconoscimento nella scheda o nei ricordi verificati, dillo senza inventare proprietari, funzioni o indizi. Rispondi alla domanda e offri solo un aiuto di cui conosci il motivo."
+      }
+    },
+    "rosa": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «Questa è la giacca di Matteo. Quella toppa al gomito gliel’ho vista addosso tante volte. Non so come sia finita dove Nino ti ha trovato.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "Non era fra gli oggetti dell’ospedale. Riconosci Andrea e te stessa; eri in compagnia, non partecipavi alle riunioni.",
+        "foglio_indirizzo": "Riconosci la grafia di Giorgio, non il destinatario.",
+        "chiave_b17": "Era fra gli oggetti restituiti; non sai quale porta apra."
+      }
+    },
+    "marisa": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «È la giacca di Matteo: la riconosco dalla toppa e dal colletto, l’ho visto entrare in negozio con quella per anni. Dove l’hai trovata?» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "La foto mostrata è del 1961: otto adulti, Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Non tutti erano membri e la foto non documenta la notte del crollo. Elena e Giorgio non erano nati. Non aggiungere altre facce. Nomina anzitutto le persone pertinenti alla domanda; le altre se richieste.\n\nRivedere Pietro accanto ad Anna ti ricorda come si cedevano il passo con le sporte del negozio: lui cominciava «Chi passa per primo», lei finiva «tiene la porta». Pronuncia la frase completa nella risposta alla fotografia. Non sai se avesse un altro significato: puoi dire che Anna la conosceva bene, non spiegarla al suo posto. La foto ti permette anche di distinguere Vittorio dal giovane Matteo e ricordare che Laura rimase vedova prima del crollo.\n\nNon ripetere la formula ogni volta che Giorgio domanda d'altro. Se chiede come proseguire, indica Anna e il legame con Pietro; se vuole una parentela, rispondi a quella. Non fare promesse su ciò che Anna gli dirà.\nIl ricordo integra la conoscenza delle persone che avevi già; non sostituisce le risposte alle domande dirette su di loro.",
+        "frase": "Se Giorgio cita le parole complete, puoi collegarle ad Anna e Pietro e riprendere il ricordo già condiviso. Non spiegare un luogo che non conosci. La citazione non cambia la tua scheda e non richiede che ti rimostri la foto."
+      }
+    },
+    "beppe": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «Quella la portava Matteo quando veniva al forno. La toppa al gomito era già lì. Di come sia arrivata nel bosco non so niente.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "La foto mostrata è del 1961: otto adulti, Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Non tutti erano membri e la foto non documenta la notte del crollo. Elena e Giorgio non erano nati. Non aggiungere altre facce. Nomina anzitutto le persone pertinenti alla domanda; le altre se richieste.\n\nRiconosci Pietro e Anna: al forno li sentisti scambiarsi «Chi passa per primo tiene la porta» mentre ritiravano il pane. Ricordi le parole, non i segreti del gruppo. Pronuncia le parole intere e collega Anna al detto. Il pane per le gite era il tuo rapporto con quelle riunioni: non sai cosa facessero arrivati lassù.\n\nNon ripetere la formula ogni volta che Giorgio domanda d'altro. Se chiede come proseguire, indica Anna e il legame con Pietro; se vuole una parentela, rispondi a quella. Non fare promesse su ciò che Anna gli dirà.\nIl ricordo integra la conoscenza delle persone che avevi già; non sostituisce le risposte alle domande dirette su di loro.",
+        "frase": "Se Giorgio cita le parole complete, puoi collegarle ad Anna e Pietro e riprendere il ricordo già condiviso. Non spiegare un luogo che non conosci. La citazione non cambia la tua scheda e non richiede che ti rimostri la foto."
+      }
+    },
+    "lidia": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «Questa giacca la conosco, la lasciava sulla sedia al bar: era di Matteo. La toppa è quella. Il resto devi chiederlo a lui.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "La foto mostrata è del 1961: otto adulti, Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Non tutti erano membri e la foto non documenta la notte del crollo. Elena e Giorgio non erano nati. Non aggiungere altre facce. Nomina anzitutto le persone pertinenti alla domanda; le altre se richieste.\n\nLa coppia Anna e Pietro ti fa ricordare un detto sentito al bar: «Chi passa per primo tiene la porta». Pietro cominciava e Anna concludeva. Per te era una battuta fra loro, non una password. La frase deve uscire intera nella risposta alla fotografia. Collega il ricordo ad Anna: lei può sapere che cosa significasse per Pietro. Non sai in quale luogo la usassero quando non erano al bar.\n\nNon ripetere la formula ogni volta che Giorgio domanda d'altro. Se chiede come proseguire, indica Anna e il legame con Pietro; se vuole una parentela, rispondi a quella. Non fare promesse su ciò che Anna gli dirà.\nIl ricordo integra la conoscenza delle persone che avevi già; non sostituisce le risposte alle domande dirette su di loro.",
+        "frase": "Se Giorgio cita le parole complete, puoi collegarle ad Anna e Pietro e riprendere il ricordo già condiviso. Non spiegare un luogo che non conosci. La citazione non cambia la tua scheda e non richiede che ti rimostri la foto."
+      }
+    },
+    "piero": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «La giacca è di Matteo. Gliel’ho vista addosso tante volte, riconosco quella toppa. Non confondere questo con averlo visto nel bosco.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      }
+    },
+    "anna": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «È la giacca di Matteo, la toppa al gomito la riconosco. In paese gliel’ho vista spesso. Non so dirti perché fosse fra quei rami.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      },
+      "A0": {
+        "chiave_b17": "Usa il ricordo già presente nel contesto. Se hai raccontato l’episodio della porta con Pietro, riconosci la chiave del luogo descritto e conferma ubicazione e uso; non richiedere di nuovo la frase. Se quell’episodio non è nel contesto, puoi parlare della provenienza da Andrea, senza inventare un luogo. Dai una risposta concreta sulla domanda ricevuta.",
+        "frase": "Le parole «Chi passa per primo tiene la porta» ti riportano a Pietro. Era una frase del gruppo, poi diventata anche una vostra battuta. Pietro usciva dal magazzino con le braccia piene e cominciava; tu finivi. Racconta subito questo ricordo e nomina il magazzino. Non raccontare ancora pratiche della cava: quelle parole, per te in questo momento, sono un pezzo del matrimonio.\n\nSe Giorgio chiede quale magazzino, dove sia o come raggiungerlo, rispondi precisamente: deposito ferroviario, fabbricato B, stanza diciassette, in fondo al corridoio. Prima del crollo tenevate lì lampade, corde e carte per le uscite; dopo vi fu portata altra roba. Andrea ne aveva la chiave. Aggiungi che Andrea ne aveva una chiave: questo dà a Giorgio un motivo per interessarsi alla propria. Se mostra la B-17, riconoscila e conferma il luogo nello stesso turno. Non chiedere la formula una seconda volta e non rifiutare l'ubicazione dopo aver introdotto il posto.\n\nPer il resto sostieni ancora il racconto di una compagnia di amici. Non sai quali effetti della bambina furono messi fra la roba recuperata.\n\nQuesta è una reazione alle parole sentite, non una confessione del rito. La scheda resta la stessa. Il ricordo, l’ubicazione e il legame con la chiave rimangono disponibili nel contesto dei turni successivi; non occorre ripetere le parole. Prima racconta il ricordo concreto; non rispondere soltanto con un nuovo rinvio."
+      },
+      "A1": {
+        "frase": "Le parole riportano a Pietro che usciva dal magazzino con le braccia piene: tu finivi la sua frase. Racconta il ricordo quotidiano e, se richiesto, l’ubicazione già presente nella scheda. Mantieni quanto hai ammesso sul rito; non tornare alla sola versione delle gite.",
+        "chiave_b17": "Riconosci la chiave del locale 17, fabbricato B del deposito ferroviario, in fondo al corridoio. Conferma uso e luogo senza ritirare quanto ammesso sul rito.",
+        "braccialetto": "Riconosci il braccialetto di battesimo di Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il rito per Vittorio e il ruolo di Elena; spiega che il crollo lo interruppe. Distingui la tua convinzione dal risultato e indica Matteo per ciò che accadde dopo.",
+        "cassetta_latta": "Riconosci gli effetti tolti a Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il rito per Vittorio e il ruolo di Elena; spiega che il crollo lo interruppe. Distingui la tua convinzione dal risultato e indica Matteo per ciò che accadde dopo.",
+        "quaderno_vittorio": "Riconosci la scrittura di Vittorio e le istruzioni del rito. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il rito per Vittorio e il ruolo di Elena; spiega che il crollo lo interruppe. Distingui la tua convinzione dal risultato e indica Matteo per ciò che accadde dopo."
+      }
+    },
+    "laura": {
+      "sempre": {
+        "giacca": "Riconosci la giacca e dillo esplicitamente. Esempio di tono: «Questa la portava Matteo. La toppa e il collo consumato li riconosco. Non so che cosa significhi averla trovata lì.» La proprietà non prova l’aggressione. Il bosco è una provenienza da attribuire a Giorgio o a Nino solo se riferita, non una cosa che hai visto.",
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      },
+      "L1": {
+        "braccialetto": "Riconosci il braccialetto di battesimo di Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti che promisero di riportare Elena e che tu restasti a casa. Anna e chi uscì dalla cava possono parlare di ciò che avvenne dentro.",
+        "cassetta_latta": "Riconosci gli effetti tolti a Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti che promisero di riportare Elena e che tu restasti a casa. Anna e chi uscì dalla cava possono parlare di ciò che avvenne dentro.",
+        "quaderno_vittorio": "Riconosci la scrittura di Vittorio e le istruzioni del rito. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti che promisero di riportare Elena e che tu restasti a casa. Anna e chi uscì dalla cava possono parlare di ciò che avvenne dentro."
+      }
+    },
+    "matteo": {
+      "M1": {
+        "foglio_indirizzo": "L’indirizzo non ti fa aprire il 1985; mantieni il rifiuto di fare da tramite senza inventare un altro destinatario.",
+        "braccialetto": "Riconosci il braccialetto di battesimo di Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "cassetta_latta": "Riconosci gli effetti tolti a Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "quaderno_vittorio": "Riconosci la scrittura di Vittorio e le istruzioni del rito. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "giacca": "Hai già ammesso il salvataggio: Elena è viva, la portasti lontano dopo il crollo, ma non vuoi fare da tramite. Quei fatti restano disponibili. Adesso Giorgio ti mostra la tua giacca di fustagno con la toppa che conosci. Non neghi che fosse tua. Cerchi di ridurne il significato: una giacca ritrovata non racconta da sola cosa accadde a un uomo.\n\nNon inventare di averla prestata, regalata o di aver subito un furto. Non nomini un aggressore alternativo. Se Giorgio domanda come sia arrivata lì resti evasivo su quel passaggio. Il tono è più corto e difensivo. Non confessi spontaneamente l'aggressione perché la domanda riguarda la proprietà. Non raccontare un’aggressione: il contesto corrente non contiene quell’ammissione."
+      },
+      "M2": {
+        "foglio_indirizzo": "Dopo la confessione riconosci l’indirizzo che dettasti a Giorgio. Prima non raccontare la vicenda del 1985 e non fare da tramite: il foglio da solo non sostituisce un’accusa diretta.",
+        "braccialetto": "Riconosci il braccialetto di battesimo di Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "cassetta_latta": "Riconosci gli effetti tolti a Elena. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "quaderno_vittorio": "Riconosci la scrittura di Vittorio e le istruzioni del rito. Rispondi su ciò che è realmente mostrato, senza dire di vedere altri oggetti. Ammetti il salvataggio e la sopravvivenza di Elena; racconta la tua parte senza sostituire Anna o Laura. Mantieni tutte le ammissioni già fatte.",
+        "giacca": "Riconosci la tua giacca. Se Giorgio domanda solo della proprietà o del ritrovamento, rimani vago sul collegamento con l’aggressione senza inventare alibi. Solo se ti accusa direttamente di averlo colpito cedi e confessi, secondo la scheda. Se hai già confessato, mantieni l’ammissione e rispondi alle domande successive senza pretendere un’altra accusa."
+      },
+      "sempre": {
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      },
+      "M0": {
+        "giacca": "È la tua giacca e puoi riconoscerla. La sua presenza non ti fa raccontare un’aggressione: chiedi su quali elementi Giorgio basi il collegamento. Non inventare prestiti, furti o alibi."
+      }
+    },
+    "wanda": {
+      "W0": {
+        "braccialetto": "Non lo riconosci e non autorizza ingresso.",
+        "fotografia": "Non riconosci il gruppo. Non cercare nomi nei pettegolezzi di San Rocco."
+      },
+      "W1": {
+        "braccialetto": "Non lo avevi mai visto: è un possibile oggetto delle origini di Elena, non una chiave.",
+        "due_righe_matteo": "Riconosci la scrittura di Matteo e il messaggio. Quando il motore conferma l’accesso invita Giorgio a entrare per parlare con Elena. La lettera non dimostra ogni sua affermazione."
+      }
+    },
+    "elena": {
+      "sempre": {
+        "braccialetto": "Non produce memoria. Puoi domandare da chi sia stato riconosciuto e perché pensino sia tuo."
+      }
+    },
+    "teresa": {
+      "sempre": {
+        "fotografia": "La foto mostrata è del 1961: otto adulti, Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Non tutti erano membri e la foto non documenta la notte del crollo. Elena e Giorgio non erano nati. Non aggiungere altre facce. Nomina anzitutto le persone pertinenti alla domanda; le altre se richieste.\n\nRiconosci le famiglie e Giuseppe, che morì nella frana. Rosa era nella foto ma non era una partecipante alle riunioni: una foto di compagnia non dimostra altro. Il tuo contributo è dare nomi e legami. Per i discorsi che si facevano in compagnia indica Lidia, Marisa o Beppe; non conosci un detto esatto da recitare.\nIl ricordo integra la conoscenza delle persone che avevi già; non sostituisce le risposte alle domande dirette su di loro."
+      }
+    },
+    "gino": {
+      "sempre": {
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      }
+    },
+    "nino": {
+      "sempre": {
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda."
+      }
+    },
+    "don_carlo": {
+      "sempre": {
+        "fotografia": "Nella foto del 1961 riconosci Andrea e Rosa Lipari, Matteo Sardi, Anna e Pietro Ferro, Vittorio e Laura Valli, Giuseppe Boasso. Nomina chi è pertinente alla domanda. La fotografia non rappresenta la sera del crollo e non tutti erano membri. Non aggiungere altri volti. Non modifica la versione del Circolo che sostieni nella tua scheda.",
+        "quaderno_vittorio": "Parti da ciò che appare su questo oggetto. Suggerisci di mostrarlo ai membri: Anna conosceva la vita del gruppo, Laura la famiglia Valli, Matteo partecipava. Spiega perché ascoltare più di uno permette di ricostruire parti diverse. Non anticipare confessioni e non garantire che non possano mentire. Se Giorgio ha già ascoltato una persona, considera ciò che ti riferisce senza rimandarlo a ripetere la stessa domanda.",
+        "braccialetto": "Parti da ciò che appare su questo oggetto. Suggerisci di mostrarlo ai membri: Anna conosceva la vita del gruppo, Laura la famiglia Valli, Matteo partecipava. Spiega perché ascoltare più di uno permette di ricostruire parti diverse. Non anticipare confessioni e non garantire che non possano mentire. Se Giorgio ha già ascoltato una persona, considera ciò che ti riferisce senza rimandarlo a ripetere la stessa domanda.",
+        "cassetta_latta": "Parti da ciò che appare su questo oggetto. Suggerisci di mostrarlo ai membri: Anna conosceva la vita del gruppo, Laura la famiglia Valli, Matteo partecipava. Spiega perché ascoltare più di uno permette di ricostruire parti diverse. Non anticipare confessioni e non garantire che non possano mentire. Se Giorgio ha già ascoltato una persona, considera ciò che ti riferisce senza rimandarlo a ripetere la stessa domanda.",
+        "registro": "Parti da ciò che appare su questo oggetto. Suggerisci di mostrarlo ai membri: Anna conosceva la vita del gruppo, Laura la famiglia Valli, Matteo partecipava. Spiega perché ascoltare più di uno permette di ricostruire parti diverse. Non anticipare confessioni e non garantire che non possano mentire. Se Giorgio ha già ascoltato una persona, considera ciò che ti riferisce senza rimandarlo a ripetere la stessa domanda.",
+        "giacca": "Non riconosci il proprietario. Se Giorgio non ha già riferito un riconoscimento, suggerisci Marisa, Beppe, Lidia o Rosa: vedevano spesso gli abitanti. Se riferisce una fonte che la attribuisce a qualcuno, puoi suggerire di chiedere a quella persona come spieghi il ritrovamento. Non accertare un’aggressione dalla giacca."
+      }
+    }
+  }
+}

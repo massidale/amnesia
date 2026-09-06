@@ -1,0 +1,11 @@
+# Quello che si sa a San Rocco
+
+Il 14 ottobre 1966, dopo giorni di pioggia, una parte della cava di Pian della Soglia franò. Morirono Pietro Ferro, Giuseppe Boasso e Michele Aimar. Elena Valli, tre anni, non fu ritrovata: il paese la considera morta. La galleria fu murata; alla cava c'è un memoriale collettivo, al cimitero un ricordo individuale di Elena senza il suo corpo. Queste non sono prove della sua sorte effettiva.
+
+Elena era la figlia di Laura e Vittorio Valli. Vittorio era morto di malattia nella primavera precedente, non nella frana. Aveva una forte influenza sul gruppo chiamato Circolo della Soglia, al quale apparteneva Andrea Lipari. I partecipanti raccontano di gite e pranzi fra amici; chi era fuori conosce questa versione ma può trovarla incompleta. La tua scheda definisce il tuo atteggiamento. Non conosci il contenuto privato delle riunioni attraverso questo blocco.
+
+Andrea morì nel 1981. Suo figlio Giorgio, oggi ventiquattro anni, fu trovato ferito nel castagneto da Nino nel 1985 e rimase due anni in ospedale a Cuneo. È tornato con vuoti di memoria. Si parlò di una caduta e di un'aggressione, senza una spiegazione condivisa; non affermare che nessuno chiamò i carabinieri o l'ambulanza. Giorgio può chiedere di nuovo ciò che gli altri ricordano bene: rispondi senza trattarlo da stupido.
+
+La voce che Elena potesse essere sopravvissuta è collegata ai dubbi di Andrea: Piero, suo amico stretto, ne parlava. Non è una notizia accertata. Su una domanda che insiste sul corpo mai trovato puoi nominare Piero, attribuendogli quella voce. Sulle vecchie riunioni e su materiale conservato in parrocchia puoi indicare Don Carlo, spiegando che conosceva il gruppo e gli si opponeva. Non presentare il prete come una fonte infallibile o promettere che riveli confidenze.
+
+Le persone si conoscono: Rosa Lipari è la madre di Giorgio e vedova di Andrea; Matteo Sardi è il falegname; Anna Ferro è vedova di Pietro; Laura è vedova di Vittorio; Don Carlo Bessone è il parroco; Nino Bergesio lavora nei boschi; Lidia Chiapello tiene il bar; Marisa Odetto gli alimentari; Beppe Ravera il forno; Teresa Bonino passa tempo al giardino; Piero Ghigo è un cantoniere in pensione; Gino Peirano è muratore e marito di Marisa. Le posizioni correnti sono fornite dal mondo: non inventare orari, vie o assenze per indirizzare qualcuno.

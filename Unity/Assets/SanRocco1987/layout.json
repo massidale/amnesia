@@ -1,0 +1,24 @@
+{
+  "sites": [
+    {"id":"casa_lipari","label":"CASA LIPARI","kind":"house","x":-24,"z":-62,"w":12,"d":11,"h":3.4,"yaw":-84},
+    {"id":"casa_ferro","label":"CASA FERRO","kind":"house","x":-27,"z":-36,"w":11,"d":10,"h":3.3,"yaw":-97},
+    {"id":"casa_valli","label":"CASA VALLI","kind":"house","x":22,"z":70,"w":13,"d":12,"h":3.6},
+    {"id":"bottega","label":"SARDI / FALEGNAMERIA","kind":"workshop","x":-24,"z":72,"w":14,"d":14,"h":3.8},
+    {"id":"bar","label":"BAR / LIDIA","kind":"bar","x":22,"z":9,"w":12,"d":10,"h":3.4,"yaw":90},
+    {"id":"panetteria","label":"PANIFICIO RAVERA","kind":"bakery","x":-22,"z":9,"w":12,"d":10,"h":3.4,"yaw":-90},
+    {"id":"negozio","label":"ALIMENTARI ODETTO","kind":"shop","x":-22,"z":-9,"w":12,"d":10,"h":3.4,"yaw":-90},
+    {"id":"chiesa","label":"SAN ROCCO","kind":"church","x":0,"z":33,"w":17,"d":26,"h":7},
+    {"id":"canonica","label":"CANONICA","kind":"house","x":0,"z":57,"w":11,"d":10,"h":3.4},
+    {"id":"scuola","label":"SCUOLA ELEMENTARE","kind":"school","x":28,"z":-35,"w":15,"d":12,"h":3.8,"yaw":90},
+    {"id":"cooperativa","label":"COOPERATIVA AGRICOLA","kind":"coop","x":24,"z":-59,"w":16,"d":13,"h":4,"yaw":90},
+    {"id":"stazione","label":"SAN ROCCO DI VALDIERI","kind":"station","x":35,"z":-79,"w":19,"d":10,"h":4,"yaw":180},
+    {"id":"deposito_a","label":"A","kind":"depot","x":70,"z":-77,"w":14,"d":28,"h":4.3,"yaw":90},
+    {"id":"deposito_b","label":"B","kind":"depot","x":104,"z":-77,"w":14,"d":28,"h":4.3,"yaw":90},
+    {"id":"casa_nino","label":"CASA BERGESIO","kind":"house","x":-59,"z":63,"w":9,"d":9,"h":3.2,"yaw":-90},
+    {"id":"casa_teresa","label":"CASA BONINO","kind":"house","x":22,"z":-10,"w":9,"d":9,"h":3.2,"yaw":90},
+    {"id":"casa_piero","label":"CASA GHIGO","kind":"house","x":-51,"z":-58,"w":9,"d":9,"h":3.2,"yaw":-90},
+    {"id":"casa_chiapello","label":"CASA CHIAPELLO","kind":"house","x":-46,"z":-82,"w":9,"d":9,"h":3.2,"yaw":180},
+    {"id":"casa_ravera","label":"CASA RAVERA","kind":"house","x":-53,"z":14,"w":9,"d":9,"h":3.2,"yaw":-90},
+    {"id":"casa_peirano","label":"CASA PEIRANO / ODETTO","kind":"house","x":59,"z":-21,"w":11,"d":10,"h":3.4,"yaw":90}
+  ]
+}

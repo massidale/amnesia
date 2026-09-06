@@ -1,0 +1,8 @@
+FASE 1: quote, piazzole, viabilita e relazioni narrative validate.
+Castagneto a latifoglie dietro la bottega; conifere sulle quote alte.
+Cava: imbocco principale murato, ingresso laterale percorribile, Stanza, acqua, puntelli e memoriale.
+15 prefab distinti, 12 abitanti collocati; Wanda ed Elena riservate a Chivasso, Giorgio al giocatore.
+Soglie anteriori libere (B-17 chiuso intenzionalmente); pavimenti e passaggi centrali degli interni verificati.
+Percorsi: 2639 campioni con capsula di 56 cm, gradini fino a 35 cm, suolo presente e pendenza sotto 48 gradi. Controllo geometrico, non sostitutivo del playtest.
+20 ingressi collegati ai percorsi; chiesa con un solo ingresso, unica uscita posteriore nella bottega di Matteo.
+Prefab e scene salvati; immagini di verifica in Assets/SanRocco1987/Previews.

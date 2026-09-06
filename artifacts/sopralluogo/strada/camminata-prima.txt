@@ -1,0 +1,1 @@
+STRADA_CAMMINATA_OK: percorso=72m campioni=341 oscillazione_verticale=0.0000m frame_mediano=82.1ms frame_p95=124.4ms

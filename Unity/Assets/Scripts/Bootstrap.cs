@@ -22,7 +22,8 @@ namespace AmnesiaUnity
         [Tooltip("Risoluzione verticale di rendering. Bassa apposta: e' la direzione artistica, non un ripiego.")]
         public int RenderHeight = 180;
 
-        public WorldState World { get; private set; }
+        private WorldState _world;
+        public WorldState World { get => Session?.World ?? _world; private set => _world = value; }
         public VillageMap Map { get; private set; }
         public ItemCatalog Items { get; private set; }
         public ConversationSession Session { get; private set; }
@@ -35,6 +36,26 @@ namespace AmnesiaUnity
         private DeclarationTable _dichiarazioni;
         private ConvinzioniTable _convinzioni = ConvinzioniTable.Empty();
         private PlaceTable _luoghi;
+        private static System.Action<Bootstrap> _riprendiViaggio;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void AzzeraViaggio() { _riprendiViaggio = null; }
+
+        public void ConservaPerViaggio()
+        {
+            if (Session == null) return;
+            var session = Session; var map = Map; var items = Items;
+            var saluti = Accoglienza; var porte = Porte;
+            var dichiarazioni = _dichiarazioni; var convinzioni = _convinzioni; var luoghi = _luoghi;
+            var nomi = new Dictionary<string, string>(_nomi);
+            // Keep narrative data only, never scene transforms or persistent duplicate players.
+            _riprendiViaggio = next => {
+                next.Session = session; next.Map = map; next.Items = items;
+                next.Accoglienza = saluti; next.Porte = porte;
+                next._dichiarazioni = dichiarazioni; next._convinzioni = convinzioni; next._luoghi = luoghi;
+                foreach (var pair in nomi) next._nomi[pair.Key] = pair.Value;
+            };
+        }
         private readonly Dictionary<string, Transform> _porte = new Dictionary<string, Transform>();
 
         // Lasciato acceso, il paese e le figure si generano da codice come
@@ -160,12 +181,18 @@ namespace AmnesiaUnity
 
         private void Awake()
         {
-            if (!Carica())
+            var riprendi = _riprendiViaggio; _riprendiViaggio = null;
+            if (riprendi != null) riprendi(this);
+            else if (!Carica())
             {
                 enabled = false;
                 return;
             }
             RegistraOggettiInScena();
+            if (mappaAMano && Session != null) {
+                foreach (var id in new List<string>(_porte.Keys))
+                    if (Porte.IsOpen(Session.World, id)) SpalancaLaPorta(id);
+            }
             // A mano: la scena e' gia' tutta li'. Il codice registra soltanto gli
             // abitanti piazzati (per il loro id) e non aggiunge altro, cosi' non
             // spuntano case sulla griglia di gioco lontano dal paese disegnato.

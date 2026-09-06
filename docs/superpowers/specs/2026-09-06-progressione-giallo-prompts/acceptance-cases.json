@@ -1,0 +1,266 @@
+{
+  "status": "Desiderata narrativi, non tutti realizzabili entro soli prompt/scalini. I casi che richiedono estensioni sono fuori perimetro, non test da soddisfare modificando il motore.",
+  "cases": [
+    {
+      "id": "lidia_persona_senza_foto",
+      "profile": "lidia",
+      "kind": "prompt",
+      "input": "Chi è Anna? E suo marito? Nessuna foto posseduta o mostrata.",
+      "expected": "Nome, relazione con Pietro, crollo e dettaglio personale pertinente. Scheda invariata.",
+      "forbidden": "Richiedere una foto per sapere chi è Anna; cambio di posizione; rivelare il magazzino."
+    },
+    {
+      "id": "marisa_persona_senza_foto",
+      "profile": "marisa",
+      "kind": "prompt",
+      "input": "Chi è Anna? E suo marito? Nessuna foto posseduta o mostrata.",
+      "expected": "Nome, relazione con Pietro, crollo e dettaglio personale pertinente. Scheda invariata.",
+      "forbidden": "Richiedere una foto per sapere chi è Anna; cambio di posizione; rivelare il magazzino."
+    },
+    {
+      "id": "beppe_persona_senza_foto",
+      "profile": "beppe",
+      "kind": "prompt",
+      "input": "Chi è Anna? E suo marito? Nessuna foto posseduta o mostrata.",
+      "expected": "Nome, relazione con Pietro, crollo e dettaglio personale pertinente. Scheda invariata.",
+      "forbidden": "Richiedere una foto per sapere chi è Anna; cambio di posizione; rivelare il magazzino."
+    },
+    {
+      "id": "teresa_persona_senza_foto",
+      "profile": "teresa",
+      "kind": "prompt",
+      "input": "Chi è Anna? E suo marito? Nessuna foto posseduta o mostrata.",
+      "expected": "Nome, relazione con Pietro, crollo e dettaglio personale pertinente. Scheda invariata.",
+      "forbidden": "Richiedere una foto per sapere chi è Anna; cambio di posizione; rivelare il magazzino."
+    },
+    {
+      "id": "circolo_libero",
+      "profile": "marisa",
+      "kind": "prompt",
+      "input": "Che cosa faceva il Circolo della Soglia?",
+      "expected": "Versione delle gite attribuita, dubbi personali e rimando motivato al don. Nessun cambio di scheda.",
+      "forbidden": "Confessione del rito o chiamata a classificatore delle intenzioni."
+    },
+    {
+      "id": "foto",
+      "profile": "lidia",
+      "kind": "motore+prompt",
+      "input": "[mostra: fotografia] verificata",
+      "expected": "Stessa scheda; aggiunta della reazione fotografia con Anna/Pietro e frase intera.",
+      "forbidden": "Trasformare la conoscenza delle persone in un privilegio sbloccato dalla foto."
+    },
+    {
+      "id": "foto_seguito",
+      "profile": "marisa",
+      "kind": "motore+prompt",
+      "input": "Dopo il ricordo della foto e oltre 12 messaggi: che frase diceva Pietro?",
+      "expected": "Il fatto già raccontato da Marisa è nel contesto locale, senza una variante MR1.",
+      "forbidden": "Pretendere una seconda presentazione della foto; conoscenza importata da altri NPC.",
+      "scope_note": "Non garantito dalle meccaniche attuali: vedere incompatibilità della specifica; nessuna estensione autorizzata."
+    },
+    {
+      "id": "piero_subito",
+      "profile": "piero",
+      "kind": "prompt",
+      "input": "Perché mio padre cercava Elena?",
+      "expected": "Ricerca di Andrea e continuazione di Giorgio, disponibili dall’inizio.",
+      "forbidden": "Una posizione P1; prova della sopravvivenza; accusa anticipata a Matteo."
+    },
+    {
+      "id": "frammento",
+      "profile": "anna/A0",
+      "kind": "motore",
+      "input": "Chi passa per primo…",
+      "expected": "Scheda A0 invariata; il frammento non seleziona il ricordo della frase completa.",
+      "forbidden": "Match per parole sparse, prefissi o frammento incompleto."
+    },
+    {
+      "id": "formula",
+      "profile": "anna/A0",
+      "kind": "motore+prompt",
+      "input": "Formula completa riconosciuta dal codice, anche senza foto posseduta",
+      "expected": "A0 invariata; reazione con Pietro, magazzino e legame con la chiave, dettagli disponibili nei seguiti.",
+      "forbidden": "Cambio di posizione; requisito di foto; confessione del rito dalla sola frase."
+    },
+    {
+      "id": "dove",
+      "profile": "anna/A0",
+      "kind": "prompt",
+      "input": "Dopo il ricordo della frase: quale magazzino?",
+      "expected": "Ubicazione e uso nel contesto locale; stessa scheda A0, nessuna domanda da classificare.",
+      "forbidden": "Ripetere la frase o mostrare la foto come condizione della risposta; nuova posizione."
+    },
+    {
+      "id": "chiave",
+      "profile": "anna/A0",
+      "kind": "motore+prompt",
+      "input": "Dopo la reazione alla frase: [mostra: chiave_b17] verificata",
+      "expected": "Ricordo persistente e reazione assicurano ubicazione e funzione della chiave; parole e dichiarazioni corrispondono.",
+      "forbidden": "Annotare ubicazione non pronunciata; richiedere un interprete semantico."
+    },
+    {
+      "id": "laura_senza_formula",
+      "profile": "laura/L1",
+      "kind": "motore+prompt",
+      "input": "Prima visita a Laura con [mostra: quaderno_vittorio]",
+      "expected": "L1 per oggetto, ammissione del consenso; riconoscimento del quaderno reale.",
+      "forbidden": "Richiedere la frase; fingere il braccialetto mostrato; essere testimone nella cava."
+    },
+    {
+      "id": "don_oggetti",
+      "profile": "don_carlo",
+      "kind": "motore+prompt",
+      "input": "[mostra: cassetta_latta]",
+      "expected": "Scheda invariata più reazione; rimando motivato a membri diversi.",
+      "forbidden": "Una posizione C2 o rivelazione del rito dal prete."
+    },
+    {
+      "id": "nino_prima",
+      "profile": "nino/N0",
+      "kind": "motore+prompt",
+      "input": "Rito ammesso da Anna/Laura; Matteo non ha parlato",
+      "expected": "N0, nessuna giacca trovata. Racconto del 1985 già disponibile.",
+      "forbidden": "Sbloccare giacca per il rito o per un racconto del giocatore."
+    },
+    {
+      "id": "nino_dopo",
+      "profile": "nino/N1",
+      "kind": "motore+prompt",
+      "input": "Solo Matteo ha pronunciato Elena viva, poi visita Nino",
+      "expected": "Nino trova ora e consegna una giacca, anche senza don, rito o rifiuto.",
+      "forbidden": "Conservata da anni; condizioni supplementari; Nino conosce la confessione di Matteo."
+    },
+    {
+      "id": "giacca_sola",
+      "profile": "matteo/M2",
+      "kind": "motore+prompt",
+      "input": "Giacca posseduta; domanda generica o sulla proprietà, senza accusa",
+      "expected": "M2 subito; evasione senza ammissione del 1985.",
+      "forbidden": "Richiedere presentazione o riconoscimento per M2; confessare per il solo possesso."
+    },
+    {
+      "id": "accusa_prematura",
+      "profile": "matteo/M0",
+      "kind": "prompt",
+      "input": "Accusa diretta prima di possedere la giacca",
+      "expected": "La scheda iniziale non contiene la confessione; nessuna accusa accantonata per il futuro.",
+      "forbidden": "Confessione automatica al successivo ingresso in M2."
+    },
+    {
+      "id": "accusa_valida",
+      "profile": "matteo/M2",
+      "kind": "prompt",
+      "input": "In M2: «Sei stato tu a colpirmi?»",
+      "expected": "Matteo cede e ammette secondo il prompt; stessa posizione M2.",
+      "forbidden": "Richiedere formula esatta, tono aggressivo, prova esterna o nuova presentazione della giacca."
+    },
+    {
+      "id": "motivo",
+      "profile": "matteo/M2",
+      "kind": "prompt",
+      "input": "Perché? Dopo la confessione già pronunciata.",
+      "expected": "Spiegazione usando M2 già caricato.",
+      "forbidden": "Nuova posizione, nuovo classificatore o motivo inventato."
+    },
+    {
+      "id": "lettera_senza_motivo",
+      "profile": "matteo/M2",
+      "kind": "motore",
+      "input": "Richiesta esplicita proposta della lettera subito dopo ammissione",
+      "expected": "Consegna una volta, anche senza domanda sul perché.",
+      "forbidden": "Richiedere un’ulteriore posizione; consegna affidata a una promessa generata.",
+      "scope_note": "Non garantito dalle meccaniche attuali: vedere incompatibilità della specifica; nessuna estensione autorizzata."
+    },
+    {
+      "id": "wanda_precoce",
+      "profile": "wanda/W0",
+      "kind": "motore+prompt",
+      "input": "Visita a Chivasso senza lettera reale",
+      "expected": "Porta e dialogo Elena chiusi; richiesta concreta di due righe da una persona conosciuta.",
+      "forbidden": "Accettare persuasione, braccialetto o lettera soltanto nominata."
+    },
+    {
+      "id": "wanda_lettera",
+      "profile": "wanda/W1",
+      "kind": "motore+prompt",
+      "input": "[mostra: due_righe_matteo] autentiche",
+      "expected": "Ingresso persistente; conoscenze dopo apertura; Elena disponibile.",
+      "forbidden": "Accesso che si perde al cambio scena o al salvataggio."
+    },
+    {
+      "id": "elena",
+      "profile": "elena",
+      "kind": "prompt",
+      "input": "Giorgio racconta la ricerca del padre e domanda se voglia incontrare Laura",
+      "expected": "Risposta personale sui racconti ricevuti, libertà e domande di Elena.",
+      "forbidden": "Gratitudine, perdono o ricordo adulto del rito automatici."
+    },
+    {
+      "id": "dichiaro_non_arbitro",
+      "profile": "matteo/M1",
+      "kind": "motore",
+      "input": "Trasporto controllato omette o falsifica un tool call sul fatto indispensabile",
+      "expected": "Il percorso usa battuta garantita e registrazione corrispondente, secondo estensione proposta.",
+      "forbidden": "Affidare il ritrovamento di Nino all’interpretazione o alla segnalazione libera del modello.",
+      "scope_note": "Non garantito dalle meccaniche attuali: vedere incompatibilità della specifica; nessuna estensione autorizzata."
+    },
+    {
+      "id": "anna_rito_senza_frase",
+      "profile": "anna/A1",
+      "kind": "motore+prompt",
+      "input": "Reperto reale mostrato, indipendentemente dalla frase",
+      "expected": "Passaggio pubblico → rito dovuto al reperto.",
+      "forbidden": "Frase come prerequisito della scala."
+    },
+    {
+      "id": "anna_seguimento_lungo",
+      "profile": "anna/A0",
+      "kind": "motore+prompt",
+      "input": "Frase riconosciuta ad Anna, oltre 12 messaggi, domanda sul luogo",
+      "expected": "Contesto locale conserva episodio, luogo e chiave; grants pertinenti ammessi senza cambiare scheda.",
+      "forbidden": "Memoria affidata solo alla finestra o a un nuovo classificatore; taccuino con fatti mai pronunciati.",
+      "scope_note": "Non garantito dalle meccaniche attuali: vedere incompatibilità della specifica; nessuna estensione autorizzata."
+    },
+    {
+      "id": "guida_prima_domanda",
+      "profile": "piero",
+      "kind": "prompt",
+      "input": "Mi hanno detto che cercavo Elena, ma non capisco perché",
+      "expected": "Spiega subito ricerca di Andrea e continuazione di Giorgio; propone il don per il Circolo, con motivo.",
+      "forbidden": "Solo una domanda di rimando senza dare l’informazione di base."
+    },
+    {
+      "id": "guida_foto",
+      "profile": "marisa",
+      "kind": "prompt",
+      "input": "Foto mostrata: che cosa ricordi?",
+      "expected": "Racconto concreto, frase intera e Anna come persona a cui chiedere dell’abitudine con Pietro.",
+      "forbidden": "Formula senza collegamento a una persona; elenco indiscriminato di NPC."
+    },
+    {
+      "id": "guida_ritorno",
+      "profile": "don_carlo",
+      "kind": "prompt",
+      "input": "Sono già stato da Marisa: mi ha parlato della frase che si dicevano Anna e Pietro",
+      "expected": "Considera la novità e propone Anna per quel ricordo, senza anticipare il luogo.",
+      "forbidden": "Rimandare a Marisa per rifare la stessa domanda."
+    },
+    {
+      "id": "guida_visita_precoce",
+      "profile": "anna/A0",
+      "kind": "prompt",
+      "input": "Chi era Pietro e perché frequentavate il Circolo?",
+      "expected": "Fatti personali e versione pubblica; un appiglio pertinente se il giocatore cerca altro.",
+      "forbidden": "Rifiuto totale finché manca la frase; chiedere di procurarsi la frase per poter parlare."
+    },
+    {
+      "id": "m2_solo_possesso",
+      "profile": "matteo/M2",
+      "kind": "motore",
+      "input": "Giorgio riceve giacca da Nino; non l’ha mostrata né fatta identificare",
+      "expected": "Posizione Matteo M2; nessuna confessione già registrata; lettera non consegnata.",
+      "forbidden": "Prerequisito di accusa, presentazione, riconoscimento esterno o confessione automatica.",
+      "scope_note": "Non garantito dalle meccaniche attuali: vedere incompatibilità della specifica; nessuna estensione autorizzata."
+    }
+  ]
+}

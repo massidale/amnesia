@@ -28,7 +28,7 @@ public sealed class PlaceService
     /// serratura onesta.
     public string Descrizione(string placeId) => _luoghi.Find(placeId)?.Closed ?? "";
 
-    public Result<Apertura> Apri(WorldState world, string placeId, string playerId = "player")
+    public Result<Apertura> Apri(WorldState world, string placeId, string playerId = "player", bool raccogliContenuto = true)
     {
         var luogo = _luoghi.Find(placeId);
         if (luogo is null)
@@ -56,7 +56,7 @@ public sealed class PlaceService
 
         world.Flags[Chiave(placeId)] = true;
         var presi = new List<string>();
-        foreach (var oggetto in luogo.Contains)
+        foreach (var oggetto in raccogliContenuto ? luogo.Contains : Enumerable.Empty<string>())
         {
             // Quello che qualcun altro ha gia' preso non ricompare: il mondo e'
             // uno solo, e la roba sta in un posto per volta.
@@ -67,6 +67,17 @@ public sealed class PlaceService
             }
         }
         return Result<Apertura>.Ok(new Apertura(luogo.Opened, presi));
+    }
+
+    public Result<string> Raccogli(WorldState world, string placeId, string itemId, string playerId = "player")
+    {
+        var luogo = _luoghi.Find(placeId);
+        if (luogo is null || !luogo.Contains.Contains(itemId))
+            return Result<string>.Fail("no_item", itemId);
+        if (!IsOpen(world, placeId)) return Result<string>.Fail("closed", placeId);
+        if (world.ItemOwners.ContainsKey(itemId)) return Result<string>.Fail("already_owned", itemId);
+        world.ItemOwners[itemId] = playerId;
+        return Result<string>.Ok(itemId);
     }
 
     private static string Chiave(string placeId) => $"aperto:{placeId}";

@@ -25,9 +25,6 @@ public sealed class WorldState
     /// quali righe entrano nel prompt di un personaggio.
     public Dictionary<string, List<string>> ShownTo { get; set; } = new();
 
-    /// I confronti gia' messi davanti a ciascun personaggio, come coppie
-    /// normalizzate. Sta accanto a ShownTo e non dentro, perche' accostare due
-
     /// Le catene autoriali a colpo singolo: acceso una volta, resta acceso.
     public Dictionary<string, bool> Flags { get; set; } = new();
 

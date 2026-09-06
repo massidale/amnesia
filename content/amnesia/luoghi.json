@@ -5,26 +5,17 @@
         "x": 11,
         "y": 58
       },
-      "closed": "Una saracinesca di lamiera in fondo alla fila, uguale alle altre nove. Sopra, una targhetta d'ottone: B-17.",
-      "opened": "La serratura è dura ma gira. Dentro c'è l'aria ferma di vent'anni, e la roba di una cava accatastata contro il muro.",
+      "closed": "Dentro il fabbricato B del deposito ferroviario, una saracinesca di lamiera in fondo alla fila, uguale alle altre nove. Sopra, una targhetta d'ottone: B-17.",
+      "opened": "La serratura è dura ma gira. Dentro c'è l'aria ferma di vent'anni, e la roba di una cava accatastata contro il muro. Su un ripiano, una cassetta di latta legata con lo spago.",
       "requires_item": "chiave_b17",
+      "requires_declared": [
+        "magazzino_dove"
+      ],
       "contains": [
-        "registro",
-        "quaderno_vittorio"
-      ]
-    },
-    "seminterrato": {
-      "door": {
-        "x": 7,
-        "y": 58
-      },
-      "closed": "Una botola nel pavimento, sotto la polvere e la segatura. L'anello è ancora unto.",
-      "opened": "Sotto è tutto più freddo. In fondo, su un ripiano di mattoni, una cassetta di latta legata con lo spago.",
-      "contains": [
+        "quaderno_vittorio",
         "cassetta_latta",
         "braccialetto"
-      ],
-      "botola": true
+      ]
     }
   }
 }

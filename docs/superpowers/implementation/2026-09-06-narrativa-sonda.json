@@ -1,0 +1,420 @@
+{
+  "status": "passed",
+  "controlled_transport": true,
+  "turns": [
+    {
+      "turn": 1,
+      "npc": "nino",
+      "input": "Hai trovato altro?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "dove_lo_trovai"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 2,
+      "npc": "nino",
+      "input": "E se avessi trovato una giacca?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": [
+        "nino_giacca"
+      ]
+    },
+    {
+      "turn": 3,
+      "npc": "wanda",
+      "input": "Buongiorno.",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "wanda_una_persona_sola"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 4,
+      "npc": "piero",
+      "input": "Perché cercavo Elena?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 5,
+      "npc": "lidia",
+      "input": "Chi è Anna?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 6,
+      "npc": "marisa",
+      "input": "[mostra: fotografia] Chi riconosci?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "foto_anna_e_pietro"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 7,
+      "npc": "anna",
+      "input": "[mostra: chiave_b17] Sai qualcosa di questa chiave?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 8,
+      "npc": "anna",
+      "input": "Chi passa per primo…",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 9,
+      "npc": "anna",
+      "input": "Chi passa per primo tiene la porta.",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 10,
+      "npc": "anna",
+      "input": "Quale magazzino?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "magazzino_dove"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 11,
+      "npc": "anna",
+      "input": "",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [
+        "braccialetto"
+      ],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 12,
+      "npc": "anna",
+      "input": "",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [
+        "cassetta_latta"
+      ],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 13,
+      "npc": "anna",
+      "input": "",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [
+        "quaderno_vittorio"
+      ],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 14,
+      "npc": "anna",
+      "input": "",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [
+        "registro"
+      ],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 15,
+      "npc": "laura",
+      "input": "[mostra: quaderno_vittorio] Che cosa facevate?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L1",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "elena_prescelta",
+        "laura_non_cera"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 16,
+      "npc": "anna",
+      "input": "[mostra: braccialetto] Era di Elena?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "il_rito",
+        "sacrificio_per_vittorio",
+        "anna_solo_matteo"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 17,
+      "npc": "nino",
+      "input": "Hai novità?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 18,
+      "npc": "matteo",
+      "input": "Chi passa per primo tiene la porta.",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 19,
+      "npc": "matteo",
+      "input": "[mostra: cassetta_latta] Di chi erano queste cose?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M1",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [
+        "matteo_la_porto_via",
+        "elena_viva"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 20,
+      "npc": "nino",
+      "input": "Che cosa volevi dirmi?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [
+        "giacca"
+      ],
+      "declared": [
+        "nino_giacca"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 21,
+      "npc": "matteo",
+      "input": "Che cosa sai del mio incidente?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 22,
+      "npc": "matteo",
+      "input": "[mostra: giacca] È tua?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 23,
+      "npc": "matteo",
+      "input": "Sei stato tu a colpirmi?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [
+        "due_righe_matteo"
+      ],
+      "declared": [
+        "matteo_confessa"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 24,
+      "npc": "matteo",
+      "input": "Perché?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 25,
+      "npc": "wanda",
+      "input": "[mostra: due_righe_matteo] Mi manda lui.",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 26,
+      "npc": "elena",
+      "input": "Sono Giorgio, prima del coma ti cercavo seguendo le ricerche di mio padre.",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 27,
+      "npc": "nino",
+      "input": "Sono passato a salutarti.",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": []
+    }
+  ]
+}

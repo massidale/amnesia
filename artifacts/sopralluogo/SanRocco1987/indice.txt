@@ -1,0 +1,29 @@
+0-79: bar ingresso e panorama interno
+80-159: bottega ingresso e panorama interno
+160-239: canonica ingresso e panorama interno
+240-319: casa_chiapello ingresso e panorama interno
+320-399: casa_ferro ingresso e panorama interno
+400-479: casa_lipari ingresso e panorama interno
+480-559: casa_nino ingresso e panorama interno
+560-639: casa_peirano ingresso e panorama interno
+640-719: casa_piero ingresso e panorama interno
+720-799: casa_ravera ingresso e panorama interno
+800-879: casa_teresa ingresso e panorama interno
+880-959: casa_valli ingresso e panorama interno
+960-1039: chiesa ingresso e panorama interno
+1040-1119: cooperativa ingresso e panorama interno
+1120-1199: deposito_a ingresso e panorama interno
+1200-1279: deposito_b ingresso e panorama interno
+1280-1359: negozio ingresso e panorama interno
+1360-1439: panetteria ingresso e panorama interno
+1440-1519: scuola ingresso e panorama interno
+1520-1599: stazione ingresso e panorama interno
+1600-1719: giro esterno completo
+1720-1791: accesso laterale cava
+1792-1855: cimitero e cenotafio
+1856-1919: castagneto e punto del ritrovamento
+1920-1983: corridoio B completo
+1984-2031: ispezione interna B-17, senza aprire la serranda narrativa
+2032-2127: strada esterna fino alla galleria
+2128-2223: piazza circolare, panchine e fronti commerciali
+Frame: 2224; materiali validi; ingressi senza intersezioni della camera.

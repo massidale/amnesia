@@ -1,0 +1,8 @@
+0-79: caffe_chivasso ingresso e panorama interno
+80-159: cartoleria_chivasso ingresso e panorama interno
+160-239: casa_cortile_chivasso ingresso e panorama interno
+240-319: casa_portico_chivasso ingresso e panorama interno
+320-399: casa_wanda ingresso e panorama interno
+400-479: stazione_chivasso ingresso e panorama interno
+480-599: giro esterno completo
+Frame: 600; materiali validi; ingressi senza intersezioni della camera.

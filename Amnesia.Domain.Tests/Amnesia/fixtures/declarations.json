@@ -73,7 +73,7 @@
       ]
     },
     "magazzino_dove": {
-      "text": "La roba della cava l'hanno portata giù al magazzino: l'edificio davanti alla chiesa, dall'altro lato del fiume. Il diciassette.",
+      "text": "La roba della cava l'hanno portata giù al deposito ferroviario, accanto alla stazione. Il magazzino in fondo alla fila, il diciassette.",
       "truth": "true",
       "sources": [
         "anna",
@@ -149,7 +149,7 @@
       "requires_shown": []
     },
     "il_rito": {
-      "text": "Il rito voleva un sacrificio: qualcuno andava dato alla Soglia, calato nell'acqua in fondo alla Stanza, perché un morto potesse tornare. Chi scendeva non tornava su, e questo lo sapevano tutti.",
+      "text": "Il rito voleva che qualcuno passasse la Soglia, calato nell'acqua in fondo alla Stanza, e tornasse indietro perché un morto potesse tornare. Credevamo che sarebbe risalito. Sapevamo che era pericoloso.",
       "truth": "true",
       "sources": [
         "quaderno_vittorio",
@@ -169,7 +169,7 @@
       ]
     },
     "elena_prescelta": {
-      "text": "La prescelta era Elena, la figlia di Vittorio: sangue suo. Doveva morire là sotto, e nessuno di loro credeva altrimenti.",
+      "text": "La prescelta era Elena, la figlia di Vittorio: sangue suo. Doveva scendere e tornare indietro. Ci eravamo detti che era santo, anche se sapevamo che era pericoloso.",
       "truth": "true",
       "sources": [
         "anna",

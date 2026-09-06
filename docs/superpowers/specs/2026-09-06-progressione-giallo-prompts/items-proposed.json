@@ -1,0 +1,74 @@
+[
+  {
+    "id": "fotografia",
+    "name": "fotografia",
+    "visible": "Fotografia in bianco e nero di otto adulti davanti alla cava. Sul retro: «Circolo della Soglia — 1961».",
+    "description": "La stampa che mi ha dato Don Carlo. Posso chiedere alle persone del paese chi riconoscono."
+  },
+  {
+    "id": "frase",
+    "name": "frase",
+    "visible": "Chi passa per primo tiene la porta.",
+    "description": "Citazione accessibile dal taccuino solo dopo averla ascoltata o pronunciata davvero. Non stampare questa descrizione nella prima pagina iniziale."
+  },
+  {
+    "id": "foglio_indirizzo",
+    "name": "foglio",
+    "visible": "Un foglio di quaderno piegato in quattro, la piega ormai lisa. Una riga sola, a penna, scritta in fretta: «Via Sant'Orsola 14 — Chivasso».",
+    "description": "È la mia calligrafia. Non ricordo perché avessi questo indirizzo."
+  },
+  {
+    "id": "chiave_b17",
+    "name": "chiave",
+    "visible": "Una chiave di ferro, grossa, da serratura vecchia. All'anello è legata con lo spago una targhetta d'ottone stampigliata: B-17.",
+    "description": "Una chiave e una sigla. Non so cosa apra, e non ho idea di dove sia la porta."
+  },
+  {
+    "id": "taccuino",
+    "name": "taccuino",
+    "visible": "Un taccuino nuovo a righe, con una copertina di tela.",
+    "description": "Me l’ha dato mia madre. Annoto ciò che mi viene detto, con chi lo ha detto."
+  },
+  {
+    "id": "quaderno_vittorio",
+    "name": "quaderno manoscritto",
+    "visible": "Un quaderno scritto fitto da una mano sola, senza date, senza nomi e senza firme. Spiega per esteso cosa si deve fare perché qualcuno passi dall'altra parte e torni indietro: che chi passa dev'essere del sangue di chi si chiama, che deve scendere senza niente addosso, e che chi tiene la corda non la lascia per nessun motivo.",
+    "description": "Istruzioni scritte da una mano sola. Chi conosceva quelle persone può spiegarmi a cosa servissero."
+  },
+  {
+    "id": "registro",
+    "name": "registro",
+    "visible": "Un registro rilegato in tela, una riga per serata, dal 1958 all'ottobre del 1966. Sulle righe ci sono solo nomi di battesimo e iniziali. L'ultima riga è più lunga delle altre: fra i presenti c'è «A. L.», e di fianco, aggiunto dopo con un'altra penna, «+ il bambino». «L. V.» non c'è.",
+    "description": "Otto anni di serate, contate e firmate come si fa con le cose serie."
+  },
+  {
+    "id": "cassetta_latta",
+    "name": "cassetta di latta",
+    "visible": "Una cassetta di latta da biscotti, legata con lo spago. Dentro: un paio di scarpine da bambina, un fermaglio per capelli di celluloide e un braccialetto d'argento sottile.",
+    "description": "Roba da bambina piccola, tolta e messa via, e conservata per vent'anni da qualcuno che non l'ha buttata."
+  },
+  {
+    "id": "braccialetto",
+    "name": "braccialetto",
+    "visible": "Un braccialetto da battesimo, d'argento sottile, della misura di un polso di bambina. All'interno, inciso in corsivo: E. V.",
+    "description": "Due iniziali su un braccialetto non vogliono dire niente, finché qualcuno non ti ha raccontato di chi erano."
+  },
+  {
+    "id": "giacca",
+    "name": "giacca",
+    "visible": "Giacca da uomo di fustagno, sporca e scolorita, con una toppa al gomito e il colletto consumato.",
+    "description": "Nino l’ha trovata adesso, incastrata fra i rami vicino al punto del mio ritrovamento. Non sa di chi sia."
+  },
+  {
+    "id": "due_righe_matteo",
+    "name": "due righe di Matteo",
+    "visible": "Un messaggio a matita: «Wanda, Giorgio vuole parlarti della bambina che ti affidai a Roccavione nel 1966. Lascialo parlare con Elena. Matteo Sardi». ",
+    "description": "Matteo lo ha scritto su mia richiesta."
+  },
+  {
+    "id": "lapide",
+    "name": "lapide",
+    "visible": "Una lastra di pietra murata all'imbocco della cava, la scritta scavata e ripassata di nero. «A ricordo di Pietro Ferro, Giuseppe Boasso, Michele Aimar, e della piccola Elena Valli, che questa montagna ha preso il 14 ottobre 1966.» Sotto, piu' piccolo: «Il paese di San Rocco».",
+    "description": "Quattro nomi. Tre uomini e una bambina di tre anni. Uno dei tre lo conosco: Ferro e' il cognome della vedova in fondo alla strada."
+  }
+]

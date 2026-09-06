@@ -1,0 +1,333 @@
+{
+  "status": "passed",
+  "controlled_transport": true,
+  "known_limitation": "Anna/Laura: giacca_e_di_matteo nel glossario e nel servizio, ma non nell’enum dello schema. Nessuna modifica al motore.",
+  "turns": [
+    {
+      "turn": 1,
+      "npc": "lidia",
+      "input": "Chi erano i genitori di Elena?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "elena_figlia_vittorio"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 2,
+      "npc": "lidia",
+      "input": "E il Circolo?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "circolo_esisteva",
+        "padre_nel_circolo"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 3,
+      "npc": "rosa",
+      "input": "Ricordi una frase?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "avevano_una_frase"
+      ],
+      "refused": [
+        "frase_per_riconoscersi"
+      ]
+    },
+    {
+      "turn": 4,
+      "npc": "piero",
+      "input": "Perché cercavo Elena?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "andrea_cercava_elena",
+        "giorgio_continuo_ricerche"
+      ],
+      "refused": [
+        "elena_viva"
+      ]
+    },
+    {
+      "turn": 5,
+      "npc": "marisa",
+      "input": "[mostra: fotografia] Che ricordi hai di Anna e Pietro?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "frase_per_riconoscersi"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 6,
+      "npc": "anna",
+      "input": "Chi passa per primo tiene la porta.",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "magazzino_dove",
+        "frase_per_riconoscersi"
+      ],
+      "refused": [
+        "il_rito"
+      ]
+    },
+    {
+      "turn": 7,
+      "npc": "matteo",
+      "input": "Elena è viva?",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": [
+        "elena_viva",
+        "matteo_confessa"
+      ]
+    },
+    {
+      "turn": 8,
+      "npc": "anna",
+      "input": "",
+      "positions": {
+        "anna": "A0",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [
+        "quaderno_vittorio"
+      ],
+      "declared": [],
+      "refused": []
+    },
+    {
+      "turn": 9,
+      "npc": "anna",
+      "input": "[mostra: quaderno_vittorio] Cosa sai?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L0",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "padre_nella_cava"
+      ],
+      "refused": [
+        "elena_viva"
+      ]
+    },
+    {
+      "turn": 10,
+      "npc": "laura",
+      "input": "[mostra: quaderno_vittorio] Elena?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M0",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "elena_prescelta"
+      ],
+      "refused": [
+        "anna_solo_matteo",
+        "elena_viva",
+        "magazzino_dove"
+      ]
+    },
+    {
+      "turn": 11,
+      "npc": "matteo",
+      "input": "[mostra: quaderno_vittorio] Cosa accadde?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M1",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [
+        "matteo_la_porto_via"
+      ],
+      "refused": [
+        "matteo_confessa"
+      ]
+    },
+    {
+      "turn": 12,
+      "npc": "nino",
+      "input": "Novità?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M1",
+        "nino": "N0"
+      },
+      "received": [],
+      "declared": [],
+      "refused": [
+        "nino_giacca"
+      ]
+    },
+    {
+      "turn": 13,
+      "npc": "matteo",
+      "input": "E oggi?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M1",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [
+        "elena_viva"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 14,
+      "npc": "nino",
+      "input": "Cosa hai trovato?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [
+        "giacca"
+      ],
+      "declared": [
+        "nino_giacca"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 15,
+      "npc": "beppe",
+      "input": "La riconosci?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": [
+        "giacca_e_di_matteo"
+      ]
+    },
+    {
+      "turn": 16,
+      "npc": "beppe",
+      "input": "[mostra: giacca] La riconosci?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [
+        "giacca_e_di_matteo"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 17,
+      "npc": "gino",
+      "input": "[mostra: giacca] La riconosci?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [],
+      "refused": [
+        "giacca_e_di_matteo"
+      ]
+    },
+    {
+      "turn": 18,
+      "npc": "anna",
+      "input": "[mostra: giacca] La riconosci?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M2",
+        "nino": "N1"
+      },
+      "received": [],
+      "declared": [
+        "giacca_e_di_matteo"
+      ],
+      "refused": []
+    },
+    {
+      "turn": 19,
+      "npc": "matteo",
+      "input": "Sei stato tu a colpirmi?",
+      "positions": {
+        "anna": "A1",
+        "laura": "L1",
+        "matteo": "M3",
+        "nino": "N1"
+      },
+      "received": [
+        "due_righe_matteo"
+      ],
+      "declared": [
+        "matteo_confessa"
+      ],
+      "refused": []
+    }
+  ]
+}

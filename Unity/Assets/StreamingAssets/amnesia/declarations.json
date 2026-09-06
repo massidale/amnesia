@@ -9,90 +9,74 @@
         "don_carlo",
         "anna",
         "laura",
-        "matteo"
-      ],
-      "requires_shown": [
-        "fotografia"
-      ]
-    },
-    "scampagnate": {
-      "text": "Era una compagnia di amici. Si andava su alla cava a fare le scampagnate, roba di quando eravamo giovani.",
-      "truth": "false",
-      "sources": [
-        "anna",
-        "laura",
         "matteo",
         "teresa",
+        "piero",
         "marisa",
         "beppe",
+        "lidia",
         "gino"
       ],
       "requires_shown": []
     },
-    "avevano_una_frase": {
-      "text": "Avevano una specie di detto fra loro. Non me lo ricordo bene.",
+    "scampagnate": {
+      "text": "I partecipanti parlavano di una compagnia di amici, di gite e pranzi alla cava.",
       "truth": "true",
       "sources": [
         "rosa",
         "nino",
         "don_carlo",
+        "anna",
+        "laura",
+        "matteo",
         "teresa",
-        "lidia"
+        "piero",
+        "marisa",
+        "beppe",
+        "lidia",
+        "gino"
       ],
-      "requires_shown": [],
-      "variants": {
-        "rosa": "Una frase, sì… la diceva anche tu da bambino, sai. Cinque parole. Non ci ho mai capito niente.",
-        "nino": "Al bar, vent'anni fa, gliel'ho sentita dire una volta. Una cosa di passare per primi, mi pare.",
-        "don_carlo": "Avevano una formula, sì. Ci ho predicato contro per dieci anni senza mai sentirla per intero.",
-        "teresa": "Sì, dicevano sempre una cosa fra loro. Qualcosa di una porta, mi pare. O di un cancello.",
-        "lidia": "Ah, quella frase! La dicevano sempre, sempre la stessa. Chiedimi le parole e non te le so dire."
-      }
+      "requires_shown": []
     },
     "non_erano_gite": {
-      "text": "Non erano gite. Era una specie di setta: ci si trovava su alla cava per fare dei riti.",
+      "text": "Oltre alle uscite il Circolo praticava dei riti. Il racconto delle sole scampagnate nascondeva quella parte.",
       "truth": "true",
       "sources": [
         "anna",
         "laura",
         "matteo"
       ],
-      "requires_shown": [
-        "frase"
-      ]
+      "requires_shown": []
     },
     "padre_nel_circolo": {
-      "text": "Tuo padre era dei nostri. Otto anni, forse nove.",
+      "text": "Andrea Lipari frequentava il Circolo della Soglia, il gruppo di Vittorio.",
       "truth": "true",
       "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
         "anna",
         "laura",
-        "matteo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa",
+        "beppe",
+        "lidia",
+        "gino"
       ],
-      "requires_shown": [
-        "frase"
-      ]
+      "requires_shown": []
     },
     "magazzino_dove": {
-      "text": "La roba della cava l'hanno portata giù al magazzino: l'edificio davanti alla chiesa, dall'altro lato del fiume. Il diciassette.",
+      "text": "Il magazzino è al deposito ferroviario, dentro il fabbricato B, stanza 17 in fondo al corridoio. Andrea ne aveva la chiave B-17.",
       "truth": "true",
       "sources": [
-        "anna",
-        "laura"
-      ],
-      "requires_shown": [
-        "frase"
-      ]
-    },
-    "affitto": {
-      "text": "Tuo padre l'affitto di un posto l'ha pagato per vent'anni. Non gli ho mai chiesto di cosa.",
-      "truth": "true",
-      "sources": [
-        "rosa"
+        "anna"
       ],
       "requires_shown": []
     },
     "versione_paese": {
-      "text": "È stata una disgrazia. Erano andati su a vedere la cava, la montagna è venuta giù, e per quella creatura è stato un attimo.",
+      "text": "In paese Elena Valli è considerata morta nel crollo della cava del 1966. È la versione che si racconta, non una certezza su ciò che accadde alla bambina.",
       "truth": "half",
       "sources": [
         "rosa",
@@ -111,7 +95,7 @@
       "requires_shown": []
     },
     "elena_figlia_vittorio": {
-      "text": "Era la figlia di Vittorio Valli, quello che comandava.",
+      "text": "Elena era la figlia di Laura e Vittorio Valli.",
       "truth": "true",
       "sources": [
         "rosa",
@@ -130,7 +114,7 @@
       "requires_shown": []
     },
     "corpo_mai_trovato": {
-      "text": "Non l'hanno mai tirata fuori. Hanno murato la galleria e ci hanno messo la lapide.",
+      "text": "Il corpo di Elena non fu ritrovato dopo il crollo. Alla cava c’è il memoriale dei morti, al cimitero un ricordo senza il suo corpo.",
       "truth": "true",
       "sources": [
         "rosa",
@@ -149,7 +133,7 @@
       "requires_shown": []
     },
     "il_rito": {
-      "text": "Il rito voleva un sacrificio: qualcuno andava dato alla Soglia, calato nell'acqua in fondo alla Stanza, perché un morto potesse tornare. Chi scendeva non tornava su, e questo lo sapevano tutti.",
+      "text": "Il rito voleva che qualcuno passasse la Soglia, calato nell'acqua in fondo alla Stanza, e tornasse indietro perché un morto potesse tornare. Credevamo che sarebbe risalito. Sapevamo che era pericoloso.",
       "truth": "true",
       "sources": [
         "quaderno_vittorio",
@@ -164,21 +148,17 @@
       "sources": [
         "anna"
       ],
-      "requires_shown": [
-        "braccialetto"
-      ]
+      "requires_shown": []
     },
     "elena_prescelta": {
-      "text": "La prescelta era Elena, la figlia di Vittorio: sangue suo. Doveva morire là sotto, e nessuno di loro credeva altrimenti.",
+      "text": "La prescelta era Elena, la figlia di Vittorio: sangue suo. Doveva scendere e tornare indietro. Ci eravamo detti che era santo, anche se sapevamo che era pericoloso.",
       "truth": "true",
       "sources": [
         "anna",
         "laura",
         "matteo"
       ],
-      "requires_shown": [
-        "braccialetto"
-      ]
+      "requires_shown": []
     },
     "laura_non_cera": {
       "text": "Io lassù non c'ero. Sono rimasta a casa.",
@@ -186,33 +166,27 @@
       "sources": [
         "laura"
       ],
-      "requires_shown": [
-        "braccialetto"
-      ]
+      "requires_shown": []
     },
     "laura_assoggettata": {
-      "text": "Ero assoggettata a mio marito. Non giudicarmi.",
+      "text": "Vittorio aveva molta influenza su di me. Dopo la sua morte accettai la promessa che Elena sarebbe scesa e tornata; restai a casa pur sapendo dove la portavano.",
       "truth": "half",
       "sources": [
         "laura"
       ],
-      "requires_shown": [
-        "braccialetto"
-      ]
+      "requires_shown": []
     },
     "anna_solo_matteo": {
-      "text": "Quando sono scesa in paese, alla cava era rimasto solo Matteo.",
+      "text": "Durante la fuga vidi Matteo tornare verso l’imbocco della cava. Non so dove fossero tutti gli altri o che cosa trovò.",
       "truth": "true",
       "sources": [
         "anna"
       ],
-      "requires_shown": [
-        "braccialetto"
-      ],
+      "requires_shown": [],
       "counts_alone": true
     },
     "padre_nella_cava": {
-      "text": "Tuo padre quella notte c'era.",
+      "text": "Andrea, tuo padre, era alla cava la notte del crollo del 1966.",
       "truth": "true",
       "sources": [
         "anna",
@@ -221,7 +195,7 @@
       "requires_shown": []
     },
     "io_ero_con_lui": {
-      "text": "E c'eri anche tu. Ti aveva portato su, non aveva nessuno a cui lasciarti.",
+      "text": "Anche tu, Giorgio, eri alla cava la notte del crollo: Andrea ti aveva portato con sé perché non aveva a chi lasciarti.",
       "truth": "true",
       "sources": [
         "anna",
@@ -238,7 +212,7 @@
       "requires_shown": []
     },
     "matteo_la_porto_via": {
-      "text": "L'ho sentita sotto le pietre. L'ho tirata fuori io.",
+      "text": "Sentii Elena sotto le pietre dopo il crollo. La tirai fuori io, Matteo.",
       "truth": "true",
       "sources": [
         "matteo"
@@ -256,24 +230,16 @@
       "counts_alone": true
     },
     "matteo_non_dice_dove": {
-      "text": "Lasciala stare. Ha una vita che non c'entra niente con noi.",
+      "text": "So dove vive Elena, ma non voglio dirtelo né fare da tramite. Lasciala stare: ha una vita che non c’entra con noi.",
       "truth": "true",
       "sources": [
         "matteo"
       ],
       "requires_shown": [],
       "counts_alone": true
-    },
-    "matteo_cosa_ti_ricordi": {
-      "text": "Senti… ma tu, di preciso, cosa ti ricordi?",
-      "truth": "true",
-      "sources": [
-        "matteo"
-      ],
-      "requires_shown": []
     },
     "matteo_confessa": {
-      "text": "Quando ti sei girato ho visto tutto finire. Ho preso una pietra dal banco. Non ho deciso niente.",
+      "text": "Sì, sono stato io a colpirti con una pietra nel 1985 e a trascinarti nel castagneto.",
       "truth": "true",
       "sources": [
         "matteo"
@@ -281,61 +247,16 @@
       "requires_shown": [],
       "counts_alone": true
     },
-    "usciva_allegro": {
-      "text": "Quella sera è uscito dopo cena. Era allegro, la prima volta in mesi. Diceva che andava da uno che sapeva.",
-      "truth": "true",
-      "sources": [
-        "rosa"
-      ],
-      "requires_shown": []
-    },
     "dove_lo_trovai": {
-      "text": "Nel castagneto sopra la curva. Lì non ci si arriva camminando, e non ci si cade da soli.",
+      "text": "Ti trovai all’alba nel castagneto sopra la curva, lontano dal bordo della strada. Non vidi come eri arrivato lì o chi ti avesse fatto male.",
       "truth": "true",
       "sources": [
         "nino"
       ],
       "requires_shown": []
     },
-    "giovedi_sabato": {
-      "text": "Sei venuto da me di giovedì. Il sabato ti hanno trovato.",
-      "truth": "true",
-      "sources": [
-        "don_carlo"
-      ],
-      "requires_shown": []
-    },
-    "nessuno_denuncio": {
-      "text": "Si è detto che eri caduto. Poi si è smesso di dirlo. Nessuno ha mai denunciato niente.",
-      "truth": "true",
-      "sources": [
-        "rosa",
-        "nino",
-        "don_carlo",
-        "anna",
-        "laura",
-        "matteo",
-        "teresa",
-        "piero",
-        "marisa",
-        "beppe",
-        "lidia",
-        "gino"
-      ],
-      "requires_shown": []
-    },
-    "don_carlo_manda": {
-      "text": "Non posso dirti niente. Va' a parlare con Matteo.",
-      "truth": "true",
-      "sources": [
-        "don_carlo"
-      ],
-      "requires_shown": [
-        "braccialetto"
-      ]
-    },
     "wanda_una_persona_sola": {
-      "text": "Di questa faccenda io parlo con una persona sola, e non è lei.",
+      "text": "Di questa faccenda parlo con una persona che conosco. Torni con due righe scritte da chi l’ha mandata: saprò riconoscere se è una persona di cui mi fido.",
       "truth": "true",
       "sources": [
         "wanda"
@@ -351,127 +272,19 @@
       "requires_shown": []
     },
     "frase_per_riconoscersi": {
-      "text": "Quella frase se la dicevano per riconoscersi fra loro.",
+      "text": "Anna e Pietro si scambiavano questa battuta: uno diceva «Chi passa per primo» e l’altro rispondeva «tiene la porta».",
       "truth": "true",
       "sources": [
-        "rosa",
-        "nino",
-        "don_carlo",
-        "teresa",
         "lidia",
-        "anna",
-        "laura",
-        "matteo"
-      ],
-      "requires_shown": [
-        "frase"
-      ],
-      "variants": {
-        "rosa": "Ecco, sì… era quella. Ma tu dove l'hai sentita? Da chi?",
-        "nino": "Ah, adesso sì. Era quella. Se la dicevano fra loro per farsi riconoscere, come una parola d'ordine.",
-        "don_carlo": "…Sì. Era quella. Se la dicevano per riconoscersi, figliolo. Non chiedermi altro.",
-        "teresa": "Oh! Ma sì, era quella lì! Se la dicevano fra loro, per farsi capire che erano dei loro.",
-        "lidia": "Eccola. Era quella. Se la dicevano per riconoscersi — e adesso dimmi tu chi te l'ha insegnata.",
-        "anna": "…Dove l'hai sentita, quella. …Sì. Sì, la so. Era la nostra: se la dicevamo fra noi, per riconoscerci.",
-        "laura": "…Basta. Basta così. …Sì, la conosco. Era quella che si dicevano fra loro, per riconoscersi. Chi te l'ha insegnata?",
-        "matteo": "C-come fai a saperla, tu? …Chi te l'ha detta? …Sì, va bene, la so. Era una cosa che ci si diceva fra noi, per riconoscersi. Roba di ragazzi, Giorgio. Roba vecchia."
-      }
-    },
-    "foto_anna_e_pietro": {
-      "text": "Quello è Pietro Ferro, è morto nel crollo. E quella è Anna, sua moglie: sta ancora qui.",
-      "truth": "true",
-      "sources": [
-        "teresa",
-        "lidia",
-        "gino",
-        "beppe",
-        "marisa"
-      ],
-      "requires_shown": [
-        "fotografia"
-      ],
-      "variants": {
-        "teresa": "Aspetta che metto gli occhiali… Ma questo è Pietro Ferro! Poveretto, è rimasto sotto lui, nel crollo. E quella di fianco è la Anna, sua moglie — è ancora qui, in fondo alla strada. Vacci a parlare, che a lei fa piacere.",
-        "lidia": "Questo qui è Pietro Ferro, è uno dei tre rimasti sotto. E quella è la Anna, la moglie: la trovi in casa, non esce quasi mai. Se le porti quella foto ti dice più lei di me.",
-        "gino": "Oh, ma quello è Ferro! Il marito della Anna, quello morto nella frana. Lei è ancora viva, sta qui in paese — vacci, che se c'è una che se le ricorda quelle cose è lei.",
-        "beppe": "Pietro Ferro, quello. È morto lassù. La moglie è la Anna, viene a prendere il pane il sabato. Chiedi a lei.",
-        "marisa": "Quello è Pietro Ferro — è uno dei tre della cava. La moglie, la Anna, è ancora qui: sta in fondo, verso ponente. Parlaci tu, che io il banco non lo lascio."
-      }
-    },
-    "foto_matteo": {
-      "text": "Quello è Matteo Sardi, il falegname. La bottega è sulla strada alta, appena sopra la curva.",
-      "truth": "true",
-      "sources": [
-        "teresa",
-        "lidia",
-        "beppe",
-        "gino",
-        "marisa"
-      ],
-      "requires_shown": [
-        "fotografia"
-      ],
-      "variants": {
-        "teresa": "E questo qui è il Sardi, Matteo. Il falegname, quello che aggiusta le sedie a tutte noi. La bottega è su in alto, appena passata la curva. Da ragazzo era un bel ragazzo, sai.",
-        "lidia": "Matteo Sardi. Viene qui tutti i giorni alle undici e mezza, da vent'anni. La bottega ce l'ha sulla strada alta, sopra la curva — non puoi sbagliare, si sente l'odore del legno.",
-        "beppe": "Quello è Matteo, il falegname. Bottega sulla strada alta. Prende il pane la mattina, o lo prendeva.",
-        "gino": "Ah, il Sardi! Con lui ci ho lavorato, gli ho tirato su il muretto dietro. Sta su, oltre la curva, dove c'è la bottega.",
-        "marisa": "Matteo Sardi, il falegname. Sale e scende da lì tutti i giorni: la bottega è sulla strada alta."
-      }
-    },
-    "foto_andrea": {
-      "text": "Quello è tuo padre, Andrea. Brava persona, un po' chiuso.",
-      "truth": "half",
-      "sources": [
-        "teresa",
-        "piero",
-        "lidia",
-        "gino"
-      ],
-      "requires_shown": [
-        "fotografia"
-      ],
-      "variants": {
-        "teresa": "Oh… ma questo è tuo padre. Andrea. Che brav'uomo era, poveretto. Un po' chiuso, ecco, negli ultimi anni non parlava quasi più con nessuno.",
-        "piero": "Tuo padre. Sì, è lui. Brava persona. Di quelli che salutano e tirano dritto.",
-        "lidia": "Andrea. Tuo padre, sì. Veniva qui a prendere il caffè e non diceva una parola. Buon uomo, però.",
-        "gino": "Ma quello è il tuo vecchio! Andrea Lipari. Mi dispiace ancora, sai, era una brava persona."
-      }
-    },
-    "foto_vittorio": {
-      "text": "Quello in mezzo è Vittorio Valli. Comandava lui, in quella compagnia. È morto di malattia, la primavera prima della frana.",
-      "truth": "true",
-      "sources": [
-        "teresa",
-        "gino",
-        "beppe",
-        "piero"
-      ],
-      "requires_shown": [
-        "fotografia"
-      ],
-      "variants": {
-        "teresa": "Quello in mezzo, quello con il cappotto buono, è Vittorio Valli. Comandava lui. È morto di malattia, poveretto, la primavera prima della disgrazia.",
-        "gino": "Quello lì è il Valli, Vittorio. Uno che parlava e gli altri stavano a sentire. È morto prima della frana, di male.",
-        "beppe": "Vittorio Valli. Quello davanti a tutti, vedi? Sempre lui davanti. Morto di malattia nel '66, in primavera.",
-        "piero": "Il Valli. Comandava lui quella compagnia lì. È morto prima, di malattia."
-      }
-    },
-    "foto_laura": {
-      "text": "Quella è Laura Valli, la moglie di Vittorio. Abita ancora qui, in cima alla strada.",
-      "truth": "true",
-      "sources": [
-        "teresa",
         "marisa",
-        "lidia"
+        "beppe",
+        "anna"
       ],
       "requires_shown": [
         "fotografia"
       ],
       "variants": {
-        "teresa": "E quella di fianco a lui è la Laura, sua moglie. È ancora viva, sta in cima alla strada, di fronte alla bottega. È quella a cui è morta la bambina, poveretta.",
-        "marisa": "Quella è la Valli, Laura. La moglie di Vittorio. Viene a fare la spesa il martedì. Sta su in cima, dall'altra parte della strada rispetto alla bottega.",
-        "lidia": "La Laura. Vedova Valli. Sta in cima alla strada e non scende quasi mai — dopo quella storia della bambina non è più stata quella di prima."
+        "anna": "Fra me e Pietro uno diceva «Chi passa per primo» e l’altro rispondeva «tiene la porta»."
       }
     },
     "vittorio_morto": {
@@ -497,14 +310,23 @@
       "text": "Il Circolo era roba di Vittorio Valli: l'aveva messo su lui, e comandava lui.",
       "truth": "true",
       "sources": [
+        "rosa",
+        "nino",
+        "don_carlo",
         "anna",
         "laura",
-        "don_carlo"
+        "matteo",
+        "teresa",
+        "piero",
+        "marisa",
+        "beppe",
+        "lidia",
+        "gino"
       ],
       "requires_shown": []
     },
     "nino_giacca": {
-      "text": "Accanto a te, nel castagneto, c'era una giacca da uomo, buttata fra le foglie. L'ho raccolta quella mattina e l'ho tenuta: nessuno me l'ha mai chiesta. Tienila tu.",
+      "text": "Ho trovato oggi una giacca vicino al punto del castagneto dove ti avevo trovato due anni fa. Non l’avevo raccolta allora. Tienila tu, forse qualcuno la riconosce.",
       "truth": "true",
       "sources": [
         "nino"
@@ -518,7 +340,11 @@
       "sources": [
         "rosa",
         "anna",
-        "laura"
+        "laura",
+        "lidia",
+        "marisa",
+        "beppe",
+        "piero"
       ],
       "counts_alone": true,
       "requires_shown": [
@@ -526,10 +352,30 @@
       ]
     },
     "padre_ricerche": {
-      "text": "Negli ultimi anni tuo padre cercava qualcuno. Era diventato un chiodo fisso, ci stava perdendo la testa. Non ho mai saputo chi, e non gliel'ho mai chiesto.",
+      "text": "Negli ultimi anni Andrea era assorbito da una ricerca e si assentava spesso.",
       "truth": "true",
       "sources": [
-        "rosa"
+        "rosa",
+        "piero"
+      ],
+      "requires_shown": [],
+      "variants": {
+        "rosa": "Negli ultimi anni Andrea cercava qualcuno e si assentava spesso. Non ho mai saputo chi cercasse."
+      }
+    },
+    "andrea_cercava_elena": {
+      "text": "Andrea cercava Elena perché era convinto che potesse essere sopravvissuta. A me, Piero, non mostrò una prova e non diede un recapito verificato.",
+      "truth": "true",
+      "sources": [
+        "piero"
+      ],
+      "requires_shown": []
+    },
+    "giorgio_continuo_ricerche": {
+      "text": "Dopo la morte di Andrea nel 1981 continuasti tu a cercare Elena: volevi verificare ciò che tuo padre non era riuscito a chiarire. Ne parlavi con me prima del coma.",
+      "truth": "true",
+      "sources": [
+        "piero"
       ],
       "requires_shown": []
     }

@@ -3,49 +3,27 @@ using UnityEngine.UI;
 
 namespace AmnesiaUnity
 {
-    /// L'aspetto dell'interfaccia, in un posto solo.
-    ///
-    /// L'idea: quello che il giocatore ha davanti non e' un'interfaccia di
-    /// gioco, e' l'incartamento di Giorgio. Un uomo che non si fida della
-    /// propria memoria scrive tutto a macchina e lo tiene in una cartella: per
-    /// questo il taccuino, i nomi e le etichette sono in Courier, e solo le
-    /// voci della gente hanno il carattere di un libro.
-    ///
-    /// L'ottone e' la firma, e si spende una volta sola per schermata: e' il
-    /// colore della targhetta legata alla chiave, e segna la cosa dentro cui sei
-    /// adesso — il nome di chi hai davanti, la pagina aperta. Tutto il resto e'
-    /// carta e grafite.
+    /// Interfaccia low poly: un solo font, superfici piatte e contrasti netti.
     public static class Stile
     {
-        public static readonly Color Notte = new Color(0.071f, 0.067f, 0.055f, 0.95f);
-        public static readonly Color Velo = new Color(0.043f, 0.043f, 0.039f, 0.97f);
-        public static readonly Color Carta = new Color(0.902f, 0.875f, 0.800f);
-        public static readonly Color Grafite = new Color(0.549f, 0.522f, 0.467f);
-        public static readonly Color Ottone = new Color(0.753f, 0.596f, 0.247f);
-        public static readonly Color Ruggine = new Color(0.549f, 0.290f, 0.196f);
-        public static readonly Color Incavo = new Color(1f, 1f, 1f, 0.05f);
+        public static readonly Color Notte = new Color(.08f, .11f, .14f, .98f);
+        public static readonly Color Velo = new Color(.035f, .05f, .065f, .98f);
+        public static readonly Color Carta = new Color(.91f, .95f, .96f);
+        public static readonly Color Grafite = new Color(.63f, .71f, .76f);
+        public static readonly Color Ottone = new Color(.40f, .82f, .68f);
+        public static readonly Color Ruggine = new Color(.92f, .48f, .34f);
+        public static readonly Color Incavo = new Color(.26f, .34f, .39f, .65f);
+        public static readonly Color Pannello = new Color(.13f, .18f, .22f);
+        public static readonly Color Bordo = new Color(.30f, .39f, .44f);
 
-        private static Font _macchina;
-        private static Font _libro;
+        private static Font _interfaccia;
+        public static Font Interfaccia => _interfaccia != null
+            ? _interfaccia
+            : _interfaccia = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
-        /// Courier Prime, per tutto cio' che e' scritto invece che detto.
-        public static Font Macchina => _macchina != null
-            ? _macchina
-            : _macchina = Carattere("CourierPrime-Regular");
-
-        /// Crimson Text, per le voci. Un carattere da libro perche' le battute
-        /// sono l'unica cosa di questo gioco che non e' un documento.
-        public static Font Libro => _libro != null
-            ? _libro
-            : _libro = Carattere("CrimsonText-Regular");
-
-        private static Font Carattere(string nome)
-        {
-            var caricato = Resources.Load<Font>("font/" + nome);
-            // Un carattere che non c'e' non deve lasciare l'interfaccia muta:
-            // meglio brutta e leggibile che vuota.
-            return caricato != null ? caricato : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        }
+        // Alias per i chiamanti esistenti: dialoghi, menu e HUD usano lo stesso font.
+        public static Font Macchina => Interfaccia;
+        public static Font Libro => Interfaccia;
 
         public static Canvas Tela(string nome, int ordine)
         {
