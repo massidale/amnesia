@@ -33,6 +33,9 @@ namespace AmnesiaUnity
         private ScrollRect _rullo;
         private string _con = "";
         private bool _inAttesa;
+        private Text _attesa;
+        private float _inizioAttesa;
+        private static readonly string[] FasiAttesa = { "Sta rispondendo.  ", "Sta rispondendo.. ", "Sta rispondendo..." };
         private Button _richiesta;
         private Text _testoRichiesta;
         private string _oggettoRichiesto = "";
@@ -103,6 +106,11 @@ namespace AmnesiaUnity
             _campo.lineType = InputField.LineType.SingleLine;
             _campo.caretColor = Stile.Ottone;
             _campo.customCaretColor = true;
+            _attesa = Stile.Scritta(riga, Stile.Macchina, 18, Stile.Ottone,
+                new Vector2(0.012f, 0f), new Vector2(0.99f, 1f));
+            _attesa.alignment = TextAnchor.MiddleLeft;
+            _attesa.raycastTarget = false;
+            _attesa.gameObject.SetActive(false);
             // onEndEdit scatta anche quando il campo perde il fuoco: senza il
             // filtro sull'invio, cliccare altrove manderebbe una battuta.
             _campo.onEndEdit.AddListener(testo =>
@@ -173,6 +181,7 @@ namespace AmnesiaUnity
 
         private void Update()
         {
+            if (_inAttesa) AggiornaAttesa(Time.unscaledTime - _inizioAttesa);
             // La rotella scorre solo dove sta il puntatore; questi funzionano
             // anche con le mani sulla tastiera, che e' dove stanno mentre parli.
             if (Aperto && _rullo != null)
@@ -211,9 +220,9 @@ namespace AmnesiaUnity
                 _campo.ActivateInputField();
                 return;
             }
-            _inAttesa = true;
             _campo.text = "";
-            _stato.text = "sta rispondendo…";
+            ImpostaAttesa(true);
+            _stato.text = "";
 
             TurnResult turno;
             try
@@ -226,7 +235,7 @@ namespace AmnesiaUnity
                 // mondo non si e' mosso, e il giocatore ha diritto di saperlo.
                 _stato.color = Stile.Ruggine;
                 _stato.text = $"non ha risposto — {errore.GetType().Name}";
-                _inAttesa = false;
+                ImpostaAttesa(false);
                 _campo.ActivateInputField();
                 return;
             }
@@ -264,8 +273,27 @@ namespace AmnesiaUnity
                 _stato.color = Stile.Ruggine;
                 _stato.text = $"non ha risposto — {turno.Message}";
             }
-            _inAttesa = false;
+            ImpostaAttesa(false);
             _campo.ActivateInputField();
+        }
+
+        private void ImpostaAttesa(bool attiva)
+        {
+            _inAttesa = attiva;
+            _attesa.gameObject.SetActive(attiva);
+            _campo.interactable = !attiva;
+            _richiesta.interactable = !attiva;
+            _fila.gameObject.SetActive(!attiva);
+            if (attiva)
+            {
+                _inizioAttesa = Time.unscaledTime;
+                AggiornaAttesa(0f);
+            }
+        }
+
+        private void AggiornaAttesa(float secondi)
+        {
+            _attesa.text = FasiAttesa[Mathf.FloorToInt(Mathf.Max(0f, secondi) / .4f) % FasiAttesa.Length];
         }
 
         /// Gli oggetti che hai addosso, uno per targhetta. Cliccarne una scrive

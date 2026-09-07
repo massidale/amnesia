@@ -142,6 +142,9 @@ namespace AmnesiaUnity.Editor.SanRocco
             Debug.Log("FOTOGRAFIA_ALLINEATA: otto persone, prefab e icona aggiornati.");
         }
 
+        [MenuItem("Amnesia/San Rocco 1987/Aggiorna solo icone inventario")]
+        public static void RefreshIcons() => RenderIcons();
+
         static void RenderIcons(string[] ids = null)
         {
             var directory=Folder+"/Icone";Directory.CreateDirectory(directory);
@@ -150,10 +153,10 @@ namespace AmnesiaUnity.Editor.SanRocco
             camera.enabled=false;camera.orthographic=true;camera.orthographicSize=1.05f;
             camera.nearClipPlane=.1f;camera.farClipPlane=8;
             camera.transform.localPosition=V(0,2.2f,-2.7f);camera.transform.LookAt(studio.transform);
-            camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.79f,.82f,.79f);
+            camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;
             var lamp=Group("luce",studio.transform).gameObject.AddComponent<Light>();
             lamp.transform.localPosition=V(-1,2,-2);lamp.type=LightType.Point;lamp.range=7;lamp.intensity=2.2f;
-            var target=new RenderTexture(256,256,24){antiAliasing=4};target.Create();camera.targetTexture=target;
+            var target=new RenderTexture(256,256,24,RenderTextureFormat.ARGB32){antiAliasing=4};target.Create();camera.targetTexture=target;
             var previous=RenderTexture.active;
             try
             {
@@ -165,7 +168,7 @@ namespace AmnesiaUnity.Editor.SanRocco
                     float scale=1.5f/Mathf.Max(bounds.size.x,bounds.size.y,bounds.size.z);
                     model.transform.localScale*=scale;model.transform.localPosition=(studio.transform.position-bounds.center)*scale;
                     camera.Render();RenderTexture.active=target;
-                    var image=new Texture2D(256,256,TextureFormat.RGB24,false);
+                    var image=new Texture2D(256,256,TextureFormat.RGBA32,false);
                     image.ReadPixels(new Rect(0,0,256,256),0,0);image.Apply();
                     File.WriteAllBytes(directory+"/"+id+".png",image.EncodeToPNG());
                     Object.DestroyImmediate(image);Object.DestroyImmediate(model);

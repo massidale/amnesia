@@ -55,7 +55,7 @@ namespace AmnesiaUnity
             _camera.orthographic = true; _camera.orthographicSize = 1.12f;
             _camera.nearClipPlane = .1f; _camera.farClipPlane = 8;
             _camera.clearFlags = CameraClearFlags.SolidColor;
-            _camera.backgroundColor = new Color(.79f,.82f,.79f,1);
+            _camera.backgroundColor = Color.clear;
             _camera.enabled = false;
             _texture = new RenderTexture(512,512,24,RenderTextureFormat.ARGB32) { antiAliasing = 4 };
             _texture.Create(); _camera.targetTexture = _texture;
