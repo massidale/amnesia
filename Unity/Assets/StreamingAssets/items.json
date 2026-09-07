@@ -2,14 +2,14 @@
   {
     "id": "fotografia",
     "name": "fotografia",
-    "visible": "Una fotografia in bianco e nero, il bordo dentellato, la carta ingiallita. Undici persone in fila davanti all'imbocco di una cava, in posa, vestite bene. Sul retro, a matita: «Circolo della Soglia — 1961».",
-    "description": "Undici facce che guardano l'obiettivo. Due le conosco: mio padre, e il falegname che abita a duecento metri da casa mia. Le altre nove sono facce e basta."
+    "visible": "Una fotografia in bianco e nero, il bordo dentellato, la carta ingiallita. Otto persone in fila davanti all'imbocco di una cava, in posa. Sul retro, a matita: «Circolo della Soglia — 1961».",
+    "description": "La stampa conservata da Don Carlo. Riconosco mio padre, mia madre e Matteo da giovane. Le altre facce sono ancora nomi da ritrovare."
   },
   {
     "id": "frase",
     "name": "frase",
-    "visible": "Cinque parole, dette a voce o lette dalla prima pagina di un taccuino: «Chi passa per primo tiene la porta».",
-    "description": "Cinque parole che non vogliono dire niente. Le ripetevo da bambino, e mia madre dice che avevo ricominciato a dirle prima del coma."
+    "visible": "Un frammento ricordato da Rosa: «Chi passa per primo…».",
+    "description": "Mia madre mi sentiva ripetere queste parole da bambino e prima del coma. Non ricorda come finisse la frase."
   },
   {
     "id": "foglio_indirizzo",
@@ -26,7 +26,7 @@
   {
     "id": "taccuino",
     "name": "taccuino",
-    "visible": "Un taccuino a righe con la copertina di tela, gonfio d'uso. Le pagine sono piene di righe scritte a mano, ognuna con accanto una data.",
+    "visible": "Un taccuino nuovo a righe, con la copertina di tela. Rosa me lo ha dato per annotare le cose che scopro.",
     "description": "Il mio taccuino. Ci scrivo quello che mi viene detto, con la data, perché di quello che ricordo non mi fido più."
   },
   {
@@ -56,7 +56,7 @@
   {
     "id": "giacca",
     "name": "giacca",
-    "visible": "Una giacca da uomo, di fustagno, consumata. Me l'ha data Nino: dice di averla trovata fra le foglie del castagneto, a due passi da dove ha trovato me.",
+    "visible": "Una giacca da uomo di fustagno, sporca e scolorita, con una toppa riconoscibile. Nino l’ha trovata oggi sotto un groviglio di rami sul bordo del castagneto, vicino al punto dove mi soccorse nel 1985.",
     "description": "Una giacca che non è mia. Chi la conosce sa di chi è."
   },
   {

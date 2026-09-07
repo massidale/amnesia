@@ -9,25 +9,29 @@ namespace Amnesia.Dialogue;
 public sealed record PlayerUtterance(
     string Spoken,
     IReadOnlyList<string> ShownItemIds,
-    IReadOnlyList<string> InvalidTags);
+    IReadOnlyList<string> InvalidTags)
+{
+    public IReadOnlyList<string> RequestedItemIds { get; init; } = Array.Empty<string>();
+}
 
 /// Il confine di sicurezza del gioco: un modello puo' mentire a parole, ma non
 /// puo' muovere la merce. Il tag `[mostra: <oggetto>]` lo legge il motore — mai
 /// il modello — ed e' qui, e solo qui, che si decide cosa il giocatore possiede.
-/// C'e' un canale solo: i vecchi tag di dono e di offerta sono stati tolti, e con
-/// loro la superficie che si portavano dietro.
+/// Le richieste `[richiedi: <oggetto>]` vengono risolte qui ma autorizzate
+/// dalla sessione secondo interlocutore e stato; non concedono il possesso.
 public static class PlayerInput
 {
     // Insensibile alle maiuscole e tollerante allo spazio prima dei due punti:
     // ogni variante di sintassi va tolta, o il testo di un tag forgiato resta in
     // piedi e arriva al prompt.
     private static readonly Regex TagPattern =
-        new(@"\[mostra\s*:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
+        new(@"\[(mostra|richiedi)\s*:\s*([^\]]+)\]", RegexOptions.IgnoreCase);
 
     public static PlayerUtterance Parse(string raw, WorldState world, ItemCatalog items, string playerId)
     {
         var shown = new List<string>();
         var invalid = new List<string>();
+        var requested = new List<string>();
         var spoken = raw;
         // Ogni passata cerca sul testo gia' ripulito, mai sull'input originale: i
         // tag si annidano, e toglierne uno insieme ne mutila e ne espone altri.
@@ -40,7 +44,16 @@ public static class PlayerInput
             var before = spoken;
             foreach (Match tag in TagPattern.Matches(before))
             {
-                var wanted = tag.Groups[1].Value.Trim();
+                var wanted = tag.Groups[2].Value.Trim();
+                if (tag.Groups[1].Value.Equals("richiedi", StringComparison.OrdinalIgnoreCase))
+                {
+                    var item = items.Items.FirstOrDefault(i => new[] { i.Id, i.Name, i.Visible }
+                        .Any(s => s.Length > 0 && s.Equals(wanted, StringComparison.OrdinalIgnoreCase)));
+                    if (item is null) invalid.Add(wanted);
+                    else if (!requested.Contains(item.Id)) requested.Add(item.Id);
+                    spoken = spoken.Replace(tag.Value, "");
+                    continue;
+                }
                 var itemId = Resolve(wanted, world, items, playerId);
                 if (itemId.Length == 0)
                 {
@@ -58,7 +71,7 @@ public static class PlayerInput
             }
         }
         spoken = spoken.Replace("  ", " ").Replace(" ,", ",").Replace(" .", ".").Trim();
-        return new PlayerUtterance(spoken, shown, invalid);
+        return new PlayerUtterance(spoken, shown, invalid) { RequestedItemIds = requested };
     }
 
     /// Ogni nome con cui il giocatore puo' aver letto la cosa. L'id e' quello che

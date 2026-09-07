@@ -44,7 +44,11 @@ public sealed class DeclarationService
                     tutte.Add(id);
                 }
             }
-            return tutte;
+            return tutte.Concat(_declarations.Ids.Where(id =>
+            {
+                var d = _declarations.Find(id)!;
+                return d.Sources.Contains(npcId) && (d.RequiresShown.Count > 0 || d.RequiresAnyShown.Count > 0);
+            })).Distinct().ToList();
         }
         return _declarations.Ids.Where(id => _declarations.Find(id)!.Sources.Contains(npcId)).ToList();
     }
@@ -114,8 +118,9 @@ public sealed class DeclarationService
                 var d = declarations.Find(id);
                 return d is not null
                     && d.Sources.Contains(npcId)
-                    && d.RequiresShown.Count > 0
+                    && (d.RequiresShown.Count > 0 || d.RequiresAnyShown.Count > 0)
                     && d.RequiresShown.All(shown.Contains)
+                    && (d.RequiresAnyShown.Count == 0 || d.RequiresAnyShown.Any(shown.Contains))
                     && !governateDallaScala.Contains(id);
             });
             return positions.Granted(npcId, world).Concat(perOggetto).Distinct().ToList();
@@ -127,6 +132,7 @@ public sealed class DeclarationService
                 var declaration = declarations.Find(id);
                 return declaration is not null
                     && declaration.Sources.Contains(npcId)
+                    && (declaration.RequiresAnyShown.Count == 0 || declaration.RequiresAnyShown.Any(shown.Contains))
                     && declaration.RequiresShown.All(shown.Contains);
             })
             .ToList();

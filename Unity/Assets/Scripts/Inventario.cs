@@ -16,16 +16,13 @@ namespace AmnesiaUnity
         private static readonly string[] PrimaPagina = { "frase", "taccuino" };
 
         /// La prima pagina, scritta all'ospedale. Sono due righe, e sono tutto
-        /// il gioco: cinque parole che non vogliono dire niente e un nome di
+        /// il gioco: un frammento di frase e un nome di
         /// donna. Nessuna delle due, per Giorgio, significa ancora qualcosa.
         private static string PrimeDueRighe(Bootstrap gioco)
         {
-            var scritto = new StringBuilder("PRIMA PAGINA — scritta all'ospedale, sotto dettatura di mia madre\n");
-            var frase = gioco.Items.Find("frase");
-            if (frase != null)
-            {
-                scritto.Append(frase.Visible).Append('\n');
-            }
+            if (!gioco.World.ItemOwners.ContainsKey("taccuino")) return "";
+            var scritto = new StringBuilder("PRIMA PAGINA — le parole ricordate da mia madre\n");
+            scritto.Append("Chi passa per primo…\n");
             scritto.Append("Elena. Ripetevo anche questo nome, da bambino. Mia madre non l'ha mai collegato a niente.\n\n");
             return scritto.ToString();
         }
@@ -70,6 +67,7 @@ namespace AmnesiaUnity
         /// bussola del giocatore, non un archivio.
         public static string Righe(Bootstrap gioco)
         {
+            if (!gioco.World.ItemOwners.ContainsKey("taccuino")) return "Non hai ancora un taccuino.";
             var scritto = new StringBuilder(PrimeDueRighe(gioco));
             var righe = gioco.Taccuino.Convinzioni();
             if (righe.Count == 0)

@@ -37,6 +37,9 @@ public sealed class PositionStep
     [JsonPropertyName("requires_declared")]
     public List<string> RequiresDeclared { get; set; } = new();
 
+    [JsonPropertyName("requires_owned")]
+    public List<string> RequiresOwned { get; set; } = new();
+
     /// Gli oggetti che passano di mano quando questo gradino viene raggiunto.
     /// E' l'unico canale con cui un personaggio DA' qualcosa al giocatore: il
     /// modello puo' raccontare la consegna come vuole, ma la merce la muove il
@@ -204,6 +207,8 @@ public sealed class PositionTable
     private static bool Satisfied(
         PositionStep step, WorldState world, string npcId, IReadOnlyList<string> shown, Register register)
     {
+        if (step.RequiresOwned.Any(id => !world.ItemOwners.TryGetValue(id, out var owner) || owner != "player"))
+            return false;
         if (step.RequiresShown.Any(itemId => !shown.Contains(itemId)))
         {
             return false;

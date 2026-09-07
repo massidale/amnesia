@@ -153,12 +153,11 @@ adesso lo deserializza la prova in `Amnesia.Domain.Tests/Content/`.
 
 Il catalogo dice **cosa sono** le cose, non **di chi sono**: `ItemDefinition` non
 ha un proprietario, perché chi possiede cosa è stato di partita e si salva col
-resto. I quattro oggetti che Giorgio ha addosso al risveglio — `fotografia`,
-`foglio_indirizzo`, `chiave_b17`, `taccuino` — glieli deve mettere in mano il
-motore; questo file non può dirlo.
+resto. Al primo incontro Rosa restituisce `foglio_indirizzo` e `chiave_b17`
+e consegna un `taccuino` nuovo. La `fotografia` viene richiesta a Don Carlo;
+le `due_righe_matteo` si richiedono dopo la confessione. Le azioni esplicite
+usano `[richiedi: id]`; il dominio ne verifica interlocutore e condizioni.
 
-`frase` è un oggetto come gli altri e sta sulla prima pagina del taccuino. Non è
-una cosa che si porta: è una cosa che si dice, e mostrarla significa pronunciarla
-in faccia a qualcuno. È l'unico oggetto del gioco la cui faccia visibile è
-esattamente il suo contenuto — cinque parole — e che è insieme innocuo e
-insostenibile, a seconda di chi le ascolta.
+`frase` resta un identificativo contestuale, non un oggetto da mostrare.
+Il taccuino iniziale contiene solo «Chi passa per primo…». La formula completa
+ha sette parole e si apprende dalle reazioni alla fotografia; si usa dicendola.

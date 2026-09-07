@@ -73,7 +73,11 @@
       "sources": [
         "anna"
       ],
-      "requires_shown": []
+      "requires_shown": [],
+      "requires_any_shown": [
+        "frase",
+        "chiave_b17"
+      ]
     },
     "versione_paese": {
       "text": "In paese Elena Valli è considerata morta nel crollo della cava del 1966. È la versione che si racconta, non una certezza su ciò che accadde alla bambina.",
@@ -280,12 +284,14 @@
         "beppe",
         "anna"
       ],
-      "requires_shown": [
-        "fotografia"
-      ],
+      "requires_shown": [],
       "variants": {
         "anna": "Fra me e Pietro uno diceva «Chi passa per primo» e l’altro rispondeva «tiene la porta»."
-      }
+      },
+      "requires_any_shown": [
+        "fotografia",
+        "frase"
+      ]
     },
     "vittorio_morto": {
       "text": "Vittorio Valli è morto in primavera, nel '66, di malattia. Pochi mesi prima della frana.",

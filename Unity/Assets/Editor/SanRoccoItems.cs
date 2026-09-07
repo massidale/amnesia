@@ -119,7 +119,30 @@ namespace AmnesiaUnity.Editor.SanRocco
             RenderIcons();
         }
 
-        static void RenderIcons()
+        [MenuItem("Amnesia/San Rocco 1987/Allinea fotografia narrativa")]
+        public static void AlignPhotograph()
+        {
+            if (EditorApplication.isPlaying) throw new InvalidOperationException("Uscire da Play.");
+            Begin("foto_allineata_");
+            var p = Group("fotografia");
+            try
+            {
+                Photograph(p);
+                var box = p.gameObject.AddComponent<BoxCollider>();
+                box.center = V(0, .004f, 0);
+                box.size = V(.24f, .01f, .17f);
+                PrefabUtility.SaveAsPrefabAsset(p.gameObject, Folder + "/fotografia.prefab");
+            }
+            finally { Object.DestroyImmediate(p.gameObject); Begin(); }
+            RenderIcons(new[] { "fotografia" });
+            AssetDatabase.SaveAssets();
+            var photo = AssetDatabase.LoadAssetAtPath<GameObject>(Folder + "/fotografia.prefab");
+            if (photo.GetComponentsInChildren<Transform>().Count(t => t.name.StartsWith("persona_")) != 8)
+                throw new Exception("La fotografia deve contenere otto persone.");
+            Debug.Log("FOTOGRAFIA_ALLINEATA: otto persone, prefab e icona aggiornati.");
+        }
+
+        static void RenderIcons(string[] ids = null)
         {
             var directory=Folder+"/Icone";Directory.CreateDirectory(directory);
             var studio=new GameObject("studio_temporaneo_oggetti");studio.transform.position=V(12000,12000,12000);
@@ -134,7 +157,7 @@ namespace AmnesiaUnity.Editor.SanRocco
             var previous=RenderTexture.active;
             try
             {
-                foreach(var id in Ids)
+                foreach(var id in ids ?? Ids)
                 {
                     var model=Instance(id,studio.transform,Vector3.zero);
                     var renderers=model.GetComponentsInChildren<Renderer>();var bounds=renderers[0].bounds;
@@ -269,9 +292,9 @@ namespace AmnesiaUnity.Editor.SanRocco
                 Part(p,"bordo_dentellato",V(-.114f+i*.015f,.001f,z),V(.01f,.002f,.006f),Paper);
             Part(p,"stampa_cava",V(0,.0045f,0),V(.213f,.001f,.143f),Mat("oggetti_foto_grigio","#78827D"));
             for(int i=0;i<5;i++) Part(p,"gradone_fotografato",V(0,.005f,.054f-i*.007f),V(.208f,.001f,.003f),Mat("oggetti_foto_roccia","#ACB0A1"));
-            for(int i=0;i<11;i++)
+            for(int i=0;i<8;i++)
             {
-                float x=-.091f+i*.0182f,z=-.022f+(i%3)*.003f;
+                float x=-.084f+i*.024f,z=-.022f+(i%3)*.003f;
                 Part(p,"persona_"+(i+1),V(x,.006f,z),V(.012f,.001f,.038f),Ink);
                 Part(p,"volto_"+(i+1),V(x,.006f,z+.023f),V(.009f,.001f,.011f),Paper);
             }

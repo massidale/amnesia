@@ -134,7 +134,7 @@ public class TabelleTests
 
     private static readonly IReadOnlyDictionary<string, string> Provenienza = new Dictionary<string, string>
     {
-        ["fotografia"] = Risveglio,
+        ["fotografia"] = "don_carlo",
         ["frase"] = Risveglio,
         ["foglio_indirizzo"] = Risveglio,
         ["chiave_b17"] = Risveglio,
@@ -153,8 +153,8 @@ public class TabelleTests
     {
         Assert.That(Declarations().Ids.Count, Is.GreaterThanOrEqualTo(25),
             "meno di venticinque righe non e' un'indagine");
-        Assert.That(Scale().Keys, Is.EquivalentTo(new[] { "matteo", "anna", "laura", "don_carlo", "nino" }),
-            "hanno una scala i quattro guardinghi — e Nino, che tiene la giacca");
+        Assert.That(Scale().Keys, Is.EquivalentTo(new[] { "matteo", "anna", "laura", "wanda", "nino" }),
+            "scale per confessioni, ritrovamento e accesso di Wanda");
     }
 
     /// Orfani nella prima direzione: un gradino che concede un id che la tabella
@@ -194,7 +194,8 @@ public class TabelleTests
             // una persona che non nasconde niente, oppure un documento che la
             // dice a chi lo legge.
             var senzaScala = table.SourcesOf(declarationId).Any(source => !positions.HasLadder(source));
-            if (!concesse.Contains(declarationId) && !senzaScala)
+            var contestuale = table.Find(declarationId)!.RequiresShown.Count > 0 || table.Find(declarationId)!.RequiresAnyShown.Count > 0;
+            if (!concesse.Contains(declarationId) && !senzaScala && !contestuale)
             {
                 mute.Add(declarationId);
             }
@@ -234,7 +235,7 @@ public class TabelleTests
         var inventati = new List<string>();
         foreach (var declarationId in table.Ids)
         {
-            foreach (var itemId in table.RequiresShown(declarationId))
+            foreach (var itemId in table.RequiresShown(declarationId).Concat(table.Find(declarationId)!.RequiresAnyShown))
             {
                 if (!oggetti.Contains(itemId))
                 {
@@ -244,7 +245,7 @@ public class TabelleTests
         }
         foreach (var (npcId, ladder) in Scale())
         {
-            foreach (var itemId in ladder.SelectMany(step => step.RequiresShown))
+            foreach (var itemId in ladder.SelectMany(step => step.RequiresShown.Concat(step.RequiresAnyShown).Concat(step.RequiresOwned)))
             {
                 if (!oggetti.Contains(itemId))
                 {
@@ -286,7 +287,7 @@ public class TabelleTests
         {
             foreach (var step in ladder)
             {
-                foreach (var itemId in step.RequiresShown)
+                foreach (var itemId in step.RequiresShown.Concat(step.RequiresAnyShown).Concat(step.RequiresOwned))
                 {
                     if (!Provenienza.TryGetValue(itemId, out var da))
                     {
@@ -309,11 +310,11 @@ public class TabelleTests
     }
 
     [Test]
-    public void IQuattroSenzaScalaHannoQualcosaDaDire()
+    public void IPersonaggiSenzaScalaHannoQualcosaDaDire()
     {
         var table = Declarations();
         var positions = Positions();
-        foreach (var npcId in new[] { "rosa", "wanda", "elena", "teresa" })
+        foreach (var npcId in new[] { "rosa", "don_carlo", "elena", "teresa", "piero", "gino", "marisa", "beppe", "lidia" })
         {
             Assert.That(positions.HasLadder(npcId), Is.False, $"{npcId} non e' guardingo e non ha una scala");
             var sue = table.Ids.Where(id => table.SourcesOf(id).Contains(npcId)).ToList();
@@ -328,14 +329,12 @@ public class TabelleTests
     /// diverse. Nelle regole il coro NON c'e' piu': era un'istruzione permanente
     /// che faceva recitare la copertura anche a chi era gia' andato oltre.
     [Test]
-    public void LaVersioneDelPaeseEUnCoroEEscePariPariDaOgniBocca()
+    public void LaVersionePubblicaNonCertificaLaSorteDiElena()
     {
         var table = Declarations();
         var testo = table.TextOf("versione_paese");
 
-        Assert.That(testo, Is.EqualTo(
-            "È stata una disgrazia. Erano andati su a vedere la cava, la montagna è venuta giù, e per quella creatura è stato un attimo."),
-            "il testo canonico del coro e' fissato qui, e non si cambia per sbaglio");
+        Assert.That(testo, Does.Contain("non una certezza"));
         var regole = File.ReadAllText(PathOf("prompts", "rules.md"));
         Assert.That(regole, Does.Not.Contain("per quella creatura"),
             "il coro non sta nelle regole: e' la posizione di partenza, non un ordine permanente");
@@ -343,7 +342,7 @@ public class TabelleTests
 
         // E ogni scala lo concede sul primo gradino, altrimenti chi ha una scala
         // resta fuori dal coro proprio mentre il paese lo canta.
-        foreach (var (npcId, ladder) in Scale())
+        foreach (var (npcId, ladder) in Scale().Where(x => x.Key != "wanda"))
         {
             Assert.That(ladder[0].Grants, Does.Contain("versione_paese"),
                 $"{npcId} e' del paese e la frase del paese ce l'ha dal primo minuto");
@@ -379,13 +378,13 @@ public class TabelleTests
     /// cui si gioca, ed e' il modo piu' silenzioso di avere tutto verde e un
     /// gioco rotto.
     [Test]
-    public void LeFixtureSonoLaCopiaEsattaDelContenuto()
+    public void UnityCaricaLaCopiaEsattaDelContenuto()
     {
         foreach (var fileName in new[] { "declarations.json", "positions.json" })
         {
-            var fixture = Path.Combine(TestContext.CurrentContext.TestDirectory, "Amnesia", "fixtures", fileName);
+            var fixture = Path.Combine(ContentDir(), "..", "Unity", "Assets", "StreamingAssets", "amnesia", fileName);
             Assert.That(File.ReadAllText(fixture), Is.EqualTo(File.ReadAllText(PathOf("amnesia", fileName))),
-                $"{fileName}: la fixture e' andata alla deriva dal contenuto");
+                $"{fileName}: la copia Unity diverge dal contenuto");
         }
     }
 
@@ -394,125 +393,59 @@ public class TabelleTests
     /// di Matteo e apre la porta di Chivasso. Se questa non passa, il gioco non
     /// si puo' finire — e nessuna prova di formato se ne accorge.
     [Test]
-    public void DaUnMondoFreddoLaCatenaFinoAllUltimoGradinoDiMatteoSiPercorre()
+    public async Task DaUnMondoFreddoLaCatenaFinoAElenaSiPercorre()
     {
-        var partita = new Partita(Declarations(), Positions());
-
-        // Atto I. La fotografia apre il paese: ogni faccia riconosciuta e' un nome.
-        partita.Mostra("rosa", "fotografia");
-        partita.Dice("rosa", "circolo_esisteva");
-        partita.Dice("rosa", "padre_ricerche");
-        partita.Dice("nino", "avevano_una_frase");
-        partita.Dice("nino", "dove_lo_trovai");
-
-        // Atto II. La frase apre i membri, e Anna dice dov'e' il magazzino.
-        partita.Mostra("anna", "frase");
-        Assert.That(partita.Posizione("anna"), Is.EqualTo("A1"));
-        partita.Dice("anna", "magazzino_dove");
-        partita.ApreIlMagazzino();
-
-        // La prova della cava apre il rito. Anna fa l'elenco di chi c'era e chi no.
-        partita.Mostra("anna", "braccialetto");
-        Assert.That(partita.Posizione("anna"), Is.EqualTo("A2"));
-        partita.Dice("anna", "sacrificio_per_vittorio");
-        partita.Dice("anna", "anna_solo_matteo");
-        partita.Dice("anna", "padre_nella_cava");
-        partita.Dice("anna", "io_ero_con_lui");
-
-        // Atto III. Matteo: la frase, poi UN oggetto del magazzino sul banco —
-        // basta quello, e la scampagnata non regge piu': rito e ratto insieme.
-        partita.Mostra("matteo", "frase");
-        partita.Dice("matteo", "matteo_ero_gia_sceso");
-        partita.Dice("matteo", "non_erano_gite");
-        partita.Mostra("matteo", "quaderno_vittorio");
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo("M2"));
-        partita.Dice("matteo", "il_rito");
-        partita.Dice("matteo", "matteo_la_porto_via");
-        partita.Dice("matteo", "elena_viva");
-        partita.Dice("matteo", "matteo_non_dice_dove");
-
-        // Atto IV. Col ratto confessato, il paese sa che Nino ha una cosa da
-        // dare: la giacca ritrovata accanto al corpo.
-        Assert.That(partita.InTasca, Does.Contain("giacca"), "col ratto confessato Nino consegna la giacca");
-        // La si fa riconoscere — basta una bocca — e la si porta in faccia a Matteo.
-        partita.Mostra("rosa", "giacca");
-        partita.Dice("rosa", "giacca_e_di_matteo");
-        partita.Mostra("matteo", "giacca");
-
-        var ultimo = Scale()["matteo"].Last().Id;
-        Assert.That(partita.Posizione("matteo"), Is.EqualTo(ultimo),
-            "la giacca sua, mostrata in faccia, chiude la scala di Matteo");
-        partita.Dice("matteo", "matteo_confessa");
-        Assert.That(partita.InTasca, Does.Contain("due_righe_matteo"), "e concede il foglio per Wanda");
-
-        // E la porta di Chivasso si apre.
-        partita.Mostra("wanda", "due_righe_matteo");
-        partita.Dice("wanda", "wanda_una_persona_sola");
-        partita.Mostra("elena", "braccialetto");
-        partita.Dice("elena", "elena_adottata");
-    }
-
-    /// Una partita giocata coi soli mezzi del gioco: si mostra solo cio' che si
-    /// ha in mano, e si dice solo cio' che il motore concede.
-    private sealed class Partita
-    {
-        private readonly WorldState _world = new();
-        private readonly PositionTable _positions;
-        private readonly DeclarationService _service;
-        private readonly HashSet<string> _inTasca;
-
-        public Partita(DeclarationTable declarations, PositionTable positions)
+        var world = new WorldState();
+        var log = new ConversationLog();
+        var items = Items();
+        var declarations = Declarations();
+        var positions = Positions();
+        var service = new DeclarationService(declarations, positions);
+        var context = new ContextBuilder("regole", new Dictionary<string, string>(), items, false, declarations, positions);
+        async Task<Amnesia.Game.TurnResult> Turn(string npc, string text, string? id = null)
         {
-            _positions = positions;
-            _service = new DeclarationService(declarations, positions);
-            _inTasca = Provenienza
-                .Where(item => item.Value is Risveglio or "paese" or "rosa")
-                .Select(item => item.Key)
-                .ToHashSet();
+            var transport = id is null ? Amnesia.Tests.Llm.FakeAnswers.Replying("Va bene.")
+                : Amnesia.Tests.Llm.FakeAnswers.Calling("dichiaro", JsonSerializer.Serialize(new { id }), declarations.TextOf(id, npc));
+            var session = new Amnesia.Game.ConversationSession(world, log, context, transport, service, items, "test");
+            var result = await session.TakeTurnAsync(npc, text);
+            Assert.That(result.IsOk, Is.True, result.Message);
+            Assert.That(result.RefusedDeclarations, Is.Empty);
+            world = session.World;
+            return result;
         }
-
-        public IReadOnlyCollection<string> InTasca => _inTasca;
-
-        public string Posizione(string npcId) => _positions.PositionOf(npcId, _world);
-
-        public void Mostra(string npcId, string itemId)
-        {
-            Assert.That(_inTasca, Does.Contain(itemId),
-                $"il giocatore non puo' mostrare a {npcId} una cosa che non ha: {itemId}");
-            _world.MarkShown(npcId, itemId);
-            Raccogli();
-        }
-
-        public void Dice(string npcId, string declarationId)
-        {
-            var said = _service.Declare(_world, npcId, declarationId);
-            Assert.That(said.IsOk, Is.True, $"{npcId} non puo' dire {declarationId}: {said.Message}");
-            Raccogli();
-        }
-
-        /// La chiave d'ottone ce l'ha dal risveglio: gli mancava dov'e'.
-        public void ApreIlMagazzino()
-        {
-            Assert.That(new Register(_world).SupportsFor("magazzino_dove"), Is.Not.Empty,
-                "nessuno gli ha ancora detto dov'e' il diciassette");
-            foreach (var item in Provenienza.Where(item => item.Value == Magazzino))
-            {
-                _inTasca.Add(item.Key);
-            }
-        }
-
-        /// Cio' che i gradini raggiunti hanno da consegnare: la stessa riga di
-        /// dati che usa il motore, cosi' il banco di prova non puo' mentire.
-        private void Raccogli()
-        {
-            foreach (var npcId in new[] { "matteo", "don_carlo", "nino" })
-            {
-                foreach (var itemId in _positions.ConsegnateFinora(npcId, _world))
-                {
-                    _inTasca.Add(itemId);
-                }
-            }
-        }
+        Assert.That(world.ItemOwners, Is.Empty);
+        new Amnesia.Game.Greeter(GreetingTable.Load(PathOf("amnesia", "saluti.json")).Value!, positions).Apri(world, log, "rosa");
+        Assert.That(world.ItemOwners.Keys, Is.EquivalentTo(new[] { "chiave_b17", "foglio_indirizzo", "taccuino" }));
+        await Turn("don_carlo", "[richiedi: fotografia]");
+        Assert.That(world.ItemOwners["fotografia"], Is.EqualTo("player"));
+        await Turn("beppe", "[mostra: fotografia] Chi sono?", "frase_per_riconoscersi");
+        await Turn("anna", "Chi passa per primo tiene la porta", "magazzino_dove");
+        Assert.That(positions.PositionOf("anna", world), Is.EqualTo("A0"));
+        var places = new Amnesia.Game.PlaceService(PlaceTable.Load(PathOf("amnesia", "luoghi.json")).Value!);
+        Assert.That(places.Apri(world, "magazzino_b17", raccogliContenuto: false).IsOk, Is.True);
+        Assert.That(world.ItemOwners.ContainsKey("quaderno_vittorio"), Is.False);
+        foreach (var id in new[] { "quaderno_vittorio", "cassetta_latta", "braccialetto" })
+            Assert.That(places.Raccogli(world, "magazzino_b17", id).IsOk, Is.True);
+        await Turn("anna", "[mostra: cassetta_latta]", "il_rito");
+        Assert.That(positions.PositionOf("anna", world), Is.EqualTo("A1"));
+        await Turn("laura", "[mostra: braccialetto]", "laura_assoggettata");
+        Assert.That(positions.PositionOf("laura", world), Is.EqualTo("L1"));
+        await Turn("nino", "Come mi trovasti?");
+        Assert.That(world.ItemOwners.ContainsKey("giacca"), Is.False);
+        await Turn("matteo", "[mostra: quaderno_vittorio]", "elena_viva");
+        await Turn("nino", "Buongiorno.");
+        Assert.That(world.ItemOwners["giacca"], Is.EqualTo("player"));
+        Assert.That(positions.PositionOf("matteo", world), Is.EqualTo("M2"));
+        await Turn("matteo", "Sei stato tu a colpirmi?", "matteo_confessa");
+        Assert.That(world.ItemOwners.ContainsKey("due_righe_matteo"), Is.False);
+        Assert.That(positions.PositionOf("wanda", world), Is.EqualTo("W0"));
+        await Turn("matteo", "[richiedi: due_righe_matteo]");
+        Assert.That(world.ItemOwners["due_righe_matteo"], Is.EqualTo("player"));
+        Assert.That(positions.PositionOf("wanda", world), Is.EqualTo("W0"));
+        await Turn("wanda", "[mostra: due_righe_matteo]");
+        Assert.That(positions.PositionOf("wanda", world), Is.EqualTo("W1"));
+        await Turn("elena", "Che cosa sai della tua famiglia?", "elena_adottata");
+        Assert.That(world.Declarations.ContainsKey("elena_adottata"), Is.True);
     }
 
     private sealed class ScaleDto
@@ -534,6 +467,9 @@ public class TabelleTests
 
         [JsonPropertyName("requires_any_shown")]
         public List<string> RequiresAnyShown { get; set; } = new();
+
+        [JsonPropertyName("requires_owned")]
+        public List<string> RequiresOwned { get; set; } = new();
     }
 
     /// Una porta con le coordinate sbagliate non rompe niente: il gioco parte,

@@ -41,6 +41,9 @@ public sealed class Declaration
     [JsonPropertyName("requires_shown")]
     public List<string> RequiresShown { get; set; } = new();
 
+    [JsonPropertyName("requires_any_shown")]
+    public List<string> RequiresAnyShown { get; set; } = new();
+
     /// Come se la ricorda ciascuno.
     ///
     /// Alcune cose il paese le dice con le stesse identiche parole — la

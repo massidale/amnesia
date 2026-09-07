@@ -31,20 +31,20 @@ public class ConoscenzeBaseTests
         var conoscenze = ConoscenzeBase.Load(PromptsDir());
 
         // Il coro, verbatim, nel blocco base.
-        Assert.That(conoscenze.PerPersonaggio("beppe"), Does.Contain("è stato un attimo"));
-        Assert.That(conoscenze.PerPersonaggio("teresa"), Does.Contain("è stato un attimo"));
+        Assert.That(conoscenze.PerPersonaggio("beppe"), Does.Contain("non fu ritrovata"));
+        Assert.That(conoscenze.PerPersonaggio("teresa"), Does.Contain("non fu ritrovata"));
         // Rosa ci crede: la riceve anche lei.
-        Assert.That(conoscenze.PerPersonaggio("rosa"), Does.Contain("è stato un attimo"));
+        Assert.That(conoscenze.PerPersonaggio("rosa"), Does.Contain("non fu ritrovata"));
     }
 
     [Test]
-    public void ChiHaUnaPosizioneSuaNonLaRiceve()
+    public void IMembriConosconoIFattiPubbliciMaWandaEdElenaNo()
     {
         var conoscenze = ConoscenzeBase.Load(PromptsDir());
 
         // I guardinghi hanno la loro versione nella scheda per-scalino.
-        Assert.That(conoscenze.PerPersonaggio("matteo"), Is.Empty);
-        Assert.That(conoscenze.PerPersonaggio("anna"), Is.Empty);
+        Assert.That(conoscenze.PerPersonaggio("matteo"), Does.Contain("non fu ritrovata"));
+        Assert.That(conoscenze.PerPersonaggio("anna"), Does.Contain("non fu ritrovata"));
         // Wanda ed Elena sanno che Elena e' viva: niente versione del paese.
         Assert.That(conoscenze.PerPersonaggio("wanda"), Is.Empty);
         Assert.That(conoscenze.PerPersonaggio("elena"), Is.Empty);

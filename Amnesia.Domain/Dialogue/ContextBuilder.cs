@@ -160,12 +160,13 @@ public sealed class ContextBuilder
             parts.Add(ComeReagisci(npcId, gradini, itemId, codaDiSvolta));
             codaDiSvolta = "";
         }
-        if (turn.FraseDetta)
+        if (turn.FraseDetta || (npcId == "anna" && world.ShownToNpc(npcId).Contains("frase")))
         {
             var reazione = _reactions.Reazione(npcId, gradini, "frase");
             if (reazione.Length > 0)
             {
-                parts.Add($"<come_reagisci>{PlayerInput.Sanitize(reazione)}{codaDiSvolta}</come_reagisci>");
+                var ricordo = turn.FraseDetta ? "" : "Ricordo di una conversazione precedente: non ripetere la scena, usalo per rispondere ai seguiti. ";
+                parts.Add($"<come_reagisci>{ricordo}{PlayerInput.Sanitize(reazione)}{codaDiSvolta}</come_reagisci>");
                 codaDiSvolta = "";
             }
         }

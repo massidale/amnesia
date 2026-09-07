@@ -1,5 +1,9 @@
 # Amnesia — conoscenze, reazioni e progressione del giallo
 
+Aggiornamento del 7 settembre: autorizzato e applicato l'allineamento del motore.
+Il comportamento corrente e le decisioni che superano i limiti di questa bozza
+sono documentati in `../implementation/2026-09-07-allineamento-runtime.md`.
+
 Stato: specifica proposta, corretta il 6 settembre 2026 dopo il confronto sulle posizioni. Solo documentazione e prompt di bozza: nessuna installazione nel runtime. Questa revisione sostituisce la precedente architettura del documento, comprese le 34 varianti e le 22 scene.
 
 ## 1. Separazione conforme al codice attuale

@@ -33,7 +33,10 @@ public class CatalogoEDatiTests
     [Test]
     public void IlVocabolarioChiusoDiceEsattamenteQuelloCheLaTabellaContiene()
     {
-        Assert.That(EnumDelCatalogo(), Is.EquivalentTo(TestDeclarations.Table().Ids),
+        var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "..", "..", "..", "..", "content", "amnesia", "declarations.json");
+        var live = DeclarationTable.Load(path);
+        Assert.That(live.IsOk, Is.True, live.Message);
+        Assert.That(EnumDelCatalogo(), Is.EquivalentTo(live.Value!.Ids),
             "catalogo e dati sono andati alla deriva: una dichiarazione che il modello non puo' scegliere non verra' mai detta da nessuno");
     }
 

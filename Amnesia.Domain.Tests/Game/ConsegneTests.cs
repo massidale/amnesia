@@ -81,7 +81,10 @@ public class ConsegneTests
         var session = Session(transport, world);
         var turn = await session.TakeTurnAsync("matteo", confessa ? "Sei stato tu a colpirmi?" : "Era tua?");
         Assert.That(turn.IsOk, Is.True);
-        Assert.That(turn.Received.Contains("due_righe_matteo"), Is.EqualTo(confessa));
+        Assert.That(turn.Received.Contains("due_righe_matteo"), Is.False);
+        transport.Answers(Result<LlmReply>.Ok(new LlmReply { Text = "Ecco la mia risposta." }));
+        var request = await session.TakeTurnAsync("matteo", "[richiedi: due_righe_matteo]");
+        Assert.That(request.Received.Contains("due_righe_matteo"), Is.EqualTo(confessa));
         Assert.That(session.World.ItemOwners.TryGetValue("due_righe_matteo", out var owner) && owner == "player", Is.EqualTo(confessa));
     }
 }

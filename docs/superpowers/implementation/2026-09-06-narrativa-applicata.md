@@ -1,5 +1,9 @@
 # Applicazione narrativa — contenuti e scalini
 
+Resoconto storico del 6 settembre. Le incompatibilita' residue sotto elencate
+sono state affrontate nell'intervento autorizzato del 7 settembre, descritto in
+`2026-09-07-allineamento-runtime.md`.
+
 Implementati prompt, conoscenze condivise, reazioni, saluti e testi canonici delle dichiarazioni. Nessuna modifica ai file C#, a id/fonti/condizioni delle dichiarazioni, catalogo oggetti, geografia, inizializzazione o taccuino.
 
 Anna A0 resta invariata alla frase; la reazione fornisce il ricordo e il prompt disciplina quando pronunciare l’ubicazione. A1 confessa ai reperti. Laura L1 confessa ai reperti senza formula. Matteo M1 racconta il salvataggio; M2 dipende dalla dichiarazione `nino_giacca` e contiene la risposta all’accusa diretta. M3 è lo scalino di consegna dopo `matteo_confessa`, che permette di conservare la lettera con il motore attuale. Nino N1 dipende solo da `elena_viva`. Wanda W1 dipende dalla lettera mostrata. Gli altri NPC hanno scheda unica.

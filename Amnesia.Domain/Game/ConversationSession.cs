@@ -28,6 +28,10 @@ public sealed class ConversationSession
     public WorldState World { get; private set; }
     public ConversationLog Log { get; }
 
+    public bool PuoParlare(string npcId) => npcId != "elena"
+        || _declarations.PositionOf("wanda", World).Length == 0
+        || ConsegneNarrative.AccessoElena(World);
+
     public ConversationSession(
         WorldState world,
         ConversationLog log,
@@ -73,6 +77,7 @@ public sealed class ConversationSession
 
     public async Task<TurnResult> TakeTurnAsync(string npcId, string rawText, CancellationToken cancellationToken = default)
     {
+        if (!PuoParlare(npcId)) return TurnResult.Fail("access_denied", "Wanda non ha ancora autorizzato l'ingresso.");
         // Le etichette le legge il motore, mai il modello: e' qui che si decide
         // cosa il giocatore possiede davvero e quali due righe ha raccolto.
         var utterance = PlayerInput.Parse(rawText, World, _items, _playerId);
@@ -89,8 +94,8 @@ public sealed class ConversationSession
             draft.MarkShown(npcId, itemId);
         }
 
-        // La frase non e' un oggetto: e' cinque parole scritte sulla prima pagina
-        // del taccuino, e il modo di usarle e' dirle. Il motore le riconosce
+        // La frase completa non e' un oggetto: il modo di usarla e' dirla.
+        // Il taccuino iniziale ne contiene solo il frammento. Il motore la riconosce
         // mentre le scrivi e le segna come messe davanti a questa persona —
         // percio' tutto cio' che gia' dipendeva dall'averla mostrata continua a
         // valere senza cambiare una riga.
@@ -100,22 +105,35 @@ public sealed class ConversationSession
             draft.MarkShown(npcId, "frase");
         }
 
-        // Il rimando a Nino. Quando lo stallo con Matteo e' un fatto — Elena
-        // risulta viva e lui ha detto di no — il paese lo sa prima di te: la
-        // PRIMA persona con cui parli ti manda da Nino, che ha una cosa da
-        // darti. Una volta sola, e mai da Nino o Matteo stessi: e' un passa-
-        // parola, non un coro.
         var note = new List<string>();
-        var registro = new Register(draft);
-        if (npcId != "nino" && npcId != "matteo" && npcId != "wanda" && npcId != "elena"
-            && !draft.Flags.ContainsKey("nino_indirizzato")
-            && registro.IsEstablished("elena_viva")
-            && registro.IsEstablished("matteo_non_dice_dove"))
+        var ricevuti = new List<string>();
+        var rifiutate = new List<string>(utterance.InvalidTags);
+        var richieste = ConsegneNarrative.Richiedibili(draft, npcId);
+        foreach (var id in utterance.RequestedItemIds)
         {
-            note.Add("Nino Bergesio sta facendo dire in giro che cerca il ragazzo dei Lipari: "
-                + "tiene una cosa da dargli, da anni. Diglielo prima che il discorso finisca — "
-                + "che Nino lo cerca, e che e' meglio che ci passi.");
-            draft.Flags["nino_indirizzato"] = true;
+            if (!richieste.Contains(id)) { rifiutate.Add(id); continue; }
+            draft.ItemOwners[id] = _playerId;
+            ricevuti.Add(id);
+            note.Add("Giorgio ha richiesto esplicitamente " + _items.VisibleOf(id)
+                + ". Gli consegni questo oggetto in questo scambio.");
+        }
+        if (npcId == "rosa")
+        {
+            var prima = new HashSet<string>(draft.ItemOwners.Keys);
+            ConsegneNarrative.PrimoIncontroRosa(draft);
+            ricevuti.AddRange(draft.ItemOwners.Keys.Where(id => !prima.Contains(id)));
+            note.Add("Hai restituito a Giorgio foglio e chiave e gli hai dato un taccuino nuovo. Non gli hai dato una fotografia.");
+        }
+        foreach (var id in _declarations.ConsegnateFinora(npcId, draft))
+            note.Add(draft.ItemOwners.ContainsKey(id)
+                ? "Hai gia' consegnato " + _items.VisibleOf(id) + "; non lo consegni di nuovo."
+                : "In questo scambio consegni a Giorgio " + _items.VisibleOf(id) + ".");
+        if (npcId == "don_carlo" || npcId == "matteo")
+        {
+            var id = npcId == "don_carlo" ? "fotografia" : "due_righe_matteo";
+            if (!ricevuti.Contains(id)) note.Add(draft.ItemOwners.ContainsKey(id)
+                ? "Hai gia' consegnato " + id + ". Non creare altre copie."
+                : "Non consegni " + id + " in questo turno. La consegna richiede l'azione esplicita del giocatore quando disponibile.");
         }
 
         var turn = new TurnContext
@@ -189,17 +207,19 @@ public sealed class ConversationSession
         // giocatore sono ovviamente non fidate; quelle del modello lo sono
         // altrettanto, perche' un turno passato che contenesse un blocco forgiato
         // tornerebbe nel prompt come se il mondo l'avesse scritto.
-        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), Didascalia(utterance.ShownItemIds));
+        var gesto = Didascalia(utterance.ShownItemIds);
+        if (utterance.RequestedItemIds.Count > 0)
+            gesto += (gesto.Length > 0 ? "; " : "") + "richiedi: " + string.Join(", ", utterance.RequestedItemIds);
+        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), gesto);
         Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto));
 
         // La consegna: gli oggetti che i gradini raggiunti hanno da dare
         // passano di mano ADESSO, decisi dai dati e mai dal modello. Una volta
         // in tasca al giocatore non tornano indietro: e' una consegna, non un
         // prestito.
-        var ricevuti = new List<string>();
         foreach (var itemId in _declarations.ConsegnateFinora(npcId, draft))
         {
-            if (!draft.ItemOwners.TryGetValue(itemId, out var chi) || chi != _playerId)
+            if (!draft.ItemOwners.ContainsKey(itemId))
             {
                 draft.ItemOwners[itemId] = _playerId;
                 ricevuti.Add(itemId);
@@ -219,7 +239,7 @@ public sealed class ConversationSession
             IsOk = true,
             NpcId = npcId,
             Reply = detto,
-            RefusedTags = utterance.InvalidTags,
+            RefusedTags = rifiutate,
             Declared = declared,
             RefusedDeclarations = refused,
             Minute = draft.Minute,

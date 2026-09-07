@@ -33,6 +33,9 @@ namespace AmnesiaUnity
         private ScrollRect _rullo;
         private string _con = "";
         private bool _inAttesa;
+        private Button _richiesta;
+        private Text _testoRichiesta;
+        private string _oggettoRichiesto = "";
         private float _avvisoFino;
 
         private void Start()
@@ -64,6 +67,16 @@ namespace AmnesiaUnity
 
             _chi = Stile.Scritta(_radice.transform, Stile.Macchina, 20, Stile.Ottone,
                 new Vector2(0.035f, 0.855f), new Vector2(0.7f, 0.965f));
+            var azione = Stile.Riquadro(_radice.transform, "richiesta", Stile.Incavo,
+                new Vector2(0.70f, 0.855f), new Vector2(0.965f, 0.965f));
+            _testoRichiesta = Stile.Scritta(azione, Stile.Macchina, 14, Stile.Carta, Vector2.zero, Vector2.one);
+            _testoRichiesta.alignment = TextAnchor.MiddleCenter;
+            _testoRichiesta.resizeTextForBestFit = true;
+            _testoRichiesta.resizeTextMinSize = 10;
+            _testoRichiesta.resizeTextMaxSize = 14;
+            _richiesta = azione.gameObject.AddComponent<Button>();
+            _richiesta.targetGraphic = azione.GetComponent<Image>();
+            _richiesta.onClick.AddListener(() => Manda("[richiedi: " + _oggettoRichiesto + "]"));
 
             _detto = Stile.Rullo(_radice.transform, Stile.Libro, 23, Stile.Carta,
                 new Vector2(0.035f, 0.30f), new Vector2(0.965f, 0.84f), out _rullo);
@@ -113,6 +126,11 @@ namespace AmnesiaUnity
 
         public void Apri(string npcId)
         {
+            if (!_gioco.Session.PuoParlare(npcId))
+            {
+                Avviso("Wanda non ha ancora autorizzato l'ingresso.");
+                return;
+            }
             FindFirstObjectByType<Menu>()?.Chiudi();
             _con = npcId;
             Aperto = true;
@@ -256,12 +274,17 @@ namespace AmnesiaUnity
         /// il giocatore a decidere cosa.
         private void Targhette()
         {
+            var richieste = ConsegneNarrative.Richiedibili(_gioco.Session.World, _con);
+            _oggettoRichiesto = richieste.Count > 0 ? richieste[0] : "";
+            _richiesta.gameObject.SetActive(_oggettoRichiesto.Length > 0);
+            _testoRichiesta.text = _oggettoRichiesto == "fotografia" ? "Chiedi la fotografia" : "Chiedi il messaggio";
             foreach (Transform vecchia in _fila)
             {
                 Destroy(vecchia.gameObject);
             }
             foreach (var oggetto in _gioco.Taccuino.Tasche())
             {
+                if (oggetto.Id == "taccuino" || oggetto.Id == "frase") continue;
                 var nome = string.IsNullOrEmpty(oggetto.Name) ? oggetto.Id : oggetto.Name;
                 var targhetta = Stile.Riquadro(_fila, oggetto.Id, Stile.Incavo, Vector2.zero, Vector2.one);
                 var testo = Stile.Scritta(targhetta, Stile.Macchina, 14, Stile.Carta, Vector2.zero, Vector2.one);
@@ -364,7 +387,7 @@ namespace AmnesiaUnity
         {
             var ora = Amnesia.Time.WorldClock.Format(turno.Minute);
             var registrato = turno.Declared.Count > 0 ? "   ·   annotato: " + string.Join(", ", turno.Declared) : "";
-            var rifiutato = turno.RefusedTags.Count > 0 ? "   ·   non ce l'hai: " + string.Join(", ", turno.RefusedTags) : "";
+            var rifiutato = turno.RefusedTags.Count > 0 ? "   ·   azione non disponibile: " + string.Join(", ", turno.RefusedTags) : "";
             var ricevuto = turno.Received.Count > 0 ? "   ·   ricevuto: " + string.Join(", ", turno.Received) : "";
             return ora + registrato + rifiutato + ricevuto;
         }

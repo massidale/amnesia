@@ -190,6 +190,7 @@ namespace AmnesiaUnity
             }
             RegistraOggettiInScena();
             if (mappaAMano && Session != null) {
+                AccessoWanda1987.Installa(this);
                 foreach (var id in new List<string>(_porte.Keys))
                     if (Porte.IsOpen(Session.World, id)) SpalancaLaPorta(id);
             }
@@ -235,10 +236,7 @@ namespace AmnesiaUnity
             // oggetto: e' una riga scritta, e si usa dicendola. Il taccuino non
             // e' roba che si mostra: e' la mano di Giorgio — quello che ci ha
             // scritto lo si cita, non lo si mette sul banco.
-            foreach (var starting in new[] { "fotografia", "foglio_indirizzo", "chiave_b17" })
-            {
-                World.ItemOwners[starting] = "player";
-            }
+            // Rosa restituisce chiave e foglio e consegna il taccuino al primo incontro.
             PosizionaGliAttori();
 
             // Le schede stanno in prompts/: quella unica al primo livello
@@ -688,6 +686,7 @@ namespace AmnesiaUnity
             var distanza = portata;
             foreach (var pair in _corpi)
             {
+                if (!Session.PuoParlare(pair.Key) || !pair.Value.gameObject.activeInHierarchy) continue;
                 // Distanza a terra: uno alto e uno basso sono vicini uguale.
                 var quanto = Vector2.Distance(
                     new Vector2(da.x, da.z), new Vector2(pair.Value.position.x, pair.Value.position.z));

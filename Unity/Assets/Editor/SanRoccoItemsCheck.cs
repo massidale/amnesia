@@ -52,6 +52,7 @@ namespace AmnesiaUnity.Editor.SanRocco
                 var menu=Object.FindFirstObjectByType<Menu>();
                 if(phase==0)
                 {
+                    game.Accoglienza.Apri(game.World, game.Session.Log, "rosa");
                     Require(!game.Porte.Apri(game.World,"magazzino_b17",raccogliContenuto:false).IsOk,"Porta aperta senza conoscenza");
                     new Amnesia.Register(game.World).Record("matteo","magazzino_dove");
                     Require(game.Porte.Apri(game.World,"magazzino_b17",raccogliContenuto:false).IsOk,"Porta non aperta");

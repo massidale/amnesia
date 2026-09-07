@@ -40,6 +40,7 @@ public sealed class Greeter
             return "";
         }
         world.Flags[chiave] = true;
+        if (npcId == "rosa") ConsegneNarrative.PrimoIncontroRosa(world);
         // Va nel registro come una battuta qualsiasi: se il personaggio ha
         // detto «ti trovo bene», il modello deve averlo davanti al turno dopo,
         // o si contraddice al primo scambio.

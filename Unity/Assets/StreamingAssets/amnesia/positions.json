@@ -11,9 +11,7 @@
           "vittorio_morto",
           "circolo_esisteva",
           "padre_nel_circolo",
-          "vittorio_capo",
-          "magazzino_dove",
-          "frase_per_riconoscersi"
+          "vittorio_capo"
         ]
       },
       {
@@ -99,8 +97,8 @@
         "grants": [
           "matteo_confessa"
         ],
-        "requires_declared": [
-          "nino_giacca"
+        "requires_owned": [
+          "giacca"
         ]
       },
       {
@@ -108,9 +106,6 @@
         "grants": [],
         "requires_declared": [
           "matteo_confessa"
-        ],
-        "consegna": [
-          "due_righe_matteo"
         ]
       }
     ],
