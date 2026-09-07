@@ -7,12 +7,18 @@ namespace Amnesia.Game;
 /// per le azioni visibili nella UI e per il controllo del turno nel dominio.
 public static class ConsegneNarrative
 {
+    private static readonly string[] Articoli = { "il ", "lo ", "la ", "i ", "gli ", "le ", "un ", "uno ", "una ", "l'", "un'", "l\u2019", "un\u2019" };
+
     public static string Didascalia(IEnumerable<string> ricevuti, ItemCatalog? items)
     {
         var nomi = ricevuti.Distinct().Select(id =>
         {
             var nome = items?.Find(id)?.Name;
-            return string.IsNullOrEmpty(nome) ? id : nome;
+            if (string.IsNullOrEmpty(nome)) return id;
+            foreach (var articolo in Articoli)
+                if (nome.StartsWith(articolo, StringComparison.OrdinalIgnoreCase) && nome.Length > articolo.Length)
+                    return nome.Substring(articolo.Length);
+            return nome;
         }).ToArray();
         return nomi.Length == 0 ? "" : "ricevi: " + string.Join(", ", nomi);
     }
