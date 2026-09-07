@@ -14,11 +14,13 @@ public sealed class Greeter
 {
     private readonly GreetingTable _saluti;
     private readonly PositionTable _posizioni;
+    private readonly ItemCatalog? _items;
 
-    public Greeter(GreetingTable saluti, PositionTable posizioni)
+    public Greeter(GreetingTable saluti, PositionTable posizioni, ItemCatalog? items = null)
     {
         _saluti = saluti;
         _posizioni = posizioni;
+        _items = items;
     }
 
     /// Mondo e registro si passano a ogni chiamata: la sessione sostituisce il
@@ -40,11 +42,17 @@ public sealed class Greeter
             return "";
         }
         world.Flags[chiave] = true;
-        if (npcId == "rosa") ConsegneNarrative.PrimoIncontroRosa(world);
+        var ricevuti = new List<string>();
+        if (npcId == "rosa")
+        {
+            var prima = new HashSet<string>(world.ItemOwners.Keys);
+            ConsegneNarrative.PrimoIncontroRosa(world);
+            ricevuti.AddRange(world.ItemOwners.Keys.Where(id => !prima.Contains(id)));
+        }
         // Va nel registro come una battuta qualsiasi: se il personaggio ha
         // detto «ti trovo bene», il modello deve averlo davanti al turno dopo,
         // o si contraddice al primo scambio.
-        log.Append(npcId, ChatRole.Assistant, riga);
+        log.Append(npcId, ChatRole.Assistant, riga, ConsegneNarrative.Didascalia(ricevuti, _items));
         return riga;
     }
 }

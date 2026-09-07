@@ -391,6 +391,12 @@ namespace AmnesiaUnity
                 else
                 {
                     scritto.Append(battuta.Content).Append('\n');
+                    if (!string.IsNullOrEmpty(battuta.Didascalia))
+                    {
+                        scritto.Append("<size=17><color=#C0983F>")
+                            .Append(battuta.Didascalia)
+                            .Append("</color></size>\n");
+                    }
                 }
             }
             _detto.text = scritto.ToString().Trim('\n');

@@ -53,6 +53,11 @@ public class ConsegneTests
         Assert.That(first.Received, Is.EqualTo(new[] { "giacca" }));
         Assert.That(second.Received, Is.Empty);
         Assert.That(session.World.ItemOwners["giacca"], Is.EqualTo("player"));
+        var history = session.Log.Recent("nino", 4);
+        Assert.That(history[1].Didascalia, Is.EqualTo("ricevi: la giacca"));
+        Assert.That(history[3].Didascalia, Is.Empty);
+        Assert.That(ConversationLog.FromJson(session.Log.ToJson()).Recent("nino",4)[1].Didascalia,
+            Is.EqualTo("ricevi: la giacca"));
     }
 
     [Test]
@@ -65,6 +70,7 @@ public class ConsegneTests
         Assert.That(turn.IsOk, Is.False);
         Assert.That(turn.Received, Is.Empty);
         Assert.That(session.World.ItemOwners.ContainsKey("giacca"), Is.False);
+        Assert.That(session.Log.Recent("nino", 10), Is.Empty);
     }
 
     [TestCase(false)]
@@ -86,5 +92,7 @@ public class ConsegneTests
         var request = await session.TakeTurnAsync("matteo", "[richiedi: due_righe_matteo]");
         Assert.That(request.Received.Contains("due_righe_matteo"), Is.EqualTo(confessa));
         Assert.That(session.World.ItemOwners.TryGetValue("due_righe_matteo", out var owner) && owner == "player", Is.EqualTo(confessa));
+        Assert.That(session.Log.Recent("matteo", 1)[0].Didascalia,
+            Is.EqualTo(confessa ? "ricevi: le due righe di Matteo" : ""));
     }
 }

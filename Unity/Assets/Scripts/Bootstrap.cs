@@ -291,7 +291,7 @@ namespace AmnesiaUnity
             {
                 _convinzioni = convinzioni.Value;
             }
-            Accoglienza = new Greeter(saluti.Value, posizioni.Value);
+            Accoglienza = new Greeter(saluti.Value, posizioni.Value, Items);
 
             // Il copione delle reazioni e' un file a parte e puo' mancare in una
             // partita vecchia: senza, il motore usa il ripiego («non lo conosci,

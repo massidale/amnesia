@@ -47,6 +47,11 @@ namespace AmnesiaUnity.Editor
                     Require(game.World.ItemOwners.Count == 0, "Inventario non vuoto all'avvio");
                     panel.Apri("rosa");
                     Require(game.World.ItemOwners.Count == 3 && !game.World.ItemOwners.ContainsKey("fotografia"), "Consegna iniziale errata");
+                    var caption = ConsegneNarrative.Didascalia(new[] { "foglio_indirizzo", "chiave_b17", "taccuino" }, game.Items);
+                    Require(game.Session.Log.Recent("rosa", 1)[0].Didascalia == caption, "Didascalia consegna assente nel registro");
+                    Require(Object.FindObjectsByType<Text>(FindObjectsSortMode.None).Any(t =>
+                        t.gameObject.activeInHierarchy && t.text.Contains("<size=17><color=#C0983F>" + caption + "</color></size>")),
+                        "Didascalia consegna non mostrata nel dialogo");
                     var notebook = Inventario.Righe(game);
                     Require(notebook.Contains("Chi passa per primo") && !notebook.Contains("tiene la porta"), "Formula completa nel taccuino iniziale");
                     panel.Apri("don_carlo");

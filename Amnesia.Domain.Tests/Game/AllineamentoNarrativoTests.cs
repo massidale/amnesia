@@ -89,7 +89,10 @@ public class AllineamentoNarrativoTests
         var log = new ConversationLog();
         greeter.Apri(world, log, "rosa");
         Assert.That(world.ItemOwners.Keys, Is.EquivalentTo(new[] { "chiave_b17", "foglio_indirizzo", "taccuino" }));
+        Assert.That(log.Recent("rosa",1)[0].Didascalia, Does.StartWith("ricevi: "));
+        var count = log.Recent("rosa",10).Count;
         Assert.That(greeter.Apri(world, log, "rosa"), Is.Empty);
+        Assert.That(log.Recent("rosa",10).Count, Is.EqualTo(count));
     }
 
     [TestCase("don_carlo", "[richiedi: fotografia]", true)]

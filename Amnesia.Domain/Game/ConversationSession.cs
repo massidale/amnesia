@@ -210,8 +210,6 @@ public sealed class ConversationSession
         var gesto = Didascalia(utterance.ShownItemIds);
         if (utterance.RequestedItemIds.Count > 0)
             gesto += (gesto.Length > 0 ? "; " : "") + "richiedi: " + string.Join(", ", utterance.RequestedItemIds);
-        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), gesto);
-        Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto));
 
         // La consegna: gli oggetti che i gradini raggiunti hanno da dare
         // passano di mano ADESSO, decisi dai dati e mai dal modello. Una volta
@@ -225,6 +223,10 @@ public sealed class ConversationSession
                 ricevuti.Add(itemId);
             }
         }
+
+        Log.Append(npcId, ChatRole.User, PlayerInput.Sanitize(utterance.Spoken), gesto);
+        Log.Append(npcId, ChatRole.Assistant, PlayerInput.Sanitize(detto),
+            ConsegneNarrative.Didascalia(ricevuti, _items));
 
         // Uno scambio costa un minuto. L'attesa della rete non costa niente: e'
         // latenza dell'infrastruttura, non una scelta del giocatore, e farla

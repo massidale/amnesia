@@ -9,7 +9,7 @@ namespace Amnesia.Dialogue;
 /// chiamate): qui c'e' solo cio' che una conversazione ricorda di se' stessa.
 ///
 /// `Didascalia` e' l'unica riga di tutto il gioco scritta dal motore: cosa hai
-/// messo sul banco mentre parlavi. Sta qui e non nel pannello perche' la
+/// mostrato o ricevuto durante lo scambio. Sta qui e non nel pannello perche' la
 /// trascrizione si ricompone da capo a ogni turno, e una riga tenuta a parte
 /// sparirebbe appena riavvolgi. **Non entra nel prompt**: `ContextBuilder`
 /// rigioca `Role` e `Content` e nient'altro, quindi il prefisso in cache resta
