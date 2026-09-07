@@ -109,6 +109,9 @@ namespace AmnesiaUnity
             _figura.name = "giorgio";
             _figura.SetParent(transform, false);
             _figura.localPosition = Vector3.zero;
+            // The handmade portraits face -Z; the controller and camera face +Z.
+            if (_figura.GetComponent<PassoPersonaggio>() != null)
+                _figura.localRotation = Quaternion.Euler(0f, 180f, 0f);
             // Il corpo si vede, non urta: chi urta e' il CharacterController, e
             // due collisori sulla stessa persona si spingono a vicenda.
             foreach (var urto in _figura.GetComponentsInChildren<Collider>())

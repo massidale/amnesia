@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using static AmnesiaUnity.Editor.SanRocco.Kit;
+using static AmnesiaUnity.Editor.SanRocco.PeopleGeometry;
 
 namespace AmnesiaUnity.Editor.SanRocco
 {
@@ -25,48 +26,67 @@ namespace AmnesiaUnity.Editor.SanRocco
             var skin=Mat("incarnato_"+id,i%3==0?"#D0A58D":i%3==1?"#BC947B":"#D9B29A");
             var trousers=Mat("pantaloni_"+id,i%2==0?"#505B60":"#625F55");
             float breadth=id=="beppe"?.29f:id=="nino"||id=="gino"?.27f:woman?.235f:.25f;
-            float hip=seated?.58f:.87f,shoulder=hip+.48f,head=shoulder+.24f;
-            Cone(visual,"busto",V(0,hip-.08f,0),breadth,.58f,cloth,8,breadth*.92f);
-            Box(visual,"cintura",V(0,hip-.015f,-.01f),V(breadth*1.9f,.07f,.32f),trousers,false);
+            float hip=seated?(id=="teresa"?.67f:.65f):.87f,shoulder=hip+.48f,head=shoulder+.24f;
+            Torso(visual,V(0,hip-.11f,0),V(breadth,.61f,.18f),cloth);
+            Soft(visual,"bacino",V(0,hip-.065f,0),V(breadth*.84f,seated?.10f:.145f,.165f),trousers);
+            Soft(visual,"cintura",V(0,hip+.015f,0),V(breadth*.82f,.035f,.174f),trousers);
             foreach(float sign in new[]{-1f,1f}) {
-                var pelvis=V(sign*.13f,hip-.04f,0);var knee=V(sign*.13f,seated?.51f:.46f,seated?-.36f:.025f);
+                string side=sign<0?"sx":"dx";
+                var pelvis=V(sign*.115f,hip-(seated?.05f:.12f),0);var knee=V(sign*.13f,seated?hip-.08f:.46f,seated?-.36f:.025f);
                 var ankle=V(sign*.13f,.14f,seated?-.36f:0);
-                Beam(visual,"coscia",pelvis,knee,.19f,trousers);Beam(visual,"gamba",knee,ankle,.16f,trousers);
-                Box(visual,"scarpa",V(sign*.13f,.09f,seated?-.43f:-.075f),V(.20f,.16f,.34f),Dark,false);
+                var leg=Joint(visual,"anca_"+side,pelvis,.094f,trousers);
+                Limb(leg,"coscia",Vector3.zero,knee-pelvis,.101f,trousers);
+                var shin=Joint(leg,"ginocchio_"+side,knee-pelvis,.085f,trousers);
+                Limb(shin,"polpaccio",Vector3.zero,ankle-knee,.079f,trousers);
+                Soft(shin,"scarpa",V(sign*.13f,.085f,seated?-.425f:-.065f)-knee,V(.096f,.078f,.17f),Dark);
                 var elbow=V(sign*(breadth+.08f),hip+.19f,seated?-.12f:-.02f);
                 var hand=V(sign*.21f,hip+(seated?.17f:.03f),seated?-.35f:apron?-.25f:-.08f);
-                Beam(visual,"manica",V(sign*breadth,shoulder-.06f,0),elbow,.15f,cloth);
-                Beam(visual,"avambraccio",elbow,hand,.12f,cloth);
-                Art.Facet(visual,"mano",hand,V(.07f,.09f,.065f),skin,i);
-                Art.Facet(visual,"orecchio",V(sign*.162f,head,0),V(.043f,.063f,.055f),skin,i);
+                var shoulderPoint=V(sign*breadth*.83f,shoulder-.075f,0);
+                var arm=Joint(visual,"spalla_"+side,shoulderPoint,.092f,cloth);
+                Limb(arm,"manica",Vector3.zero,elbow-shoulderPoint,.086f,cloth);
+                var forearm=Joint(arm,"gomito_"+side,elbow-shoulderPoint,.073f,cloth);
+                var wrist=hand+(elbow-hand).normalized*.085f;
+                Limb(forearm,"avambraccio",Vector3.zero,wrist-elbow,.060f,cloth);
+                Soft(forearm,"mano",hand-elbow,V(.059f,.080f,.048f),skin);
+                Soft(visual,"orecchio",V(sign*.155f,head,0),V(.033f,.054f,.04f),skin);
             }
-            if(woman || id=="don_carlo") Cone(visual,"gonna",V(0,seated?.43f:.33f,0),breadth+.035f,seated?.21f:.5f,cloth,9,breadth*.85f);
-            Cone(visual,"collo",V(0,shoulder-.01f,0),.077f,.16f,skin,8,.077f);
-            Art.Facet(visual,"viso",V(0,head,0),V(.158f,.20f,.15f),skin,i);
-            Art.Facet(visual,"capigliatura",V(0,head+.125f,.022f),V(.174f,.104f,.162f),hair,i);
+            if(woman || id=="don_carlo") {
+                if(seated) Soft(visual,"gonna",V(0,hip-.08f,-.15f),V(breadth+.015f,.09f,.31f),cloth);
+                else Skirt(visual,V(0,.34f,0),V(breadth+.015f,.55f,.19f),cloth);
+            }
+            Soft(visual,"collo",V(0,shoulder+.05f,0),V(.075f,.13f,.073f),skin);
+            Soft(visual,"viso",V(0,head,0),V(.158f,.20f,.15f),skin);
+            Soft(visual,"capigliatura",V(0,head+.13f,.022f),V(.167f,.100f,.156f),hair);
             if(woman) {
-                Art.Facet(visual,"capelli_nuca",V(0,head-.04f,.13f),V(.17f,.15f,.09f),hair,i);
-                if(id=="rosa"||id=="teresa"||id=="lidia") Art.Facet(visual,"chignon",V(0,head+.025f,.23f),V(.10f,.09f,.10f),hair,i);
-                if(id=="elena") foreach(float x in new[]{-.15f,.15f}) Art.Facet(visual,"ciocca",V(x,head-.1f,.04f),V(.045f,.15f,.09f),hair,i);
-            }
+                Soft(visual,"capelli_nuca",V(0,head-.04f,.13f),V(.16f,.15f,.085f),hair);
+                if(id=="rosa"||id=="teresa"||id=="lidia") Soft(visual,"chignon",V(0,head+.025f,.23f),V(.085f,.08f,.09f),hair);
+                if(id=="elena") foreach(float x in new[]{-.15f,.15f}) Soft(visual,"ciocca",V(x,head-.1f,.04f),V(.04f,.15f,.08f),hair);
+            } else Soft(visual,"capelli_nuca",V(0,head+.025f,.108f),V(.151f,.145f,.068f),hair);
             foreach(float x in new[]{-.058f,.058f}) {
-                Box(visual,"occhio",V(x,head+.025f,-.142f),V(.027f,.021f,.018f),Dark,false);
-                Box(visual,"sopracciglio",V(x,head+.067f,-.14f),V(.045f,.012f,.013f),hair,false);
+                Soft(visual,"occhio",V(x,head+.025f,-.140f),V(.015f,.011f,.009f),Dark);
+                Soft(visual,"sopracciglio",V(x,head+.061f,-.134f),V(.026f,.008f,.010f),hair);
             }
-            Art.Facet(visual,"naso",V(0,head-.018f,-.157f),V(.036f,.049f,.055f),skin,i);
-            Box(visual,"bocca",V(0,head-.092f,-.133f),V(.065f,.014f,.017f),Mat("labbra","#956C61"),false);
-            if(id=="nino"||id=="piero") Box(visual,"baffi",V(0,head-.066f,-.153f),V(.11f,.031f,.027f),hair,false);
-            if(id=="matteo") Art.Facet(visual,"barba_corta",V(0,head-.12f,-.035f),V(.128f,.064f,.125f),hair,i);
-            if(new[]{"don_carlo","teresa","piero","wanda"}.Contains(id)) {
+            Soft(visual,"naso",V(0,head-.018f,-.149f),V(.030f,.045f,.044f),skin);
+            Soft(visual,"bocca",V(0,head-.087f,-.133f),V(.033f,.008f,.008f),Mat("labbra","#956C61"));
+            if(new[]{"nino","piero","beppe","matteo"}.Contains(id)) Soft(visual,"baffi",V(0,head-.064f,-.143f),V(.058f,.018f,.018f),hair);
+            if(id=="matteo" || id=="nino" || id=="giorgio") {
+                bool beard=id!="giorgio";
+                Soft(visual,beard?"barba":"barba_accennata",V(0,head-.135f,-.034f),V(.122f,beard?.073f:.042f,.116f),hair);
+                foreach(float sign in new[]{-1f,1f}) Soft(visual,"basetta",V(sign*.137f,head-.035f,.012f),V(.018f,.073f,.080f),hair);
+            }
+            if(new[]{"don_carlo","teresa","piero","wanda","anna","laura"}.Contains(id)) {
                 foreach(float x in new[]{-.061f,.061f}) {
-                    foreach(float y in new[]{-.025f,.025f}) Box(visual,"montatura_occhiali",V(x,head+.02f+y,-.163f),V(.095f,.012f,.016f),Dark,false);
-                    foreach(float side in new[]{-.045f,.045f}) Box(visual,"montatura_occhiali",V(x+side,head+.02f,-.163f),V(.012f,.05f,.016f),Dark,false);
+                    for(int j=0;j<12;j++) {
+                        float a=j*Mathf.PI/6,b=(j+1)*Mathf.PI/6;
+                        Limb(visual,"montatura_occhiali",V(x+Mathf.Cos(a)*.052f,head+.022f+Mathf.Sin(a)*.032f,-.161f),V(x+Mathf.Cos(b)*.052f,head+.022f+Mathf.Sin(b)*.032f,-.161f),.0045f,Dark);
+                    }
+                    Limb(visual,"asta_occhiali",V(Mathf.Sign(x)*.116f,head+.022f,-.159f),V(Mathf.Sign(x)*.156f,head+.022f,.02f),.004f,Dark);
                 }
                 Box(visual,"ponte_occhiali",V(0,head+.025f,-.167f),V(.035f,.012f,.015f),Dark,false);
             }
             if(apron) {
                 var fabric=Mat("grembiule_"+id,id=="matteo"?"#A68B65":id=="marisa"?"#7B9B89":"#D7D2BB");
-                Box(visual,"grembiule",V(0,hip+.05f,-breadth*.9f),V(breadth*1.5f,.65f,.045f),fabric,false);
+                Apron(visual,hip,breadth,fabric);
                 Box(visual,"tasca_grembiule",V(0,hip-.02f,-breadth*.9f-.029f),V(.22f,.15f,.02f),cloth,false);
             } else if(woman && id!="elena") {
                 Cone(visual,"sciarpa",V(0,shoulder-.01f,0),.14f,.12f,Mat("sciarpa_"+id,i%2==0?"#B5A28A":"#989D91"),8,.13f);
@@ -83,12 +103,45 @@ namespace AmnesiaUnity.Editor.SanRocco
                 Beam(visual,"manico_borsa",V(-.12f,.92f,-.31f),V(.12f,.92f,-.31f),.035f,Dark);
             }
             if(id=="piero") Box(visual,"giornale",V(0,.85f,-.48f),V(.46f,.025f,.32f),Plaster,false);
+            Details(visual,id,head,shoulder,hip,cloth,hair,skin);
             // Pose geometry is non-solid: the actor owns a single interaction collider.
             foreach(var collider in visual.GetComponentsInChildren<Collider>()) UnityEngine.Object.DestroyImmediate(collider);
             float scale=Heights[i]/1.80f;visual.localScale=new Vector3(1,seated?1:scale,1);
             var body=p.gameObject.AddComponent<CapsuleCollider>();body.radius=.25f;body.height=seated?1.42f:Heights[i];body.center=V(0,body.height/2+.025f,seated?-.1f:0);
             p.gameObject.AddComponent<Personaggio>().Id=id=="giorgio"?"player":id;
+            if(id=="giorgio") {
+                var walk=p.gameObject.AddComponent<PassoPersonaggio>();
+                var nodes=visual.GetComponentsInChildren<Transform>();
+                Transform Find(string name)=>nodes.Single(t=>t.name==name);
+                walk.AncaSinistra=Find("anca_sx");walk.AncaDestra=Find("anca_dx");
+                walk.GinocchioSinistro=Find("ginocchio_sx");walk.GinocchioDestro=Find("ginocchio_dx");
+                walk.SpallaSinistra=Find("spalla_sx");walk.SpallaDestra=Find("spalla_dx");
+                walk.GomitoSinistro=Find("gomito_sx");walk.GomitoDestro=Find("gomito_dx");
+            }
             return Save(p,"Characters",id);
+        }
+
+        static void Details(Transform p,string id,float head,float shoulder,float hip,Material cloth,Material hair,Material skin)
+        {
+            var brass=Mat("ottone_personaggi","#AA9160");var pearl=Mat("perle_personaggi","#DDD4BA");
+            if(new[]{"rosa","teresa","wanda","marisa","lidia"}.Contains(id)) foreach(float x in new[]{-.164f,.164f})
+                Soft(p,"orecchino",V(x,head-.06f,-.013f),Vector3.one*(id=="lidia"?.024f:.014f),id=="lidia"?brass:pearl);
+            if(id=="rosa"||id=="teresa") Soft(p,"spilla",V(-.12f,shoulder-.15f,-.17f),V(.028f,.024f,.012f),brass);
+            if(id=="wanda") for(int j=0;j<9;j++) Soft(p,"collana_perle",V((j-4)*.022f,shoulder-.07f-Mathf.Sin(j*Mathf.PI/8)*.06f,-.17f),Vector3.one*.012f,pearl);
+            if(id=="elena"||id=="anna") {
+                Limb(p,"catenina",V(-.065f,shoulder+.01f,-.10f),V(0,shoulder-.15f,-.182f),.004f,brass);
+                Limb(p,"catenina",V(.065f,shoulder+.01f,-.10f),V(0,shoulder-.15f,-.182f),.004f,brass);
+                Soft(p,"ciondolo",V(0,shoulder-.17f,-.187f),V(.018f,.024f,.008f),id=="elena"?Mat("ciondolo_elena","#577F88"):brass);
+            }
+            if(id=="marisa") for(int j=0;j<5;j++) Soft(p,"ricciolo",V((j-2)*.058f,head+.12f,-.085f),V(.047f,.047f,.047f),hair);
+            if(id=="laura"||id=="giorgio") Soft(p,"ciuffo_laterale",V(-.063f,head+.116f,-.089f),V(.083f,.049f,.070f),hair);
+            if(id=="gino") foreach(float x in new[]{-.141f,.141f}) Soft(p,"basetta",V(x,head-.017f,0),V(.018f,.067f,.075f),hair);
+            if(id=="beppe") foreach(float y in new[]{hip+.15f,hip+.3f}) Soft(p,"bottone_giacca",V(-.09f,y,-.196f),Vector3.one*.014f,cloth);
+            if(id=="matteo") Limb(p,"matita_tasca",V(.07f,hip+.08f,-.231f),V(.065f,hip+.25f,-.231f),.009f,brass);
+            if(id=="giorgio") {
+                Limb(p,"cerniera",V(0,hip+.08f,-.184f),V(0,shoulder-.1f,-.17f),.007f,brass);
+                foreach(float x in new[]{-.07f,.07f}) Soft(p,"colletto_giacca",V(x,shoulder-.035f,-.085f),V(.045f,.025f,.040f),cloth);
+            }
         }
 
         public static void Populate(System.Collections.Generic.Dictionary<string,Transform> places)
